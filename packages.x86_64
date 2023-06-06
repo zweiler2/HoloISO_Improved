@@ -73,16 +73,11 @@ ntfs-3g
 nvme-cli
 openconnect
 openssh
-openvpn
 partclone
 parted
 partimage
 pcsclite
-ppp
-pptpclient
 pv
-qemu-guest-agent
-refind
 reiserfsprogs
 rp-pppoe
 rsync
@@ -106,7 +101,6 @@ usb_modeswitch
 usbmuxd
 usbutils
 vim
-virtualbox-guest-utils-nox
 vpnc
 wget
 wireless-regdb
@@ -128,7 +122,6 @@ xdg-user-dirs
 bash-completion
 networkmanager
 network-manager-applet
-mousepad
 gvfs
 neofetch
 xfce4-pulseaudio-plugin
