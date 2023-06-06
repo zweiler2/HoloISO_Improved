@@ -15,7 +15,7 @@ chmod 755 /etc/skel/Desktop/install.desktop
 rm /home/${LIVEOSUSER}/steam.desktop
 
 # Add a liveOS user
-ROOTPASS="holoconfig"
+ROOTPASS="holoiso"
 LIVEOSUSER="liveuser"
 
 echo -e "${ROOTPASS}\n${ROOTPASS}" | passwd root
