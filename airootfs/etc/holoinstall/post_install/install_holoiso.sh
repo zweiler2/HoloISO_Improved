@@ -21,12 +21,22 @@ check_mount(){
 	fi
 }
 
-check_download(){
-	if [ $1 != 0 ]; then
-		echo "\nError: Something went wrong when $2.\nPlease make sure you have a stable internet connection!\n"
-		echo 'Press any key to exit...'; read -k1 -s
-		exit 1
-	fi
+information_gathering() {
+	TEMP_LANG=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select a keyboard layout to use while using the installer" --multiple --column '' --column 'Keyboard layouts')
+	setxkbmap "$TEMP_LANG"
+
+	# Ask for the timezone
+	TIMEZONE=$(timedatectl list-timezones --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Timezone" --text="Select your timezone below:\n " --multiple --column '' --column 'Timezones')
+
+	# Ask for languages
+	LANGUAGES_ALL=$(cut </etc/locale.gen -c2- | tail -n +18 | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --width=600 --height=512 --title="Select Languages" --text="Select your desired languages below:\n(UTF-8 is preferred)" --checklist --multiple --column '' --column 'Languages')
+
+	# Ask for main language
+	MAIN_LANGUAGE=$(echo "$LANGUAGES_ALL" | tr "|" "\n" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Select Language" --text="Select your desired main language below:" --multiple --column '' --column 'Language')
+
+	# Ask for keyboard layouts
+	KEYBOARD_LAYOUT=$(localectl list-keymaps --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select your desired keyboard layout below:" --multiple --column '' --column 'Keyboard layouts')
+	KEYBOARD_LAYOUT_X11=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="X11 Keyboard layout" --text="Select your desired X11 keyboard layout below:" --multiple --column '' --column 'X11 Keyboard layouts')
 }
 
 partitioning(){
@@ -292,7 +302,32 @@ base_os_install() {
 	echo "\nBase system installation done, generating fstab..."
 	genfstab -U -p /mnt >> /mnt/etc/fstab
 	sleep 1
-	clear
+
+	# Set hwclock
+	printf "\nSyncing HW clock\n\n"
+	arch-chroot "${HOLO_INSTALL_DIR}" hwclock --systohc
+	arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable systemd-timesyncd
+
+	# Set timezone
+	rm "${HOLO_INSTALL_DIR}"/etc/localtime
+	arch-chroot "${HOLO_INSTALL_DIR}" ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
+
+	# Set locales
+	echo "$LANGUAGES_ALL" | tr "|" "\n" >>"${HOLO_INSTALL_DIR}"/etc/locale.gen
+	arch-chroot "${HOLO_INSTALL_DIR}" locale-gen
+	MAIN_LANGUAGE="$(echo "$MAIN_LANGUAGE" | cut -d' ' -f1)"
+	echo "LANG=$MAIN_LANGUAGE" >"${HOLO_INSTALL_DIR}"/etc/locale.conf
+
+	# Set keyboard layout
+	echo "KEYMAP=$KEYBOARD_LAYOUT" >"${HOLO_INSTALL_DIR}"/etc/vconsole.conf
+	echo "XKBLAYOUT=$KEYBOARD_LAYOUT_X11" >>"${HOLO_INSTALL_DIR}"/etc/vconsole.conf
+	cat <<EOF >"${HOLO_INSTALL_DIR}"/etc/X11/xorg.conf.d/00-keyboard.conf
+Section "InputClass"
+        Identifier "system-keyboard"
+        MatchIsKeyboard "on"
+        Option "XkbLayout" "$KEYBOARD_LAYOUT_X11"
+EndSection
+EOF
 
     echo "Configuring first boot user accounts..."
 	rm ${HOLO_INSTALL_DIR}/etc/skel/Desktop/*
@@ -348,6 +383,7 @@ echo "Please choose installation type:"
 HOLO_INSTALL_TYPE=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Install HoloISO, version $(cat /etc/os-release | grep VARIANT_ID | cut -d "=" -f 2 | sed 's/"//g') " \2 "Exit installer"  --width=700 --height=220)
 if [[ "${HOLO_INSTALL_TYPE}" == "1" ]] || [[ "${HOLO_INSTALL_TYPE}" == "barebones" ]]; then
 	echo "Installing SteamOS, barebones configuration..."
+	information_gathering
 	base_os_install
 	full_install
 	zenity --warning --text="Installation finished! You may reboot now, or type arch-chroot /mnt to make further changes" --width=700 --height=50
