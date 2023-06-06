@@ -44,6 +44,20 @@ pacman --noconfirm -S base-devel
 # Enable stuff
 systemctl enable sddm NetworkManager systemd-timesyncd cups bluetooth sshd
 
+# Remove old Kernel
+pacman -Rdd --noconfirm linux-neptune linux-neptune-headers
+
+# Download Valves linux 6.1 kernel
+mkdir -p /etc/holoinstall/post_install/pkgs/Kernel_61
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-6.1.21.valve1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-headers-6.1.21.valve1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
+
+# Install downloaded packages
+pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst
+
+# Remove packages from ISO
+rm -r /etc/holoinstall/post_install/pkgs/Kernel_61
+
 # Download extra stuff
 mkdir -p /etc/holoinstall/post_install/pkgs
 wget https://gdrivecdn.thevakhovske.pw/6:/holostaging/os/x86_64/linux-holoiso-5.18.1.holoiso20220606.1822-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs
