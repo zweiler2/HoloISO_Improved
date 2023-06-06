@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="HoloISO_4.1_Improved_AMD/Intel"
+iso_name="HoloISO_4.1_Improved_AMD-Intel"
 iso_label="HOLO_$(date +%Y%m)"
 iso_publisher="zweiler2 <https://github.com/zweiler2>"
-iso_application="HoloISO Installer Image Improved"
+iso_application="HoloISO Installer Image Improved AMD-Intel"
 iso_version="$(date +%Y%m%d_%H%M)"
 install_dir="arch"
 buildmodes=('iso')
