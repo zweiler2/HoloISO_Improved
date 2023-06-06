@@ -81,6 +81,9 @@ wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-lib
 # Install downloaded packages
 pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Mesa/*x86_64.pkg.tar.zst
 
+# Update and install os-prober
+pacman -Syyu --noconfirm os-prober
+
 # Remove packages from ISO
 rm -r /etc/holoinstall/post_install/pkgs/Kernel_61
 rm -r /etc/holoinstall/post_install/pkgs/Mesa
