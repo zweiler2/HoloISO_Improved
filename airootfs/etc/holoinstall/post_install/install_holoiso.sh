@@ -37,6 +37,17 @@ information_gathering() {
 	# Ask for keyboard layouts
 	KEYBOARD_LAYOUT=$(localectl list-keymaps --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select your desired keyboard layout below:" --multiple --column '' --column 'Keyboard layouts')
 	KEYBOARD_LAYOUT_X11=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="X11 Keyboard layout" --text="Select your desired X11 keyboard layout below:" --multiple --column '' --column 'X11 Keyboard layouts')
+
+	# Ask for swapfile size
+	SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB\n32GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=285)
+	case $SWAPSIZE in
+	1GB) SWAPSIZE=1024 ;;
+	2GB) SWAPSIZE=2048 ;;
+	4GB) SWAPSIZE=4096 ;;
+	8GB) SWAPSIZE=8192 ;;
+	16GB) SWAPSIZE=16384 ;;
+	32GB) SWAPSIZE=32768 ;;
+	esac
 }
 
 partitioning(){
@@ -328,6 +339,14 @@ Section "InputClass"
         Option "XkbLayout" "$KEYBOARD_LAYOUT_X11"
 EndSection
 EOF
+
+	# Create swapfile
+	echo "Creating swapfile..."
+	dd if=/dev/zero of="${HOLO_INSTALL_DIR}"/home/swapfile bs=1M count="$SWAPSIZE" status=progress
+	chmod 0600 "${HOLO_INSTALL_DIR}"/home/swapfile
+	mkswap -U clear "${HOLO_INSTALL_DIR}"/home/swapfile
+	swapon "${HOLO_INSTALL_DIR}"/home/swapfile
+	echo /home/swapfile none swap defaults 0 0 >>"${HOLO_INSTALL_DIR}"/etc/fstab
 
     echo "Configuring first boot user accounts..."
 	rm ${HOLO_INSTALL_DIR}/etc/skel/Desktop/*
