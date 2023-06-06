@@ -52,11 +52,38 @@ mkdir -p /etc/holoinstall/post_install/pkgs/Kernel_61
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-6.1.21.valve1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-headers-6.1.21.valve1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
 
+# Download Mesa 23.1.1
+mkdir -p /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/m/mesa/mesa-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/v/vulkan-radeon/vulkan-radeon-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/v/vulkan-mesa-layers/vulkan-mesa-layers-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/m/mesa-vdpau/mesa-vdpau-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/libva/libva-2.18.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/libva-utils/libva-utils-2.18.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/libva-mesa-driver/libva-mesa-driver-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/llvm/llvm-15.0.7-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/llvm-libs/llvm-libs-15.0.7-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/v/vulkan-intel/vulkan-intel-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/i/intel-media-driver/intel-media-driver-23.1.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/libva-intel-driver/libva-intel-driver-2.4.1-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+
+wget https://archive.archlinux.org/packages/l/lib32-mesa/lib32-mesa-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-vulkan-radeon/lib32-vulkan-radeon-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-vulkan-mesa-layers/lib32-vulkan-mesa-layers-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-mesa-vdpau/lib32-mesa-vdpau-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-libva/lib32-libva-2.18.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-libva-mesa-driver/lib32-libva-mesa-driver-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-llvm/lib32-llvm-15.0.7-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-llvm-libs/lib32-llvm-libs-15.0.7-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-vulkan-intel/lib32-vulkan-intel-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-libva-intel-driver-2.4.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+
 # Install downloaded packages
-pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst
+pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Mesa/*x86_64.pkg.tar.zst
 
 # Remove packages from ISO
 rm -r /etc/holoinstall/post_install/pkgs/Kernel_61
+rm -r /etc/holoinstall/post_install/pkgs/Mesa
 
 # Download extra stuff
 mkdir -p /etc/holoinstall/post_install/pkgs
