@@ -86,9 +86,6 @@ rm -r /etc/holoinstall/post_install/pkgs/Kernel_61
 rm -r /etc/holoinstall/post_install/pkgs/Mesa
 
 # Download extra stuff
-mkdir -p /etc/holoinstall/post_install/pkgs
-wget https://gdrivecdn.thevakhovske.pw/6:/holostaging/os/x86_64/linux-holoiso-5.18.1.holoiso20220606.1822-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs
-wget https://gdrivecdn.thevakhovske.pw/6:/holostaging/os/x86_64/linux-holoiso-headers-5.18.1.holoiso20220606.1822-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs
 wget $(pacman -Sp win600-xpad-dkms) -P /etc/holoinstall/post_install/pkgs_addon
 wget $(pacman -Sp linux-firmware-neptune) -P /etc/holoinstall/post_install/pkgs_addon
 
