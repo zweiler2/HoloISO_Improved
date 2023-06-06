@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 # Prepares ISO for packaging
 
 # Remove useless shortcuts for now
@@ -12,7 +12,7 @@ chmod +x /etc/skel/Desktop/install.desktop
 chmod 755 /etc/skel/Desktop/install.desktop
 
 # Remove stupid stuff on build
-rm /home/${LIVEOSUSER}/steam.desktop
+rm /home/"${LIVEOSUSER}"/steam.desktop
 
 # Add a liveOS user
 ROOTPASS="holoiso"
@@ -21,7 +21,7 @@ LIVEOSUSER="liveuser"
 echo -e "${ROOTPASS}\n${ROOTPASS}" | passwd root
 useradd --create-home ${LIVEOSUSER}
 echo -e "${ROOTPASS}\n${ROOTPASS}" | passwd ${LIVEOSUSER}
-echo "${LIVEOSUSER} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/${LIVEOSUSER}
+echo "${LIVEOSUSER} ALL=(root) NOPASSWD:ALL" >/etc/sudoers.d/${LIVEOSUSER}
 chmod 0440 /etc/sudoers.d/${LIVEOSUSER}
 usermod -a -G rfkill ${LIVEOSUSER}
 usermod -a -G wheel ${LIVEOSUSER}
@@ -86,17 +86,17 @@ rm -r /etc/holoinstall/post_install/pkgs/Kernel_61
 rm -r /etc/holoinstall/post_install/pkgs/Mesa
 
 # Download extra stuff
-wget $(pacman -Sp win600-xpad-dkms) -P /etc/holoinstall/post_install/pkgs_addon
-wget $(pacman -Sp linux-firmware-neptune) -P /etc/holoinstall/post_install/pkgs_addon
+wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs_addon
+wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkgs_addon
 
 # Workaround mkinitcpio bullshit so that i don't KMS after rebuilding ISO each time and having users reinstalling their fucking OS bullshit every goddamn time.
 rm /etc/mkinitcpio.conf
-mv /etc/mkinitcpio.conf.pacnew /etc/mkinitcpio.conf 
-rm /etc/mkinitcpio.d/* # This removes shitty unasked presets so that this thing can't overwrite it next time
-cp /etc/holoinstall/post_install/mkinitcpio_presets/linux-neptune.preset /etc/mkinitcpio.d/ # Yes. I'm lazy to use mkinitcpio-install. Problems? *gigachad posture*
+mv /etc/mkinitcpio.conf.pacnew /etc/mkinitcpio.conf
+rm /etc/mkinitcpio.d/*                                                                         # This removes unasked presets so that this thing can't overwrite it next time
+cp /etc/holoinstall/post_install/mkinitcpio_presets/linux-neptune-61.preset /etc/mkinitcpio.d/ # Yes. I'm lazy to use mkinitcpio-install. Problems? *gigachad posture*
 
-# Remove this shit from post-build
-rm -rf /etc/holoinstall/pre_install
+# Remove this script from ISO
 rm /etc/pacman.conf
 mv /etc/pacold /etc/pacman.conf
 rm /home/.steamos/offload/var/cache/pacman/pkg/*
+rm -rf /etc/holoinstall/pre_install
