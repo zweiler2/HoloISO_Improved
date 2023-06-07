@@ -49,10 +49,10 @@ systemctl enable sddm NetworkManager systemd-timesyncd cups bluetooth sshd
 # Remove old Kernel
 pacman -Rdd --noconfirm linux-neptune linux-neptune-headers
 
-# Download Valves linux 6.1 kernel
+# Download Valves linux 6.1 kernel with HDR patch
 mkdir -p /etc/holoinstall/post_install/pkgs/Kernel_61
-wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-6.1.21.valve1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
-wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-headers-6.1.21.valve1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-headers-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
 
 # Download Mesa 23.1.1
 mkdir -p /etc/holoinstall/post_install/pkgs/Mesa
