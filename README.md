@@ -20,7 +20,7 @@ Click [here](https://steamdeck.community/forums/holoiso.29/) to visit **HoloISO*
 - Is this official?
 > No, but it may as well be 99% of the way there. The code and packages, are straight from Valve, with zero possible edits, and the ISO is being built same rootfs bootstrap as all HoloISO installations run
 - I have an NVIDIA GPU
-> WIP
+> It may not be perfect but it works.
 
 
 **Working stuff:**
@@ -52,7 +52,7 @@ Installation process:
 - More than 8 GB RAM if you plan to use "Copy-To-RAM" option to install
 - AMD GPU that supports RADV Drivers instead of Radeon (Southern Islands and Sea Islands require additional kernel cmdline property) or  
 Intel GPUs should work, but this needs testing or  
-Nvidia is WIP
+Nvidia 900 series and up
 - UEFI-enabled device
 - Disabled secure boot
 
