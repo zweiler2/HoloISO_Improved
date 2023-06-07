@@ -81,6 +81,17 @@ wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-lib
 # Install downloaded packages
 pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Mesa/*x86_64.pkg.tar.zst
 
+# Install Nvidia driver
+cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/nvidia-all && echo -e '4\n1\nN\n\n\n' | makepkg -si --noconfirm"
+
+# Install Nvidia vaapi driver
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/libva-nvidia-driver-git.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/libva-nvidia-driver-git.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/libva-nvidia-driver-git
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/libva-nvidia-driver-git && makepkg -si --noconfirm"
+
 # Update and install os-prober
 pacman -Syyu --noconfirm os-prober
 

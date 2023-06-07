@@ -296,6 +296,9 @@ base_os_install() {
 	cp -r /etc/holoinstall/post_install/pacman.conf "${HOLO_INSTALL_DIR}"/etc/pacman.conf
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman-key --init
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm mkinitcpio-archiso
+	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" != "NVIDIA" ]]; then
+		pacman -Rdd --noconfirm nvidia-dkms-tkg nvidia-utils-tkg nvidia-egl-wayland-tkg nvidia-settings-tkg opencl-nvidia-tkg lib32-nvidia-utils-tkg lib32-opencl-nvidia-tkg libva-nvidia-driver-git
+	fi
 	arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
 	arch-chroot "${HOLO_INSTALL_DIR}" userdel -r liveuser
 	sleep 2
