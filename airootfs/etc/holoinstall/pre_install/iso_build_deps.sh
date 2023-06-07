@@ -92,7 +92,7 @@ rm -r /etc/holoinstall/post_install/pkgs/Mesa
 wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs_addon
 wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkgs_addon
 
-# Workaround mkinitcpio bullshit so that i don't KMS after rebuilding ISO each time and having users reinstalling their fucking OS bullshit every goddamn time.
+# Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf
 mv /etc/mkinitcpio.conf.pacnew /etc/mkinitcpio.conf
 rm /etc/mkinitcpio.d/*                                                                         # This removes unasked presets so that this thing can't overwrite it next time
