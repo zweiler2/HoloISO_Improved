@@ -85,8 +85,7 @@ pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.t
 pacman -Syyu --noconfirm os-prober
 
 # Remove packages from ISO
-rm -r /etc/holoinstall/post_install/pkgs/Kernel_61
-rm -r /etc/holoinstall/post_install/pkgs/Mesa
+rm -r /etc/holoinstall/post_install/pkgs
 
 # Download extra stuff
 wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs_addon
