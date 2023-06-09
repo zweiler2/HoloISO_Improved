@@ -6,11 +6,15 @@ IS_WIN600=$(grep </sys/devices/virtual/dmi/id/product_name Win600)
 IS_STEAMDECK=$(grep </sys/devices/virtual/dmi/id/product_name Jupiter)
 
 if [ -n "${IS_WIN600}" ]; then
-	GAMEPAD_DRV="1"
+	GAMEPAD_DRV=true
+else
+	GAMEPAD_DRV=false
 fi
 
 if [ -n "${IS_STEAMDECK}" ]; then
-	FIRMWARE_INSTALL="1"
+	FIRMWARE_INSTALL=true
+else
+	FIRMWARE_INSTALL=false
 fi
 
 check_mount() {
@@ -363,11 +367,11 @@ EOF
 }
 
 full_install() {
-	if [[ "${GAMEPAD_DRV}" == "1" ]]; then
+	if $GAMEPAD_DRV; then
 		echo "You're running this on Anbernic Win600. A suitable gamepad driver will be installed."
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm /etc/holoinstall/post_install/pkgs_addon/win600-xpad-dkms*.pkg.tar.zst
 	fi
-	if [[ "${FIRMWARE_INSTALL}" == "1" ]]; then
+	if $FIRMWARE_INSTALL; then
 		echo "You're running this on a Steam Deck. linux-firmware-neptune will be installed to ensure maximum kernel-side compatibility."
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm linux-firmware
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm /etc/holoinstall/post_install/pkgs_addon/linux-firmware-neptune*.pkg.tar.zst
