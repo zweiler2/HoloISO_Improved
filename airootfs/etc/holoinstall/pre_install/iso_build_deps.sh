@@ -83,6 +83,12 @@ wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-lib
 # Install downloaded packages
 pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Mesa/*x86_64.pkg.tar.zst
 
+# Install broadcom-wl-dkms
+mkdir -p /etc/holoinstall/post_install/pkgs/Broadcom
+wget https://archive.archlinux.org/packages/b/broadcom-wl-dkms/broadcom-wl-dkms-6.30.223.271-36-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Broadcom
+pacman -Rdd --noconfirm broadcom-wl &&
+    pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Broadcom/*x86_64.pkg.tar.zst
+
 # Install Nvidia driver
 cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
