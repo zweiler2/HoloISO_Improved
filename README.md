@@ -103,7 +103,10 @@ Credits:
 [ItsVixano](https://github.com/ItsVixano)  
 [pants4hire](https://github.com/pants4hire)  
 [Lolihunter1337](https://github.com/Lolihunter1337)  
-[cpyarger](https://github.com/cpyarger)
+[cpyarger](https://github.com/cpyarger)  
+[Etienne Juvigny](https://github.com/Tk-Glitch) and all contributors who made the [Nvidia driver AIO Installer](https://github.com/Frogging-Family/nvidia-all)  
+[Stephen](https://github.com/elFarto) and all contributors who made the [Nvidia vaapi driver](https://github.com/elFarto/nvidia-vaapi-driver)  
+[Severin](https://github.com/medusalix) and all contributors who made the [Xbox One and Xbox Series X|S accessories linux kernel driver](https://github.com/medusalix/xone)
 
 Screenshots:
 -
