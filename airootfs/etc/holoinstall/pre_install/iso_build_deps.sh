@@ -100,6 +100,12 @@ wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x
 pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Other/*x86_64.pkg.tar.zst
 sed -i ':a;N;$!ba;s/steam "/gamemoderun steam "/2' /usr/bin/gamescope-session
 
+# Install xpad-noone-dkms driver
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/xpad-noone-dkms.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/xpad-noone-dkms.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/xpad-noone-dkms
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xpad-noone-dkms && makepkg -si --noconfirm"
+
 # Install Nvidia driver
 cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
