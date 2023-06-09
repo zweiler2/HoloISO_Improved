@@ -27,24 +27,24 @@ check_mount() {
 }
 
 information_gathering() {
-	TEMP_LANG=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select a keyboard layout to use while using the installer" --multiple --column '' --column 'Keyboard layouts')
+	TEMP_LANG=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select a keyboard layout to use while using the installer" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null)
 	setxkbmap "$TEMP_LANG"
 
 	# Ask for the timezone
-	TIMEZONE=$(timedatectl list-timezones --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Timezone" --text="Select your timezone below:\n " --multiple --column '' --column 'Timezones')
+	TIMEZONE=$(timedatectl list-timezones --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Timezone" --text="Select your timezone below:\n " --multiple --column '' --column 'Timezones' 2>/dev/null)
 
 	# Ask for languages
-	LANGUAGES_ALL=$(cut </etc/locale.gen -c2- | tail -n +18 | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --width=600 --height=512 --title="Select Languages" --text="Select your desired languages below:\n(UTF-8 is preferred)" --checklist --multiple --column '' --column 'Languages')
+	LANGUAGES_ALL=$(cut </etc/locale.gen -c2- | tail -n +18 | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --width=600 --height=512 --title="Select Languages" --text="Select your desired languages below:\n(UTF-8 is preferred)" --checklist --multiple --column '' --column 'Languages' 2>/dev/null)
 
 	# Ask for main language
-	MAIN_LANGUAGE=$(echo "$LANGUAGES_ALL" | tr "|" "\n" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Select Language" --text="Select your desired main language below:" --multiple --column '' --column 'Language')
+	MAIN_LANGUAGE=$(echo "$LANGUAGES_ALL" | tr "|" "\n" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Select Language" --text="Select your desired main language below:" --multiple --column '' --column 'Language' 2>/dev/null)
 
 	# Ask for keyboard layouts
-	KEYBOARD_LAYOUT=$(localectl list-keymaps --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select your desired keyboard layout below:" --multiple --column '' --column 'Keyboard layouts')
-	KEYBOARD_LAYOUT_X11=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="X11 Keyboard layout" --text="Select your desired X11 keyboard layout below:" --multiple --column '' --column 'X11 Keyboard layouts')
+	KEYBOARD_LAYOUT=$(localectl list-keymaps --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select your desired keyboard layout below:" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null)
+	KEYBOARD_LAYOUT_X11=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="X11 Keyboard layout" --text="Select your desired X11 keyboard layout below:" --multiple --column '' --column 'X11 Keyboard layouts' 2>/dev/null)
 
 	# Ask for swapfile size
-	SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB\n32GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=285)
+	SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB\n32GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=285 2>/dev/null)
 	case $SWAPSIZE in
 	1GB) SWAPSIZE=1024 ;;
 	2GB) SWAPSIZE=2048 ;;
@@ -67,7 +67,7 @@ partitioning() {
 
 	DRIVEDEVICE=$(lsblk -d -o NAME | sed "1d" | sed '/sr/d' | sed '/loop/d' | awk '{ printf "FALSE""\0"$0"\0" }' |
 		xargs -0 zenity --list --width=600 --height=512 --title="Select disk" --text="Select your disk to install HoloISO in below:\n\n $(lsblk -d -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT)" \
-			--radiolist --multiple --column ' ' --column 'Disks')
+			--radiolist --multiple --column ' ' --column 'Disks' 2>/dev/null)
 	DEVICE="/dev/${DRIVEDEVICE}"
 	INSTALLDEVICE="${DEVICE}"
 
@@ -81,9 +81,9 @@ partitioning() {
 		exit 1
 	fi
 	echo "Choose your partitioning type:"
-	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Erase entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free space from the end)" --width=700 --height=220)
+	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Erase entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free space from the end)" --width=700 --height=220 2>/dev/null)
 	if [[ -n "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" ]]; then
-		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1). Please select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=500 --height=220)
+		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1). Please select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=500 --height=220 2>/dev/null)
 		mkdir -p /tmp/home
 		mount "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" /tmp/home
 		if [[ -d "/tmp/home/.steamos" ]]; then
@@ -115,56 +115,56 @@ partitioning() {
 				rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive /tmp/rootpart/var/lib/flatpak /tmp/home/.steamos/offload/var/lib/ | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }'
 				echo "Finished."
 			) |
-				zenity --progress --title="Preparing to reuse home at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" --text="Starting to move following directories to target offload:\n\n- /opt\n- /root\n- /srv\n- /usr/lib/debug\n- /usr/local\n- /var/cache/pacman\n- /var/lib/docker\n- /var/lib/systemd/coredump\n- /var/log\n- /var/tmp\n" --width=500 --no-cancel --percentage=0 --auto-close
+				zenity --progress --title="Preparing to reuse home at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" --text="Starting to move following directories to target offload:\n\n- /opt\n- /root\n- /srv\n- /usr/lib/debug\n- /usr/local\n- /var/cache/pacman\n- /var/lib/docker\n- /var/lib/systemd/coredump\n- /var/log\n- /var/tmp\n" --width=500 --no-cancel --percentage=0 --auto-close 2>/dev/null
 			umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
 			umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
 		fi
 	fi
 	# Setup password for root
 	while true; do
-		ROOTPASS=$(zenity --forms --title="Account configuration" --text="Set root/system administrator password" --add-password="Password for user root")
+		ROOTPASS=$(zenity --forms --title="Account configuration" --text="Set root/system administrator password" --add-password="Password for user root" 2>/dev/null)
 		if [ -z "$ROOTPASS" ]; then
-			zenity --warning --text "No password was set for user \"root\"!" --width=300
+			zenity --warning --text "No password was set for user \"root\"!" --width=300 2>/dev/null
 			break
 		fi
 		echo
-		ROOTPASS_CONF=$(zenity --forms --title="Account configuration" --text="Confirm your root password" --add-password="Password for user root")
+		ROOTPASS_CONF=$(zenity --forms --title="Account configuration" --text="Confirm your root password" --add-password="Password for user root" 2>/dev/null)
 		echo
 		if [ "$ROOTPASS" = "$ROOTPASS_CONF" ]; then
 			break
 		fi
-		zenity --warning --text "Passwords not match." --width=300
+		zenity --warning --text "Passwords not match." --width=300 2>/dev/null
 	done
 	# Create user
 	NAME_REGEX="^[a-z][-a-z0-9_]*\$"
 	while true; do
-		HOLOUSER=$(zenity --entry --title="Account creation" --text "Enter username for this installation:")
+		HOLOUSER=$(zenity --entry --title="Account creation" --text "Enter username for this installation:" 2>/dev/null)
 		if [ "$HOLOUSER" = "root" ]; then
-			zenity --warning --text "User root already exists." --width=300
+			zenity --warning --text "User root already exists." --width=300 2>/dev/null
 		elif [ -z "$HOLOUSER" ]; then
-			zenity --warning --text "Please create a user!" --width=300
+			zenity --warning --text "Please create a user!" --width=300 2>/dev/null
 		elif [ ${#HOLOUSER} -gt 32 ]; then
-			zenity --warning --text "Username length must not exceed 32 characters!" --width=400
+			zenity --warning --text "Username length must not exceed 32 characters!" --width=400 2>/dev/null
 		elif [[ ! $HOLOUSER =~ $NAME_REGEX ]]; then
-			zenity --warning --text "Invalid username \"$HOLOUSER\"\nUsername needs to follow these rules:\n\n- Must start with a lowercase letter.\n- May only contain lowercase letters, digits, hyphens, and underscores." --width=500
+			zenity --warning --text "Invalid username \"$HOLOUSER\"\nUsername needs to follow these rules:\n\n- Must start with a lowercase letter.\n- May only contain lowercase letters, digits, hyphens, and underscores." --width=500 2>/dev/null
 		else
 			break
 		fi
 	done
 	# Setup password for user
 	while true; do
-		HOLOPASS=$(zenity --forms --title="Account configuration" --text="Set password for $HOLOUSER" --add-password="Password for user $HOLOUSER")
+		HOLOPASS=$(zenity --forms --title="Account configuration" --text="Set password for $HOLOUSER" --add-password="Password for user $HOLOUSER" 2>/dev/null)
 		echo
-		HOLOPASS_CONF=$(zenity --forms --title="Account configuration" --text="Confirm password for $HOLOUSER" --add-password="Password for user $HOLOUSER")
+		HOLOPASS_CONF=$(zenity --forms --title="Account configuration" --text="Confirm password for $HOLOUSER" --add-password="Password for user $HOLOUSER" 2>/dev/null)
 		echo
 		if [ -z "$HOLOPASS" ]; then
-			zenity --warning --text "Please type password for user \"$HOLOUSER\"!" --width=300
+			zenity --warning --text "Please type password for user \"$HOLOUSER\"!" --width=300 2>/dev/null
 			HOLOPASS_CONF=unmatched
 		fi
 		if [ "$HOLOPASS" = "$HOLOPASS_CONF" ]; then
 			break
 		fi
-		zenity --warning --text "Passwords do not match." --width=300
+		zenity --warning --text "Passwords do not match." --width=300 2>/dev/null
 	done
 	case $install in
 	1)
@@ -172,7 +172,7 @@ partitioning() {
 		# Umount twice to fully umount the broken install of steam os 3 before installing.
 		umount "$INSTALLDEVICE"* >/dev/null 2>&1
 		umount "$INSTALLDEVICE"* >/dev/null 2>&1
-		if zenity --question --text "WARNING: The following drive is going to be fully erased. ALL DATA ON DRIVE ${DEVICE} WILL BE LOST! \n\n$(lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT "${DEVICE}" | sed "1d")\n\nErase ${DEVICE} and begin installation?" --width=700; then
+		if zenity --question --text "WARNING: The following drive is going to be fully erased. ALL DATA ON DRIVE ${DEVICE} WILL BE LOST! \n\n$(lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT "${DEVICE}" | sed "1d")\n\nErase ${DEVICE} and begin installation?" --width=700 2>/dev/null; then
 			echo "Wiping partitions..."
 			sfdisk --delete "${DEVICE}"
 			wipefs -a "${DEVICE}"
@@ -195,7 +195,7 @@ partitioning() {
 			read -r -k1 -s
 			exit 1
 		fi
-		if zenity --question --text "HoloISO will be installed on the following free (unallocated) space.\nDoes this look reasonable?\n$(sudo parted "${DEVICE}" print free | tail -n2 | grep "Free Space")" --width=500; then
+		if zenity --question --text "HoloISO will be installed on the following free (unallocated) space.\nDoes this look reasonable?\n$(sudo parted "${DEVICE}" print free | tail -n2 | grep "Free Space")" --width=500 2>/dev/null; then
 			echo "Beginning installation..."
 		else
 			printf "\nNothing has been written.\nYou canceled the non-destructive install, please try again.\n"
@@ -301,7 +301,7 @@ base_os_install() {
 		mount -t ext4 "${home_partition}" "${HOLO_INSTALL_DIR}"/home
 		check_mount $? home
 	fi
-	rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive / "${HOLO_INSTALL_DIR}" | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }' | zenity --progress --title="Installing base OS..." --text="Bootstrapping root filesystem...\nThis may take more than 10 minutes.\n" --width=500 --no-cancel --auto-close
+	rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive / "${HOLO_INSTALL_DIR}" | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }' | zenity --progress --title="Installing base OS..." --text="Bootstrapping root filesystem...\nThis may take more than 10 minutes.\n" --width=500 --no-cancel --auto-close 2>/dev/null
 	arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(find /usr/lib | grep vmlinuz | grep neptune)" "/boot/vmlinuz-$(cat /usr/lib/modules/*neptune*/pkgbase)"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm /etc/polkit-1/rules.d/99_holoiso_installuser.rules
 	cp -r /etc/holoinstall/post_install/pacman.conf "${HOLO_INSTALL_DIR}"/etc/pacman.conf
@@ -424,15 +424,15 @@ full_install() {
 echo "SteamOS 3 Installer"
 echo "Start time: $(date)"
 echo "Please choose installation type:"
-HOLO_INSTALL_TYPE=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Install HoloISO, version $(grep </etc/os-release VARIANT_ID | cut -d "=" -f 2 | sed 's/"//g') " 2 "Exit installer" --width=700 --height=220)
+HOLO_INSTALL_TYPE=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Install HoloISO, version $(grep </etc/os-release VARIANT_ID | cut -d "=" -f 2 | sed 's/"//g') " 2 "Exit installer" --width=700 --height=220 2>/dev/null)
 if [[ "${HOLO_INSTALL_TYPE}" == "1" ]] || [[ "${HOLO_INSTALL_TYPE}" == "barebones" ]]; then
 	echo "Installing SteamOS, barebones configuration..."
 	information_gathering
 	base_os_install
 	full_install
-	zenity --warning --text="Installation finished! You may reboot now, or type arch-chroot /mnt to make further changes" --width=700 --height=50
+	zenity --info --text="Installation finished! You may reboot now, or type arch-chroot /mnt to make further changes" --width=700 --height=50 2>/dev/null
 else
-	zenity --warning --text="Exiting installer..." --width=120 --height=50
+	zenity --info --text="Exiting installer..." --width=120 --height=50 2>/dev/null
 fi
 
 echo "End time: $(date)"
