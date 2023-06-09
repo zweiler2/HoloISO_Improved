@@ -53,6 +53,13 @@ information_gathering() {
 	16GB) SWAPSIZE=16384 ;;
 	32GB) SWAPSIZE=32768 ;;
 	esac
+
+	# Ask for xone-dkms-git driver
+	if zenity --question --title="Xbox One gamepad driver" --text='Do you want to install the Xbox One gamepad driver?\n\nThe firmware for the wireless dongle is subject to Microsofts Terms of Use:\n<a href="https://www.microsoft.com/en-us/legal/terms-of-use">Microsofts Terms of Use</a>\n\nDo you agree to Microsofts Terms of Use and want to install the driver?\n\nNote: This requires an internet connection.' --width=500 2>/dev/null; then
+		INSTALL_XONE_DRIVER=true
+	else
+		INSTALL_XONE_DRIVER=false
+	fi
 }
 
 partitioning() {
@@ -357,6 +364,24 @@ EOF
 	echo "${HOLOUSER} ALL=(root) NOPASSWD:ALL" >"${HOLO_INSTALL_DIR}"/etc/sudoers.d/"${HOLOUSER}"
 	chmod 0440 "${HOLO_INSTALL_DIR}"/etc/sudoers.d/"${HOLOUSER}"
 	sleep 1
+
+	if $INSTALL_XONE_DRIVER; then
+		# Install xone-dongle-firmware
+		echo The firmware for the wireless dongle is subject to Microsofts Terms of Use:
+		echo https://www.microsoft.com/en-us/legal/terms-of-use
+		mkdir "${HOLO_INSTALL_DIR}"/etc/xone
+		wget https://aur.archlinux.org/cgit/aur.git/snapshot/xone-dongle-firmware.tar.gz -P "${HOLO_INSTALL_DIR}"/etc/xone
+		cd "${HOLO_INSTALL_DIR}"/etc/xone && tar -xf "${HOLO_INSTALL_DIR}"/etc/xone/xone-dongle-firmware.tar.gz
+		arch-chroot "${HOLO_INSTALL_DIR}" chown -hR "${HOLOUSER}" /etc/xone/xone-dongle-firmware
+		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "cd /etc/xone/xone-dongle-firmware && makepkg -si --noconfirm"
+
+		# Install xone-dkms-git driver
+		wget https://aur.archlinux.org/cgit/aur.git/snapshot/xone-dkms-git.tar.gz -P "${HOLO_INSTALL_DIR}"/etc/xone
+		cd "${HOLO_INSTALL_DIR}"/etc/xone && tar -xf "${HOLO_INSTALL_DIR}"/etc/xone/xone-dkms-git.tar.gz
+		arch-chroot "${HOLO_INSTALL_DIR}" chown -hR "${HOLOUSER}" /etc/xone/xone-dkms-git
+		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "cd /etc/xone/xone-dkms-git && makepkg -si --noconfirm"
+		rm -r "${HOLO_INSTALL_DIR}"/etc/xone
+	fi
 
 	echo "Installing bootloader..."
 	mkdir -p "${HOLO_INSTALL_DIR}"/boot/efi
