@@ -92,6 +92,11 @@ pacman -Rdd --noconfirm broadcom-wl &&
 # Install steam_notif_daemon
 mkdir -p /etc/holoinstall/post_install/pkgs/Other
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/steam_notif_daemon-v1.0.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Other
+
+# Update gamescope and mangohud
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/gamescope-3.11.51-4-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Other
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/mangohud-0.6.9.1.r22.g1d8f9f6-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Other
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/lib32-mangohud-0.6.9.1.r22.g1d8f9f6-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Other
 pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Other/*x86_64.pkg.tar.zst
 
 # Install Nvidia driver
