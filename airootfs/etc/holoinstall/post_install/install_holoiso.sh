@@ -401,6 +401,8 @@ full_install() {
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm linux-firmware
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm /etc/holoinstall/post_install/pkgs_addon/linux-firmware-neptune*.pkg.tar.zst
 		arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
+	else
+		sed -i 's!/usr/lib/hwsupport/power-button-handler.py!/usr/lib/holoiso-hwsupport/power-button-handler.py!' "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
 	fi
 	echo "Configuring Steam Deck UI by default..."
 	ln -s /usr/share/applications/steam.desktop "${HOLO_INSTALL_DIR}"/etc/skel/Desktop/steam.desktop
