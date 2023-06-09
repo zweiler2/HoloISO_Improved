@@ -89,6 +89,11 @@ wget https://archive.archlinux.org/packages/b/broadcom-wl-dkms/broadcom-wl-dkms-
 pacman -Rdd --noconfirm broadcom-wl &&
     pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Broadcom/*x86_64.pkg.tar.zst
 
+# Install steam_notif_daemon
+mkdir -p /etc/holoinstall/post_install/pkgs/Other
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/steam_notif_daemon-v1.0.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Other
+pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Other/*x86_64.pkg.tar.zst
+
 # Install Nvidia driver
 cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
