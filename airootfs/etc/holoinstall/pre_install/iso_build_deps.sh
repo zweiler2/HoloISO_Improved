@@ -54,6 +54,10 @@ mkdir -p /etc/holoinstall/post_install/pkgs/Kernel_61
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-headers-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
 
+# Update linux-firmware
+mkdir /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware/linux-firmware-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+
 # Download Mesa 23.1.1
 mkdir -p /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/m/mesa/mesa-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
@@ -81,7 +85,7 @@ wget https://archive.archlinux.org/packages/l/lib32-vulkan-intel/lib32-vulkan-in
 wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-libva-intel-driver-2.4.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 
 # Install downloaded packages
-pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Mesa/*x86_64.pkg.tar.zst
+pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Mesa/*x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Firmware/*.pkg.tar.zst
 
 # Install broadcom-wl-dkms
 mkdir -p /etc/holoinstall/post_install/pkgs/Broadcom
