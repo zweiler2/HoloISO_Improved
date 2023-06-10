@@ -58,6 +58,42 @@ wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x
 mkdir /etc/holoinstall/post_install/pkgs/Firmware
 wget https://archive.archlinux.org/packages/l/linux-firmware/linux-firmware-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
 
+wget https://archive.archlinux.org/packages/l/linux-firmware-qlogic/linux-firmware-qlogic-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-bnx2x/linux-firmware-bnx2x-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-liquidio/linux-firmware-liquidio-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-mellanox/linux-firmware-mellanox-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-nfp/linux-firmware-nfp-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/mkinitcpio-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware && makepkg -s"
+mv /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware/mkinitcpio-firmware*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Firmware
+
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/aic94xx-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/aic94xx-firmware.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/aic94xx-firmware
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/aic94xx-firmware && makepkg -s"
+mv /etc/holoinstall/post_install/pkgs/aic94xx-firmware/aic94xx-firmware*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Firmware
+
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/ast-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/ast-firmware.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/ast-firmware
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/ast-firmware && makepkg -s"
+mv /etc/holoinstall/post_install/pkgs/ast-firmware/ast-firmware*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Firmware
+
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/wd719x-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/wd719x-firmware.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/wd719x-firmware
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/wd719x-firmware && makepkg -s --noconfirm"
+mv /etc/holoinstall/post_install/pkgs/wd719x-firmware/wd719x-firmware*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Firmware
+
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/upd72020x-fw.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/upd72020x-fw.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/upd72020x-fw
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/upd72020x-fw && makepkg -s"
+mv /etc/holoinstall/post_install/pkgs/upd72020x-fw/upd72020x-fw*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Firmware
+
 # Download Mesa 23.1.1
 mkdir -p /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/m/mesa/mesa-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
