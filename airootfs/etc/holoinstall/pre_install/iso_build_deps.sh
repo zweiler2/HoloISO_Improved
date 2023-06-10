@@ -108,6 +108,7 @@ wget https://archive.archlinux.org/packages/l/llvm-libs/llvm-libs-15.0.7-3-x86_6
 wget https://archive.archlinux.org/packages/v/vulkan-intel/vulkan-intel-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/i/intel-media-driver/intel-media-driver-23.1.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/libva-intel-driver/libva-intel-driver-2.4.1-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/i/intel-gmmlib/intel-gmmlib-22.3.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 
 wget https://archive.archlinux.org/packages/l/lib32-mesa/lib32-mesa-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/lib32-vulkan-radeon/lib32-vulkan-radeon-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
