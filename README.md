@@ -1,8 +1,12 @@
 ![image](https://user-images.githubusercontent.com/97450182/167457908-07be1a60-7e86-4bef-b7f0-6bd19efd8b24.png)
 # HoloISO
-First of all i want to credit [theVakhovskeIsTaken](https://github.com/theVakhovskeIsTaken) for creating the HoloISO project! So please go check him out.
+First of all i want to credit [Adam Jafarov](https://github.com/theVakhovskeIsTaken) for creating the HoloISO project! So please go check him out.
 
-Disclaimer: I am not in any way affiliated with [theVakhovskeIsTaken](https://github.com/theVakhovskeIsTaken).
+Note: I am not in any way affiliated with [Adam Jafarov](https://github.com/theVakhovskeIsTaken).  
+This is not a competition of "Who makes the better HoloISO?" or something like that.  
+I just like the project he made and saw some things that didn't work for me or i'd like to see changed.  
+So i changed some things and made them public, because it might help someone.  
+There is no bad blood between us.
 
 SteamOS 3 (Holo) archiso configuration.
 
@@ -87,7 +91,7 @@ Once it finishes, your ISO will be available in the `out` folder.
 
 Credits:
 -
-[theVakhovskeIsTaken](https://github.com/theVakhovskeIsTaken)  
+[Adam Jafarov](https://github.com/theVakhovskeIsTaken)  
 [fewtarius](https://github.com/fewtarius)  
 [LeddaZ](https://github.com/LeddaZ)  
 [danyi](https://github.com/danyi)  
