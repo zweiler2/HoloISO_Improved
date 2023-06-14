@@ -61,7 +61,7 @@ Nvidia 900 series and up
 - Disabled secure boot
 
 **Installation:**
-- Flash the ISO from [releases](https://github.com/zweiler2/HoloISO_Improved/releases) using [BalenaEtcher](https://www.balena.io/etcher/), [Rufus](https://rufus.ie) with DD mode, or by typing `sudo dd if=SteamOS.iso of=/dev/sd(your flash drive) bs=4M status=progress oflag=sync`, or by simply throwing ISO onto a Ventoy drive
+- Flash the ISO from [releases](https://github.com/zweiler2/HoloISO_Tweaked/releases) using [BalenaEtcher](https://www.balena.io/etcher/), [Rufus](https://rufus.ie) with DD mode, or by typing `sudo dd if=SteamOS.iso of=/dev/sd(your flash drive) bs=4M status=progress oflag=sync`, or by simply throwing ISO onto a Ventoy drive
 - Boot into ISO
 - Click on "Install SteamOS on this device"
 - Follow on-screen instructions
@@ -81,10 +81,10 @@ Building the ISO:
 Trigger the build by executing:
 ```
 sudo pacman -S archiso
-git clone https://github.com/zweiler2/HoloISO_Improved.git
-sudo mv ./HoloISO_Improved/mkarchiso-holoiso /usr/bin
+git clone https://github.com/zweiler2/HoloISO_Tweaked.git
+sudo mv ./HoloISO_Tweaked/mkarchiso-holoiso /usr/bin
 sudo chmod +x /usr/bin/mkarchiso-holoiso
-sudo mkarchiso-holoiso -v ./HoloISO_Improved
+sudo mkarchiso-holoiso -v ./HoloISO_Tweaked
 sudo chown -hR $USER:$USER ./out 
 ```
 Once it finishes, your ISO will be available in the `out` folder.
