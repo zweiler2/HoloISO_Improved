@@ -14,6 +14,8 @@
 # ~/.bashrc
 #
 
+pactl unload-module module-echo-cancel 2>/dev/null
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
