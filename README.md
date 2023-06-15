@@ -24,7 +24,7 @@ Click [here](https://steamdeck.community/forums/holoiso.29/) to visit **HoloISO*
 - Is this official?
 > No, but it may as well be 99% of the way there. The code and packages, are straight from Valve, with zero possible edits, and the ISO is being built same rootfs bootstrap as all HoloISO installations run
 - I have an NVIDIA GPU
-> It may not be perfect but it works.
+> It may not be perfect but it works. For a better experiece go to the desktop, then to the steam settings and under interface make sure you have GPU acceleration for web views and hardware video decoding set to enabled
 
 
 **Working stuff:**
