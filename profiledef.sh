@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="HoloISO_4.1.1_Improved"
+iso_name="HoloISO_4.1.2_Tweaked"
 iso_label="HOLO_$(date +%Y%m)"
 iso_publisher="zweiler2 <https://github.com/zweiler2>"
-iso_application="HoloISO Installer Image Improved"
+iso_application="HoloISO Installer Image Tweaked"
 iso_version="$(date +%Y%m%d_%H%M)"
 install_dir="arch"
 buildmodes=('iso')
