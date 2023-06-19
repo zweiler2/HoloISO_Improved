@@ -99,6 +99,9 @@ chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/upd72020x-fw
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/upd72020x-fw && makepkg -s"
 mv /etc/holoinstall/post_install/pkgs/upd72020x-fw/upd72020x-fw*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Firmware
 
+# Download sof-firmware
+wget https://archive.archlinux.org/packages/s/sof-firmware/sof-firmware-2.2.5-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+
 # Download Mesa 23.1.1
 mkdir -p /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/m/mesa/mesa-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
