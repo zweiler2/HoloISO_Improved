@@ -60,6 +60,13 @@ information_gathering() {
 	else
 		INSTALL_XONE_DRIVER=false
 	fi
+
+	# Ask for decky loader
+	if zenity --question --title="Decky loader" --text='Do you want to install decky loader?\n(This requires an internet connection)' 2>/dev/null; then
+		INSTALL_DECKY_LOADER=true
+	else
+		INSTALL_DECKY_LOADER=false
+	fi
 }
 
 partitioning() {
@@ -138,7 +145,7 @@ partitioning() {
 	# Create user
 	NAME_REGEX="^[a-z][-a-z0-9_]*\$"
 	while true; do
-		HOLOUSER=$(zenity --entry --title="Account creation" --text "Enter username for this installation:" 2>/dev/null)
+		HOLOUSER=$(zenity --entry --title="Account creation" --text "Enter username for this installation:\n(Tip: Use \"deck\" to increase decky loader plugin compatibility.)" 2>/dev/null)
 		if [ "$HOLOUSER" = "root" ]; then
 			zenity --warning --text "User root already exists." --width=300 2>/dev/null
 		elif [ -z "$HOLOUSER" ]; then
@@ -384,6 +391,10 @@ EOF
 		arch-chroot "${HOLO_INSTALL_DIR}" chown -hR "${HOLOUSER}" /etc/xone/xone-dkms-git
 		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "cd /etc/xone/xone-dkms-git && makepkg -si --noconfirm"
 		rm -r "${HOLO_INSTALL_DIR}"/etc/xone
+	fi
+
+	if $INSTALL_DECKY_LOADER; then
+		arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_release.sh | sh"
 	fi
 
 	echo "Installing bootloader..."
