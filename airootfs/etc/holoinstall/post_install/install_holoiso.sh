@@ -67,6 +67,13 @@ information_gathering() {
 	else
 		INSTALL_DECKY_LOADER=false
 	fi
+
+	# Ask for emudeck
+	if zenity --question --title="EmuDeck" --text='Do you want to install EmuDeck?\n(This requires an internet connection)' 2>/dev/null; then
+		INSTALL_EMUDECK=true
+	else
+		INSTALL_EMUDECK=false
+	fi
 }
 
 partitioning() {
@@ -395,6 +402,12 @@ EOF
 
 	if $INSTALL_DECKY_LOADER; then
 		arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_release.sh | sh"
+	fi
+
+	if $INSTALL_EMUDECK; then
+		arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | sh"
+		chmod +x "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
+		HOME=${HOLO_INSTALL_DIR}/home/${HOLOUSER} "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
 	fi
 
 	echo "Installing bootloader..."
