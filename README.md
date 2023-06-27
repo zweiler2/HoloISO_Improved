@@ -92,7 +92,7 @@ Once it finishes, your ISO will be available in the `out` folder.
 Credits:
 -
 [Adam Jafarov](https://github.com/theVakhovskeIsTaken)  
-[Ewan](https://github.com/Ew4n1011) for providing his build/fileserver
+[Ewan](https://github.com/Ew4n1011) for providing his build/fileserver  
 [fewtarius](https://github.com/fewtarius)  
 [LeddaZ](https://github.com/LeddaZ)  
 [danyi](https://github.com/danyi)  
