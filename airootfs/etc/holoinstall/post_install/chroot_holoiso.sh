@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 # Simple chrooter for stuff
 
 # Define mountpoint
@@ -21,7 +21,7 @@ EFIPART=$(sudo blkid | grep HOLOEFI | cut -d ':' -f 1 | head -n 1)
 # Re-mount stuff before proceeding
 CHK_MNT=$(lsblk | grep -e ${MOUNT_DIR} -e /mnt)
 if [ -n "${CHK_MNT}" ]; then
-	sudo umount -l ${ROOTPART} 2>&1
+	sudo umount -l "$ROOTPART" 2>&1
 fi
 
 # Create an mountpoint
@@ -36,17 +36,22 @@ if [ -n "${HOMEPART}" ]; then
 fi
 
 # Mount partitions
-sudo mount ${ROOTPART} ${MOUNT_DIR}
+sudo mount "$ROOTPART" ${MOUNT_DIR}
 if [ -n "${HOMEPART}" ]; then
-    sudo mount ${HOMEPART} ${MOUNT_DIR}/home
+    sudo mount "$HOMEPART" ${MOUNT_DIR}/home
 fi
-sudo mount ${EFIPART} ${MOUNT_DIR}/boot/efi
+sudo mount "$EFIPART" ${MOUNT_DIR}/boot/efi
 
 # Check for version
-echo "Your HoloISO Installation version: $(cat ${MOUNT_DIR}/etc/os-release | grep VARIANT_ID | cut -d '"' -f 2)\n"
+echo "Your HoloISO Installation version: $(cat ${MOUNT_DIR}/etc/os-release | grep VARIANT_ID | cut -d '"' -f 2)"
 echo "Currently installed kernel versions: $(cat ${MOUNT_DIR}/usr/src/linux*/version)"
 echo "Most used commands:"
-echo "steamos-update [check|now] -- Checks for OS updates and applies them\nholoiso-[enable|disable]-sessions -- Disables session autologin\nholoiso-grub-update -- Reinstalls and updates grub configuration\n\nCommands available for logged-in user:\nsteamos-session-select [plasma|gamescope|plasma-x11-persistent] -- Select a session to boot into next time\n"
+echo "steamos-update [check|now] -- Checks for OS updates and applies them"
+echo "holoiso-[enable|disable]-sessions -- Disables session autologin"
+echo "holoiso-grub-update -- Reinstalls and updates grub configuration"
+echo 
+echo "Commands available for logged-in user:"
+echo "steamos-session-select [plasma|gamescope|plasma-x11-persistent] -- Select a session to boot into next time"
 
 # Chroot!
 sudo arch-chroot ${MOUNT_DIR}
