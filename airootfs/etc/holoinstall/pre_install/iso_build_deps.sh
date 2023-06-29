@@ -49,10 +49,20 @@ systemctl enable sddm NetworkManager systemd-timesyncd cups bluetooth sshd
 # Remove old Kernel
 pacman -Rdd --noconfirm linux-neptune linux-neptune-headers
 
+# Download Archs linux 6.3 kernel
+mkdir -p /etc/holoinstall/post_install/pkgs/Kernel_63
+wget https://archive.archlinux.org/packages/l/linux/linux-6.3.9.arch1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_63
+wget https://archive.archlinux.org/packages/l/linux-headers/linux-headers-6.3.9.arch1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_63
+
 # Download Valves linux 6.1 kernel with HDR patch
 mkdir -p /etc/holoinstall/post_install/pkgs/Kernel_61
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-headers-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
+
+# Download openssl
+mkdir -p /etc/holoinstall/post_install/pkgs/OpenSSL
+wget https://archive.archlinux.org/packages/o/openssl/openssl-3.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/OpenSSL
+wget https://archive.archlinux.org/packages/o/openssl-1.1/openssl-1.1-1.1.1.u-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/OpenSSL
 
 # Update Ucodes
 mkdir -p /etc/holoinstall/post_install/pkgs/Ucodes
@@ -125,7 +135,9 @@ wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-lib
 
 # Install downloaded packages
 pacman -U --noconfirm \
+    /etc/holoinstall/post_install/pkgs/Kernel_63/*x86_64.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst \
+    /etc/holoinstall/post_install/pkgs/OpenSSL/*x86_64.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/Ucodes/*.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/Firmware/*.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/Mesa/*x86_64.pkg.tar.zst
@@ -182,8 +194,9 @@ wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkg
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf
 mv /etc/mkinitcpio.conf.pacnew /etc/mkinitcpio.conf
-rm /etc/mkinitcpio.d/*                                                                         # This removes unasked presets so that this thing can't overwrite it next time
-cp /etc/holoinstall/post_install/mkinitcpio_presets/linux-neptune-61.preset /etc/mkinitcpio.d/ # Yes. I'm lazy to use mkinitcpio-install. Problems? *gigachad posture*
+rm /etc/mkinitcpio.d/*
+cp /etc/holoinstall/post_install/mkinitcpio_presets/linux-neptune-61.preset /etc/mkinitcpio.d/
+cp /etc/holoinstall/post_install/mkinitcpio_presets/linux.preset /etc/mkinitcpio.d/
 
 # Remove this script from ISO
 rm /etc/pacman.conf
