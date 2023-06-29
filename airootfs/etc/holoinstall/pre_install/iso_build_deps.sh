@@ -69,12 +69,6 @@ wget https://archive.archlinux.org/packages/l/linux-firmware-liquidio/linux-firm
 wget https://archive.archlinux.org/packages/l/linux-firmware-mellanox/linux-firmware-mellanox-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
 wget https://archive.archlinux.org/packages/l/linux-firmware-nfp/linux-firmware-nfp-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
 
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/mkinitcpio-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware && makepkg -s"
-mv /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware/mkinitcpio-firmware*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/Firmware
-
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/aic94xx-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
 cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/aic94xx-firmware.tar.gz
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/aic94xx-firmware
@@ -135,6 +129,11 @@ pacman -U --noconfirm \
     /etc/holoinstall/post_install/pkgs/Ucodes/*.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/Firmware/*.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/Mesa/*x86_64.pkg.tar.zst
+
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/mkinitcpio-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware && makepkg -si --noconfirm"
 
 # Install broadcom-wl-dkms
 mkdir -p /etc/holoinstall/post_install/pkgs/Broadcom
