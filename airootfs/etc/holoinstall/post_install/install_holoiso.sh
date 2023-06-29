@@ -329,6 +329,11 @@ base_os_install() {
 	cp -r /etc/holoinstall/post_install/pacman.conf "${HOLO_INSTALL_DIR}"/etc/pacman.conf
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman-key --init
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm mkinitcpio-archiso
+
+	mv /etc/holoinstall/post_install/amd-perf-fix.service "${HOLO_INSTALL_DIR}"/etc/systemd/system/multi-user.target.wants
+	mv /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
+	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
+	
 	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" = "NVIDIA" ]]; then
 		echo "LIBVA_DRIVER_NAME=nvidia" >>"${HOLO_INSTALL_DIR}"/etc/environment
 		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm/' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
