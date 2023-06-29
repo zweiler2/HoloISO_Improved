@@ -103,7 +103,7 @@ partitioning() {
 		exit 1
 	fi
 	echo "Choose your partitioning type:"
-	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Erase entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformated space from the end)" --width=700 --height=220 2>/dev/null)
+	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space from the end)" --width=700 --height=220 2>/dev/null)
 	if [[ -n "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" ]]; then
 		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1). Please select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=500 --height=220 2>/dev/null)
 		mkdir -p /tmp/home
@@ -436,6 +436,8 @@ EOF
 	echo GRUB_DISABLE_OS_PROBER=false >>"${HOLO_INSTALL_DIR}"/etc/default/grub
 	arch-chroot "${HOLO_INSTALL_DIR}" holoiso-grub-update
 	sleep 1
+
+	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Syyu --noconfirm
 }
 
 full_install() {
