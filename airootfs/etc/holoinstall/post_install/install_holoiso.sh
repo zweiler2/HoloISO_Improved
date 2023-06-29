@@ -434,7 +434,8 @@ EOF
 	echo "Installing bootloader..."
 	mkdir -p "${HOLO_INSTALL_DIR}"/boot/efi
 	mount -t vfat "${efi_partition}" "${HOLO_INSTALL_DIR}"/boot/efi
-	echo GRUB_DISABLE_OS_PROBER=false >>"${HOLO_INSTALL_DIR}"/etc/default/grub
+	rm "${HOLO_INSTALL_DIR}"/etc/default/grub
+	mv /etc/holoinstall/post_install/grub "${HOLO_INSTALL_DIR}"/etc/default/grub
 	arch-chroot "${HOLO_INSTALL_DIR}" holoiso-grub-update
 	sleep 1
 

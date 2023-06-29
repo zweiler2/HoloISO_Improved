@@ -1,0 +1,41 @@
+GRUB_TIMEOUT=5
+
+# Device specific configs
+DEVICENAME="$(cat /sys/devices/virtual/dmi/id/product_name)"
+# OXP Devices
+OXP_LIST="ONE XPLAYER:ONEXPLAYER 1 T08:ONEXPLAYER 1S A08:ONEXPLAYER 1S T08:ONEXPLAYER mini A07:ONEXPLAYER mini GA72:ONEXPLAYER mini GT72:ONEXPLAYER GUNDAM GA72:ONEXPLAYER 2 ARP23:ONEXPLAYER Mini Pro"
+# AYANEO AIR Devices
+AIR_LIST="AIR:AIR Pro"
+# AYANEO Gen 1 Devices
+AYA_LIST="NEXT:NEXT Pro:NEXT Advance:AYANEO NEXT:AYANEO NEXT Pro:AYANEO NEXT Advance:AYA NEO Fouder:AYA NEO 2021:AYANEO 2021:AYANEO 2021 Pro:AYANEO 2021 Pro:AYANEO 2021 Pro Retro Power"
+# AOKZOE Devices
+AOK_LIST="AOKZOE A1 AR07"
+# GPD Devices
+GPD_LIST="G1619-04"
+
+# Define default cmdlines for each device family
+if [ "${DEVICENAME}" == "Win600" ]; then
+        GRUB_CMDLINE_LINUX_DEFAULT="video=efifb fbcon=rotate:1 quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0"
+elif [[ ":$AIR_LIST:" =~ :$DEVICENAME: ]]; then
+        GRUB_CMDLINE_LINUX_DEFAULT="video=efifb fbcon=rotate:3 quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0"
+elif [ "${DEVICENAME}" == "Jupiter 1" ]; then
+        GRUB_CMDLINE_LINUX_DEFAULT="video=efifb fbcon=rotate:1 quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0"
+elif [[ ":$OXP_LIST:" =~ :$DEVICENAME: ]]; then
+        GRUB_CMDLINE_LINUX_DEFAULT="video=efifb fbcon=rotate:3 quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0"
+elif [[ ":$AOK_LIST:" =~ :$DEVICENAME: ]]; then
+        GRUB_CMDLINE_LINUX_DEFAULT="video=efifb fbcon=rotate:3 quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0"
+elif [[ ":$GPD_LIST:" =~ :$DEVICENAME: ]]; then
+        GRUB_CMDLINE_LINUX_DEFAULT="video=efifb fbcon=rotate:0 quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0"
+elif [[ ":$AYA_LIST:" =~ :$DEVICENAME: ]]; then
+        GRUB_CMDLINE_LINUX_DEFAULT="video=efifb fbcon=rotate:1 quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0"
+elif lspci | grep VGA | cut -d ':' -f 3 | grep NVIDIA >/dev/null; then
+        GRUB_CMDLINE_LINUX_DEFAULT="video=efifb quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0 nvidia-drm.modeset=1"
+else
+        GRUB_CMDLINE_LINUX_DEFAULT="quiet splash loglevel=3 rd.udev.log_priority=3 vt.global_cursor_default=0"
+fi
+
+GRUB_DEFAULT="1>3"
+GRUB_SAVEDEFAULT="false"
+GRUB_TOP_LEVEL="/boot/vmlinuz-linux"
+GRUB_THEME="/usr/share/grub/themes/breeze/theme.txt"
+GRUB_DISABLE_OS_PROBER=false
