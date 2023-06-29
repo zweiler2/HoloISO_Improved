@@ -330,6 +330,10 @@ base_os_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman-key --init
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm mkinitcpio-archiso
 
+	rm "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
+	mv /etc/holoinstall/post_install/gamescope-session "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
+	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
+
 	mv /etc/holoinstall/post_install/amd-perf-fix.service "${HOLO_INSTALL_DIR}"/etc/systemd/system/multi-user.target.wants
 	mv /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
 	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix

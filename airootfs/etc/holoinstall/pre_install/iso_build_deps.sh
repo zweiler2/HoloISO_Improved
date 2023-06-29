@@ -150,7 +150,7 @@ wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/mangohud-0.6.9.1.r22.g1d8f9f6-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Other
 wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/lib32-mangohud-0.6.9.1.r22.g1d8f9f6-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Other
 pacman -U --noconfirm /etc/holoinstall/post_install/pkgs/Other/*x86_64.pkg.tar.zst
-sed -i ':a;N;$!ba;s/steam "/gamemoderun steam "/2' /usr/bin/gamescope-session
+#sed -i ':a;N;$!ba;s/steam "/gamemoderun steam "/2' /usr/bin/gamescope-session
 
 # Install xpad-noone-dkms driver
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/xpad-noone-dkms.tar.gz -P /etc/holoinstall/post_install/pkgs
