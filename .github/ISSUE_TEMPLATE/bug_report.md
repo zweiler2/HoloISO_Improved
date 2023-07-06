@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help me improve HoloISO
-title: "[Report]"
+title: ''
 labels: ''
 assignees: ''
 
