@@ -36,6 +36,8 @@ pacman -Rcns --noconfirm pulseaudio xfce4-pulseaudio-plugin pulseaudio-alsa
 pacman -Rdd --noconfirm sddm linux syslinux
 rm -r /usr/lib/modules/6.0.2-arch1-1
 pacman --overwrite="*" --noconfirm -S holoiso-main
+rm /etc/pacman.d/holo_mirrorlist
+cp /etc/holoinstall/post_install/holo_mirrorlist /etc/pacman.d/holo_mirrorlist
 pacman -Rdd --noconfirm rz608-fix-git
 mv /etc/pacman.conf /etc/pacold
 cp /etc/holoinstall/post_install/pacman.conf /etc/pacman.conf
