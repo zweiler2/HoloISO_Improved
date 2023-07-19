@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment[en_US]=
 Comment=
-Exec=sudo /etc/holoinstall/post_install/install_holoiso.sh
+Exec=sudo /etc/holoinstall/post_install/install_holoiso.sh; bash
 GenericName[en_US]=
 GenericName=
 Icon=run-install
