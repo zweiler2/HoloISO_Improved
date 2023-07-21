@@ -276,30 +276,38 @@ partitioning() {
 	parted "${DEVICE}" mkpart primary fat32 "${efiStart}"M ${efiEnd}M
 	parted "${DEVICE}" set ${efiPartNum} boot on
 	parted "${DEVICE}" set ${efiPartNum} esp on
+	echo "EFI partition created"
 	# If the available storage is less than 64GB, don't create /home.
 	# If the boot device is mmcblk0, don't create an ext4 partition or it will break steamOS versions
 	# released after May 20.
 	if [ "$diskSpace" -lt 64000000 ] || [[ "${DEVICE}" =~ mmcblk0 ]]; then
 		home=false
 		parted "${DEVICE}" mkpart primary btrfs ${rootStart}M 100%
+		echo "Root partition created"
 	else
-		parted "${DEVICE}" mkpart primary btrfs ${rootStart}M ${rootEnd}M
-		parted "${DEVICE}" mkpart primary ext4 ${rootEnd}M 100%
 		home=true
+		parted "${DEVICE}" mkpart primary btrfs ${rootStart}M ${rootEnd}M
+		echo "Root partition created"
+		parted "${DEVICE}" mkpart primary ext4 ${rootEnd}M 100%
+		echo "Home partition created"
 	fi
 	efi_partition=${INSTALLDEVICE}${efiPartNum}
 	root_partition=${INSTALLDEVICE}${rootPartNum}
 	home_partition=${INSTALLDEVICE}${homePartNum}
 	mkfs -t vfat "${efi_partition}"
+	echo "EFI partition formatted"
 	fatlabel "${INSTALLDEVICE}"${efiPartNum} HOLOEFI
 	mkfs -t btrfs -f "${root_partition}"
+	echo "Root partition formatted"
 	btrfs filesystem label "${root_partition}" holo-root
 	if $home; then
 		if $HOME_PART_EXISTS && [[ "${HOME_REUSE_TYPE}" == "2" ]]; then
 			echo "Home partition will be reused at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
 			home_partition="$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
+			echo "Home partition reused"
 		else
 			mkfs -t ext4 -F -O casefold "$home_partition"
+			echo "Home partition formatted"
 			e2label "$home_partition" holo-home
 		fi
 	fi
