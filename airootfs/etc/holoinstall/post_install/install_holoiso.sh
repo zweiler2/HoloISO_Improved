@@ -20,8 +20,8 @@ fi
 check_mount() {
 	if [ "$1" != 0 ]; then
 		printf "\nError: Something went wrong when mounting %s partitions. Please try again! \n" "$2"
-		echo 'Press any key to exit...'
-		read -r -k1 -s
+		echo "Press any key to exit..."
+		read -n 1 -s -r
 		exit 1
 	fi
 }
@@ -203,8 +203,8 @@ partitioning() {
 			parted "${DEVICE}" mklabel gpt
 		else
 			printf "\nNothing has been written.\nYou canceled the destructive install, please try again.\n"
-			echo 'Press any key to exit...'
-			read -r -k1 -s
+			echo "Press any key to exit..."
+			read -n 1 -s -r
 			exit 1
 		fi
 		;;
@@ -214,16 +214,16 @@ partitioning() {
 		echo "HoloISO will be installed on the following free (unallocated) space."
 		if ! parted "$DEVICE" print free | tail -n2 | grep "Free Space"; then
 			printf "Error! No Free Space found on the end of the disk.\nNothing has been written.\nYou canceled the non-destructive install, please try again.\n"
-			echo 'Press any key to exit...'
-			read -r -k1 -s
+			echo "Press any key to exit..."
+			read -n 1 -s -r
 			exit 1
 		fi
 		if zenity --question --text "HoloISO will be installed on the following free (unallocated) space.\nDoes this look reasonable?\n$(sudo parted "${DEVICE}" print free | tail -n2 | grep "Free Space")" --width=500 2>/dev/null; then
 			echo "Beginning installation..."
 		else
 			printf "\nNothing has been written.\nYou canceled the non-destructive install, please try again.\n"
-			echo 'Press any key to exit...'
-			read -r -k1 -s
+			echo "Press any key to exit..."
+			read -n 1 -s -r
 			exit 1
 		fi
 		;;
@@ -255,8 +255,8 @@ partitioning() {
 
 	if [ $efiEnd -gt "$realDiskSpace" ]; then
 		echo "Not enough space available, please choose another disk and try again."
-		echo 'Press any key to exit...'
-		read -r -k1 -s
+		echo "Press any key to exit..."
+		read -n 1 -s -r
 		exit 1
 	fi
 
