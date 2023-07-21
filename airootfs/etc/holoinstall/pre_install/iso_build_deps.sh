@@ -108,31 +108,31 @@ mv /etc/holoinstall/post_install/pkgs/upd72020x-fw/upd72020x-fw*.pkg.tar.zst /et
 # Download sof-firmware
 wget https://archive.archlinux.org/packages/s/sof-firmware/sof-firmware-2.2.5-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
 
-# Download Mesa 23.1.1
+# Download Mesa 23.1.3
 mkdir -p /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/m/mesa/mesa-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/v/vulkan-radeon/vulkan-radeon-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/v/vulkan-mesa-layers/vulkan-mesa-layers-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/m/mesa-vdpau/mesa-vdpau-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/l/libva/libva-2.18.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/l/libva-utils/libva-utils-2.18.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/l/libva-mesa-driver/libva-mesa-driver-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/m/mesa/mesa-23.1.3-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/v/vulkan-radeon/vulkan-radeon-23.1.3-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/v/vulkan-mesa-layers/vulkan-mesa-layers-23.1.3-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/m/mesa-vdpau/mesa-vdpau-23.1.3-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/libva/libva-2.19.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/libva-utils/libva-utils-2.18.2-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/libva-mesa-driver/libva-mesa-driver-23.1.3-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/llvm/llvm-15.0.7-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/llvm-libs/llvm-libs-15.0.7-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/v/vulkan-intel/vulkan-intel-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/i/intel-media-driver/intel-media-driver-23.1.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/v/vulkan-intel/vulkan-intel-23.1.3-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/i/intel-media-driver/intel-media-driver-23.3.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/libva-intel-driver/libva-intel-driver-2.4.1-2-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/i/intel-gmmlib/intel-gmmlib-22.3.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 
-wget https://archive.archlinux.org/packages/l/lib32-mesa/lib32-mesa-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/l/lib32-vulkan-radeon/lib32-vulkan-radeon-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/l/lib32-vulkan-mesa-layers/lib32-vulkan-mesa-layers-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/l/lib32-mesa-vdpau/lib32-mesa-vdpau-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-mesa/lib32-mesa-23.1.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-vulkan-radeon/lib32-vulkan-radeon-23.1.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-vulkan-mesa-layers/lib32-vulkan-mesa-layers-23.1.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-mesa-vdpau/lib32-mesa-vdpau-23.1.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/lib32-libva/lib32-libva-2.18.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/l/lib32-libva-mesa-driver/lib32-libva-mesa-driver-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-libva-mesa-driver/lib32-libva-mesa-driver-23.1.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/lib32-llvm/lib32-llvm-15.0.7-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/lib32-llvm-libs/lib32-llvm-libs-15.0.7-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
-wget https://archive.archlinux.org/packages/l/lib32-vulkan-intel/lib32-vulkan-intel-23.1.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+wget https://archive.archlinux.org/packages/l/lib32-vulkan-intel/lib32-vulkan-intel-23.1.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-libva-intel-driver-2.4.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 
 # Install downloaded packages
