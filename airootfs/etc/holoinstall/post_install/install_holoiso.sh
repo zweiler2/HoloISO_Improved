@@ -425,8 +425,6 @@ EOF
 	mv /etc/holoinstall/post_install/grub "${HOLO_INSTALL_DIR}"/etc/default/grub
 	arch-chroot "${HOLO_INSTALL_DIR}" holoiso-grub-update
 	sleep 1
-
-	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Syyu --noconfirm
 }
 
 full_install() {
