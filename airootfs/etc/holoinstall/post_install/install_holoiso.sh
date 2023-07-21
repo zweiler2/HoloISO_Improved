@@ -280,6 +280,7 @@ partitioning() {
 	# If the boot device is mmcblk0, don't create an ext4 partition or it will break steamOS versions
 	# released after May 20.
 	if [ "$diskSpace" -lt 64000000 ] || [[ "${DEVICE}" =~ mmcblk0 ]]; then
+		home=false
 		parted "${DEVICE}" mkpart primary btrfs ${rootStart}M 100%
 	else
 		parted "${DEVICE}" mkpart primary btrfs ${rootStart}M ${rootEnd}M
