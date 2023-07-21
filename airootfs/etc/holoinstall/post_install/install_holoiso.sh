@@ -28,24 +28,95 @@ check_mount() {
 
 information_gathering() {
 	sudo sed -i 's/en_US.UTF-8 UTF-8/#en_US.UTF-8 UTF-8/' /etc/locale.gen
-	TEMP_LANG=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select a keyboard layout to use while using the installer" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null)
+	# Ask for temp keyboard layout
+	while true; do
+		if TEMP_LANG=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select a keyboard layout to use while using the installer" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null); then
+			if [ -n "$TEMP_LANG" ]; then
+				break
+			else
+				zenity --info --title="Keyboard layout" --text='Please select a keyboard layout!' 2>/dev/null
+			fi
+		else
+			exit 1
+		fi
+	done
 	setxkbmap "$TEMP_LANG"
 
 	# Ask for the timezone
-	TIMEZONE=$(timedatectl list-timezones --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Timezone" --text="Select your timezone below:\n " --multiple --column '' --column 'Timezones' 2>/dev/null)
+	while true; do
+		if TIMEZONE=$(timedatectl list-timezones --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Timezone" --text="Select your timezone below:\n " --multiple --column '' --column 'Timezones' 2>/dev/null); then
+			if [ -n "$TIMEZONE" ]; then
+				break
+			else
+				zenity --info --title="Timezone" --text='Please select a timezone!' 2>/dev/null
+			fi
+		else
+			exit 1
+		fi
+	done
 
 	# Ask for languages
-	LANGUAGES_ALL=$(cut </etc/locale.gen -c2- | tail -n +18 | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --width=600 --height=512 --title="Select Languages" --text="Select your desired languages below:\n(UTF-8 is preferred)" --checklist --multiple --column '' --column 'Languages' 2>/dev/null)
+	while true; do
+		if LANGUAGES_ALL=$(cut </etc/locale.gen -c2- | tail -n +18 | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --width=600 --height=512 --title="Select Languages" --text="Select your desired languages below:\n(UTF-8 is preferred)" --checklist --multiple --column '' --column 'Languages' 2>/dev/null); then
+			if [ -n "$LANGUAGES_ALL" ]; then
+				break
+			else
+				zenity --info --title="Select Languages" --text='Please select at least one language!' 2>/dev/null
+			fi
+		else
+			exit 1
+		fi
+	done
 
 	# Ask for main language
-	MAIN_LANGUAGE=$(echo "$LANGUAGES_ALL" | tr "|" "\n" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Select Language" --text="Select your desired main language below:" --multiple --column '' --column 'Language' 2>/dev/null)
+	while true; do
+		if MAIN_LANGUAGE=$(echo "$LANGUAGES_ALL" | tr "|" "\n" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Select Language" --text="Select your desired main language below:" --multiple --column '' --column 'Language' 2>/dev/null); then
+			if [ -n "$MAIN_LANGUAGE" ]; then
+				break
+			else
+				zenity --info --title="Select Language" --text='Please select a language!' 2>/dev/null
+			fi
+		else
+			exit 1
+		fi
+	done
 
 	# Ask for keyboard layouts
-	KEYBOARD_LAYOUT=$(localectl list-keymaps --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select your desired keyboard layout below:" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null)
-	KEYBOARD_LAYOUT_X11=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="X11 Keyboard layout" --text="Select your desired X11 keyboard layout below:" --multiple --column '' --column 'X11 Keyboard layouts' 2>/dev/null)
+	while true; do
+		if KEYBOARD_LAYOUT=$(localectl list-keymaps --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select your desired keyboard layout below:" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null); then
+			if [ -n "$KEYBOARD_LAYOUT" ]; then
+				break
+			else
+				zenity --info --title="Keyboard layout" --text='Please select a keyboard layout!' 2>/dev/null
+			fi
+		else
+			exit 1
+		fi
+	done
+	while true; do
+		if KEYBOARD_LAYOUT_X11=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="X11 Keyboard layout" --text="Select your desired X11 keyboard layout below:" --multiple --column '' --column 'X11 Keyboard layouts' 2>/dev/null); then
+			if [ -n "$KEYBOARD_LAYOUT_X11" ]; then
+				break
+			else
+				zenity --info --title="Keyboard layout" --text='Please select a keyboard layout!' 2>/dev/null
+			fi
+		else
+			exit 1
+		fi
+	done
 
 	# Ask for swapfile size
-	SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB\n32GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=285 2>/dev/null)
+	while true; do
+		if SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB\n32GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=285 2>/dev/null); then
+			if [ -n "$SWAPSIZE" ]; then
+				break
+			else
+				zenity --info --title="SWAP" --text='Please select a size!' 2>/dev/null
+			fi
+		else
+			exit 1
+		fi
+	done
 	case $SWAPSIZE in
 	1GB) SWAPSIZE=1024 ;;
 	2GB) SWAPSIZE=2048 ;;
