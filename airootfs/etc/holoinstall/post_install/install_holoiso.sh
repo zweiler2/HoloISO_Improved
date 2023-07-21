@@ -241,24 +241,12 @@ partitioning() {
 
 	echo "Calculating start and end of free space..."
 	diskSpace=$(awk '/'"${DRIVEDEVICE}"'/ {print $3; exit}' /proc/partitions)
-	# <= 60GB: typical flash drive
-	if [ "$diskSpace" -lt 60000000 ]; then
-		digitMB=8
-		realDiskSpace=$(parted "${DEVICE}" unit MB print free | head -n2 | tail -n1 | cut -c 16-20)
-	# <= 500GB: typical 512GB hard drive
-	elif [ "$diskSpace" -lt 500000000 ]; then
-		digitMB=8
-		realDiskSpace=$(parted "${DEVICE}" unit MB print free | head -n2 | tail -n1 | cut -c 20-25)
-	# anything else: typical 1024GB hard drive
-	else
-		digitMB=9
-		realDiskSpace=$(parted "${DEVICE}" unit MB print free | head -n2 | tail -n1 | cut -c 20-26)
-	fi
+	realDiskSpace=$(parted "${DEVICE}" unit MB print free | head -n2 | tail -n1 | grep -oh "\w*MB" | sed s/MB//)
 
 	if [ "$destructive" ]; then
 		efiStart=2
 	else
-		efiStart=$(parted "${DEVICE}" unit MB print free | tail -n2 | sed s/'        '// | cut -c1-$digitMB | sed s/MB// | sed s/' '//g)
+		efiStart=$(parted "${DEVICE}" unit MB print free | tail -n2 | awk '{$1=$1};1' | head -n1 | sed 's/\s.*$//' | sed s/MB//)
 	fi
 	efiEnd=$((efiStart + 256))
 	rootStart=$efiEnd
