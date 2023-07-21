@@ -86,22 +86,21 @@ information_gathering() {
 
 partitioning() {
 	echo "Select your drive in popup:"
+	while true; do
+		DRIVEDEVICE=$(lsblk -d -o NAME | sed "1d" | sed '/sr/d' | sed '/loop/d' | awk '{ printf "FALSE""\0"$0"\0" }' |
+			xargs -0 zenity --list --width=600 --height=512 --title="Select disk" --text="Select your disk to install HoloISO in below:\n\n $(lsblk -d -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT | sed '/sr/d' | sed '/loop/d')" --radiolist --multiple --column ' ' --column 'Disks' 2>/dev/null)
+		DEVICE="/dev/${DRIVEDEVICE}"
+		INSTALLDEVICE="${DEVICE}"
+		if [ -b "$DEVICE" ] && lsblk "$DEVICE" | head -n2 | tail -n1 | grep disk >/dev/null 2>&1; then
+			echo "$DEVICE found and is of type disk. Continuing installation..."
+			break
+		elif [ ! -b "$DEVICE" ]; then
+			echo "$DEVICE not found! Please try again"
+		elif lsblk "$DEVICE" | head -n2 | tail -n1 | grep disk >/dev/null 2>&1; then
+			echo "$DEVICE is not of type disk!"
+		fi
+	done
 
-	DRIVEDEVICE=$(lsblk -d -o NAME | sed "1d" | sed '/sr/d' | sed '/loop/d' | awk '{ printf "FALSE""\0"$0"\0" }' |
-		xargs -0 zenity --list --width=600 --height=512 --title="Select disk" --text="Select your disk to install HoloISO in below:\n\n $(lsblk -d -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT)" \
-			--radiolist --multiple --column ' ' --column 'Disks' 2>/dev/null)
-	DEVICE="/dev/${DRIVEDEVICE}"
-	INSTALLDEVICE="${DEVICE}"
-
-	if [ ! -b "$DEVICE" ]; then
-		echo "$DEVICE not found! Installation Aborted!"
-		exit 1
-	fi
-	if ! lsblk "$DEVICE" | head -n2 | tail -n1 | grep disk >/dev/null 2>&1; then
-		echo "$DEVICE is not disk type! Installation Aborted!"
-		printf "\nNote: If you wish to preform partition install.\nPlease specify the disk drive node first then select \"2\" for partition install.\n"
-		exit 1
-	fi
 	echo "Choose your partitioning type:"
 	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space from the end)" --width=820 --height=220 2>/dev/null)
 	if [[ -n "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" ]]; then
