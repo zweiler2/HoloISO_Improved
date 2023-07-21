@@ -340,7 +340,7 @@ base_os_install() {
 	sleep 2
 
 	echo "Base system installation done, generating fstab..."
-	genfstab -U -p /mnt >>/mnt/etc/fstab
+	genfstab -U -p "${HOLO_INSTALL_DIR}" >>"${HOLO_INSTALL_DIR}"/etc/fstab
 	sleep 1
 
 	# Set hwclock
