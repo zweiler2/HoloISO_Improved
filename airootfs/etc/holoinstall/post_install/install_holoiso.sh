@@ -103,46 +103,56 @@ partitioning() {
 
 	echo "Choose your partitioning type:"
 	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space from the end)" --width=820 --height=220 2>/dev/null)
+	HOME_REUSE=false
 	HOME_PART_EXISTS=false
 	if [[ -n "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" ]]; then
 		HOME_PART_EXISTS=true
 		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1).\nPlease select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=400 --height=220 2>/dev/null)
+		HOME_REUSE=true
 		mkdir -p /tmp/home
 		mount "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" /tmp/home
+		mkdir -p /tmp/rootpart
+		mount "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)" /tmp/rootpart
 		if [[ -d "/tmp/home/.steamos" ]]; then
 			echo "Migration data found. Proceeding"
-			umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
-		else
-			(
-				sleep 2
-				echo "10"
-				mkdir -p /tmp/rootpart
-				mount "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)" /tmp/rootpart
-				mkdir -p /tmp/home/.steamos/ /tmp/home/.steamos/offload/opt /tmp/home/.steamos/offload/root /tmp/home/.steamos/offload/srv /tmp/home/.steamos/offload/usr/lib/debug /tmp/home/.steamos/offload/usr/local /tmp/home/.steamos/offload/var/lib/flatpak /tmp/home/.steamos/offload/var/cache/pacman /tmp/home/.steamos/offload/var/lib/docker /tmp/home/.steamos/offload/var/lib/systemd/coredump /tmp/home/.steamos/offload/var/log /tmp/home/.steamos/offload/var/tmp
-				echo "15"
-				sleep 1
-				mv /tmp/rootpart/opt/* /tmp/home/.steamos/offload/opt
-				mv /tmp/rootpart/root/* /tmp/home/.steamos/offload/root
-				mv /tmp/rootpart/srv/* /tmp/home/.steamos/offload/srv
-				mv /tmp/rootpart/usr/lib/debug/* /tmp/home/.steamos/offload/usr/lib/debug
-				mv /tmp/rootpart/usr/local/* /tmp/home/.steamos/offload/usr/local
-				mv /tmp/rootpart/var/cache/pacman/* /tmp/home/.steamos/offload/var/cache/pacman
-				mv /tmp/rootpart/var/lib/docker/* /tmp/home/.steamos/offload/var/lib/docker
-				mv /tmp/rootpart/var/lib/systemd/coredump/* /tmp/home/.steamos/offload/var/lib/systemd/coredump
-				mv /tmp/rootpart/var/log/* /tmp/home/.steamos/offload/var/log
-				mv /tmp/rootpart/var/tmp/* /tmp/home/.steamos/offload/var/tmp
-				echo "System directory moving complete. Preparing to move flatpak content."
-				echo "30"
-				sleep 1
-				printf "Starting flatpak data migration.\nThis may take 2 to 10 minutes to complete.\n"
-				rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive /tmp/rootpart/var/lib/flatpak /tmp/home/.steamos/offload/var/lib/ | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }'
-				echo "Finished."
-			) |
-				zenity --progress --title="Preparing to reuse home at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" --text="Starting to move following directories to target offload:\n\n- /opt\n- /root\n- /srv\n- /usr/lib/debug\n- /usr/local\n- /var/cache/pacman\n- /var/lib/docker\n- /var/lib/systemd/coredump\n- /var/log\n- /var/tmp\n" --width=500 --no-cancel --percentage=0 --auto-close 2>/dev/null
+			HOLOUSER=$(grep home </tmp/rootpart/etc/passwd | cut -d ':' -f 1)
 			umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
 			umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
-		fi
+			else
+				zenity --progress --title="Preparing to reuse home at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" --text="Your installation will reuse following user: ${HOLOUSER} \n\nStarting to move following directories to target offload ():\
+				\n\n- /opt\n- /root\n- /srv\n- /usr/lib/debug\n- /usr/local\n- /var/cache/pacman\n- /var/lib/docker\n- /var/lib/systemd/coredump\n- /var/log\n- /var/tmp\n" --width=500 --no-cancel --percentage=0 --auto-close 2>/dev/null \
+					< <(
+						echo "10"
+						sleep 1
+						HOLOUSER=$(grep home </tmp/rootpart/etc/passwd | cut -d ':' -f 1)
+						mkdir -p /tmp/home/.steamos/ /tmp/home/.steamos/offload/opt /tmp/home/.steamos/offload/root /tmp/home/.steamos/offload/srv /tmp/home/.steamos/offload/usr/lib/debug /tmp/home/.steamos/offload/usr/local /tmp/home/.steamos/offload/var/lib/flatpak /tmp/home/.steamos/offload/var/cache/pacman /tmp/home/.steamos/offload/var/lib/docker /tmp/home/.steamos/offload/var/lib/systemd/coredump /tmp/home/.steamos/offload/var/log /tmp/home/.steamos/offload/var/tmp
+						echo "15"
+						sleep 1
+						mv /tmp/rootpart/opt/* /tmp/home/.steamos/offload/opt
+						mv /tmp/rootpart/root/* /tmp/home/.steamos/offload/root
+						mv /tmp/rootpart/srv/* /tmp/home/.steamos/offload/srv
+						mv /tmp/rootpart/usr/lib/debug/* /tmp/home/.steamos/offload/usr/lib/debug
+						mv /tmp/rootpart/usr/local/* /tmp/home/.steamos/offload/usr/local
+						mv /tmp/rootpart/var/cache/pacman/* /tmp/home/.steamos/offload/var/cache/pacman
+						mv /tmp/rootpart/var/lib/docker/* /tmp/home/.steamos/offload/var/lib/docker
+						mv /tmp/rootpart/var/lib/systemd/coredump/* /tmp/home/.steamos/offload/var/lib/systemd/coredump
+						mv /tmp/rootpart/var/log/* /tmp/home/.steamos/offload/var/log
+						mv /tmp/rootpart/var/tmp/* /tmp/home/.steamos/offload/var/tmp
+						echo "System directory moving complete. Preparing to move flatpak content."
+						echo "30"
+						sleep 1
+						printf "Starting flatpak data migration.\nThis may take 2-10 minutes to complete.\n"
+						rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive /tmp/rootpart/var/lib/flatpak /tmp/home/.steamos/offload/var/lib/ | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }'
+						echo "99"
+						sleep 3
+						echo "Finished."
+					)
+
+				umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
+				umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
+			fi
 	fi
+
 	# Setup password for root
 	while true; do
 		ROOTPASS=$(zenity --forms --title="Account configuration" --text="Set root/system administrator password" --add-password="Password for user root" 2>/dev/null)
@@ -160,20 +170,22 @@ partitioning() {
 	done
 	# Create user
 	NAME_REGEX="^[a-z][-a-z0-9_]*\$"
-	while true; do
-		HOLOUSER=$(zenity --entry --title="Account creation" --text "Enter username for this installation:\n(Tip: Use \"deck\" to increase decky loader plugin compatibility.)" 2>/dev/null)
-		if [ "$HOLOUSER" = "root" ]; then
-			zenity --warning --text "User root already exists." --width=300 2>/dev/null
-		elif [ -z "$HOLOUSER" ]; then
-			zenity --warning --text "Please create a user!" --width=300 2>/dev/null
-		elif [ ${#HOLOUSER} -gt 32 ]; then
-			zenity --warning --text "Username length must not exceed 32 characters!" --width=400 2>/dev/null
-		elif [[ ! $HOLOUSER =~ $NAME_REGEX ]]; then
-			zenity --warning --text "Invalid username \"$HOLOUSER\"\nUsername needs to follow these rules:\n\n- Must start with a lowercase letter.\n- May only contain lowercase letters, digits, hyphens, and underscores." --width=500 2>/dev/null
-		else
-			break
-		fi
-	done
+	if ! $HOME_REUSE; then
+		while true; do
+			HOLOUSER=$(zenity --entry --title="Account creation" --text "Enter username for this installation:\n(Tip: Use \"deck\" to increase decky loader plugin compatibility.)" 2>/dev/null)
+			if [ "$HOLOUSER" = "root" ]; then
+				zenity --warning --text "User root already exists." --width=300 2>/dev/null
+			elif [ -z "$HOLOUSER" ]; then
+				zenity --warning --text "Please create a user!" --width=300 2>/dev/null
+			elif [ ${#HOLOUSER} -gt 32 ]; then
+				zenity --warning --text "Username length must not exceed 32 characters!" --width=400 2>/dev/null
+			elif [[ ! $HOLOUSER =~ $NAME_REGEX ]]; then
+				zenity --warning --text "Invalid username \"$HOLOUSER\"\nUsername needs to follow these rules:\n\n- Must start with a lowercase letter.\n- May only contain lowercase letters, digits, hyphens, and underscores." --width=500 2>/dev/null
+			else
+				break
+			fi
+		done
+	fi
 	# Setup password for user
 	while true; do
 		HOLOPASS=$(zenity --forms --title="Account configuration" --text="Set password for $HOLOUSER" --add-password="Password for user $HOLOUSER" 2>/dev/null)
