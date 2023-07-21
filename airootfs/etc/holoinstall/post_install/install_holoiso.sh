@@ -287,26 +287,20 @@ partitioning() {
 		parted "${DEVICE}" mkpart primary ext4 ${rootEnd}M 100%
 		home=true
 	fi
+	efi_partition=${INSTALLDEVICE}${efiPartNum}
 	root_partition=${INSTALLDEVICE}${rootPartNum}
-	mkfs -t vfat "${INSTALLDEVICE}"${efiPartNum}
-	efi_partition="${INSTALLDEVICE}${efiPartNum}"
+	home_partition=${INSTALLDEVICE}${homePartNum}
+	mkfs -t vfat "${efi_partition}"
 	fatlabel "${INSTALLDEVICE}"${efiPartNum} HOLOEFI
 	mkfs -t btrfs -f "${root_partition}"
 	btrfs filesystem label "${root_partition}" holo-root
 	if $home; then
-		if $HOME_PART_EXISTS; then
-			if [[ "${HOME_REUSE_TYPE}" == "1" ]]; then
-				mkfs -t ext4 -F -O casefold "${INSTALLDEVICE}"${homePartNum}
-				home_partition="${INSTALLDEVICE}${homePartNum}"
-				e2label "${INSTALLDEVICE}${homePartNum}" holo-home
-			elif [[ "${HOME_REUSE_TYPE}" == "2" ]]; then
-				echo "Home partition will be reused at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
-				home_partition="$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
-			fi
+		if $HOME_PART_EXISTS && [[ "${HOME_REUSE_TYPE}" == "2" ]]; then
+			echo "Home partition will be reused at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
+			home_partition="$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
 		else
-			mkfs -t ext4 -F -O casefold "${INSTALLDEVICE}"${homePartNum}
-			home_partition="${INSTALLDEVICE}${homePartNum}"
-			e2label "${INSTALLDEVICE}${homePartNum}" holo-home
+			mkfs -t ext4 -F -O casefold "$home_partition"
+			e2label "$home_partition" holo-home
 		fi
 	fi
 	echo "Partitioning complete, mounting and installing."
