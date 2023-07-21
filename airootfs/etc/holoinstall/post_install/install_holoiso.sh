@@ -424,6 +424,13 @@ EOF
 	rm "${HOLO_INSTALL_DIR}"/etc/default/grub
 	mv /etc/holoinstall/post_install/grub "${HOLO_INSTALL_DIR}"/etc/default/grub
 	arch-chroot "${HOLO_INSTALL_DIR}" holoiso-grub-update
+	mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
+	HOLOISO_EFI_ENTRY=$(efibootmgr | grep HoloISO | head -c8 | tail -c4)
+	if [ -n "$HOLOISO_EFI_ENTRY" ]; then
+		echo "Old HoloISO EFI entry found. Deleting now..."
+		arch-chroot "${HOLO_INSTALL_DIR}" efibootmgr -b "$HOLOISO_EFI_ENTRY" -B
+	fi
+	arch-chroot "${HOLO_INSTALL_DIR}" efibootmgr -c -d "${DEVICE}" -p ${efiPartNum} -L "HoloISO" -l '\EFI\BOOT\BOOTX64.EFI'
 	sleep 1
 }
 
