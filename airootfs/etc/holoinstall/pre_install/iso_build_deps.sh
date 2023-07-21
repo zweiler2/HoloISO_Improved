@@ -11,7 +11,7 @@ chmod +x /etc/holoinstall/post_install/chroot_holoiso.sh
 chmod +x /etc/skel/Desktop/install.desktop
 chmod 755 /etc/skel/Desktop/install.desktop
 
-# Remove stupid stuff on build
+# Remove steam shortcut on ISO
 rm /home/"${LIVEOSUSER}"/steam.desktop
 
 # Add a liveOS user
@@ -52,14 +52,14 @@ systemctl enable sddm NetworkManager systemd-timesyncd cups bluetooth sshd
 pacman -Rdd --noconfirm linux-neptune linux-neptune-headers
 
 # Download Archs linux 6.3 kernel
-mkdir -p /etc/holoinstall/post_install/pkgs/Kernel_63
-wget https://archive.archlinux.org/packages/l/linux/linux-6.3.9.arch1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_63
-wget https://archive.archlinux.org/packages/l/linux-headers/linux-headers-6.3.9.arch1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_63
+mkdir -p /etc/holoinstall/post_install/pkgs/Archs_Kernel
+wget https://archive.archlinux.org/packages/l/linux/linux-6.3.9.arch1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Archs_Kernel
+wget https://archive.archlinux.org/packages/l/linux-headers/linux-headers-6.3.9.arch1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Archs_Kernel
 
 # Download Valves linux 6.1 kernel with HDR patch
-mkdir -p /etc/holoinstall/post_install/pkgs/Kernel_61
-wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
-wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-headers-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Kernel_61
+mkdir -p /etc/holoinstall/post_install/pkgs/Valves_Kernel
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Valves_Kernel
+wget https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-neptune-61-headers-6.1.21.joshcolor2-3-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Valves_Kernel
 
 # Download openssl
 mkdir -p /etc/holoinstall/post_install/pkgs/OpenSSL
@@ -137,8 +137,8 @@ wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-lib
 
 # Install downloaded packages
 pacman -U --noconfirm \
-    /etc/holoinstall/post_install/pkgs/Kernel_63/*x86_64.pkg.tar.zst \
-    /etc/holoinstall/post_install/pkgs/Kernel_61/*x86_64.pkg.tar.zst \
+    /etc/holoinstall/post_install/pkgs/Archs_Kernel/*x86_64.pkg.tar.zst \
+    /etc/holoinstall/post_install/pkgs/Valves_Kernel/*x86_64.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/OpenSSL/*x86_64.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/Ucodes/*.pkg.tar.zst \
     /etc/holoinstall/post_install/pkgs/Firmware/*.pkg.tar.zst \
