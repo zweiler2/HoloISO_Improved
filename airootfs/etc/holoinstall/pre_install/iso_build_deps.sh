@@ -68,8 +68,8 @@ wget https://archive.archlinux.org/packages/o/openssl-1.1/openssl-1.1-1.1.1.u-1-
 
 # Update Ucodes
 mkdir -p /etc/holoinstall/post_install/pkgs/Ucodes
-wget https://archive.archlinux.org/packages/a/amd-ucode/amd-ucode-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Ucodes
-wget https://archive.archlinux.org/packages/i/intel-ucode/intel-ucode-20230516.a-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Ucodes
+wget https://archive.archlinux.org/packages/a/amd-ucode/amd-ucode-20230625.ee91452d-4-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Ucodes
+wget https://archive.archlinux.org/packages/i/intel-ucode/intel-ucode-20230613-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Ucodes
 
 # Update linux-firmware
 mkdir /etc/holoinstall/post_install/pkgs/Firmware
