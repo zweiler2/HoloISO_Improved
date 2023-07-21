@@ -156,7 +156,7 @@ partitioning() {
 		if [ "$ROOTPASS" = "$ROOTPASS_CONF" ]; then
 			break
 		fi
-		zenity --warning --text "Passwords not match." --width=300 2>/dev/null
+		zenity --warning --text "Passwords do not match." --width=300 2>/dev/null
 	done
 	# Create user
 	NAME_REGEX="^[a-z][-a-z0-9_]*\$"
