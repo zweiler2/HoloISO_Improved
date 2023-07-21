@@ -175,7 +175,7 @@ su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xpad-noone-dkms && ma
 # Install Nvidia driver
 cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/nvidia-all && echo -e '4\n1\nN\n\n\n' | makepkg -si --noconfirm"
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/nvidia-all && echo -e '5\n1\n1\nN\n\n\n' | makepkg -si --noconfirm"
 
 # Install Nvidia vaapi driver
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/libva-nvidia-driver-git.tar.gz -P /etc/holoinstall/post_install/pkgs
