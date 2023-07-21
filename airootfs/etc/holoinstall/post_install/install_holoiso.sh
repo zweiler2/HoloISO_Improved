@@ -470,7 +470,7 @@ if [[ "${HOLO_INSTALL_TYPE}" == "1" ]] || [[ "${HOLO_INSTALL_TYPE}" == "barebone
 	information_gathering
 	base_os_install
 	full_install
-	zenity --info --text="Installation finished! You may reboot now, or type arch-chroot /mnt to make further changes" --width=700 --height=50 2>/dev/null
+	zenity --info --text="Installation finished! \nYou may reboot now, or type \"sudo arch-chroot /mnt\"\nto make further changes." 2>/dev/null
 else
 	zenity --info --text="Exiting installer..." --width=120 --height=50 2>/dev/null
 fi
