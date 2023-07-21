@@ -135,6 +135,8 @@ wget https://archive.archlinux.org/packages/l/lib32-llvm-libs/lib32-llvm-libs-15
 wget https://archive.archlinux.org/packages/l/lib32-vulkan-intel/lib32-vulkan-intel-23.1.3-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 wget https://archive.archlinux.org/packages/l/lib32-libva-intel-driver/lib32-libva-intel-driver-2.4.1-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
 
+wget https://archive.archlinux.org/packages/x/xf86-video-amdgpu/xf86-video-amdgpu-23.0.0-1-x86_64.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Mesa
+
 # Install downloaded packages
 pacman -U --noconfirm \
     /etc/holoinstall/post_install/pkgs/Archs_Kernel/*x86_64.pkg.tar.zst \
