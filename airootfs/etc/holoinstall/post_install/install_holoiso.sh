@@ -305,9 +305,7 @@ base_os_install() {
 	sleep 1
 	mount -t btrfs -o subvol=/,compress-force=zstd:1,discard,noatime,nodiratime "${root_partition}" "${HOLO_INSTALL_DIR}"
 	check_mount $? root
-	${CMD_MOUNT_BOOT}
-	check_mount $? boot
-	if [ "$home" ]; then
+	if $home; then
 		mkdir -p "${HOLO_INSTALL_DIR}"/home
 		mount -t ext4 "${home_partition}" "${HOLO_INSTALL_DIR}"/home
 		check_mount $? home
