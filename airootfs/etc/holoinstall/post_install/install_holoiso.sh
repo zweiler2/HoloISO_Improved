@@ -103,7 +103,9 @@ partitioning() {
 
 	echo "Choose your partitioning type:"
 	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space from the end)" --width=820 --height=220 2>/dev/null)
+	HOME_PART_EXISTS=false
 	if [[ -n "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" ]]; then
+		HOME_PART_EXISTS=true
 		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1).\nPlease select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=400 --height=220 2>/dev/null)
 		mkdir -p /tmp/home
 		mount "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" /tmp/home
@@ -278,8 +280,8 @@ partitioning() {
 	fatlabel "${INSTALLDEVICE}"${efiPartNum} HOLOEFI
 	mkfs -t btrfs -f "${root_partition}"
 	btrfs filesystem label "${root_partition}" holo-root
-	if [ "$home" ]; then
-		if [[ -n "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" ]]; then
+	if $home; then
+		if $HOME_PART_EXISTS; then
 			if [[ "${HOME_REUSE_TYPE}" == "1" ]]; then
 				mkfs -t ext4 -F -O casefold "${INSTALLDEVICE}"${homePartNum}
 				home_partition="${INSTALLDEVICE}${homePartNum}"
