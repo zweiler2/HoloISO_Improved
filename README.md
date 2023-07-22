@@ -1,5 +1,5 @@
 ![image](https://user-images.githubusercontent.com/97450182/167457908-07be1a60-7e86-4bef-b7f0-6bd19efd8b24.png)
-# HoloISO
+# HoloISO_Tweaked
 First of all i want to credit [Adam Jafarov](https://github.com/theVakhovskeIsTaken) for creating the HoloISO project! So please go check him out.
 
 Note: I am not in any way affiliated with [Adam Jafarov](https://github.com/theVakhovskeIsTaken).  
@@ -61,7 +61,7 @@ Nvidia 900 series and up
 - Disabled secure boot
 
 **Installation:**
-- Flash the ISO from [releases](https://github.com/zweiler2/HoloISO_Tweaked/releases) using [BalenaEtcher](https://www.balena.io/etcher/), [Rufus](https://rufus.ie) with DD mode, or by typing `sudo dd if=SteamOS.iso of=/dev/sd(your flash drive) bs=4M status=progress oflag=sync`, or by simply throwing ISO onto a Ventoy drive
+- Flash the ISO from [releases](https://github.com/zweiler2/HoloISO_Tweaked/releases) using [BalenaEtcher](https://etcher.balena.io), [Rufus](https://rufus.ie) with DD mode, or by typing `sudo dd if=SteamOS.iso of=/dev/sd(your flash drive) bs=4M status=progress oflag=sync`, or by simply throwing the ISO onto a [Ventoy](https://www.ventoy.net) drive
 - Boot into ISO
 - Click on "Install SteamOS on this device"
 - Follow on-screen instructions
