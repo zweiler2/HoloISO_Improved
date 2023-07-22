@@ -184,6 +184,9 @@ cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/p
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/libva-nvidia-driver-git
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/libva-nvidia-driver-git && makepkg -si --noconfirm"
 
+# Install Nvidia prime
+pacman -Syyu --noconfirm nvidia-prime
+
 # Update and install os-prober
 pacman -Syyu --noconfirm os-prober
 

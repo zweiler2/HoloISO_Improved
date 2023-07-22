@@ -417,9 +417,11 @@ base_os_install() {
 		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm/' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
 		if $IS_LAPTOP; then
 			echo 'GAMEMODERUNEXEC="env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only"' >>"${HOLO_INSTALL_DIR}"/etc/environment
+		else
+			pacman -Rdd --noconfirm nvidia-prime
 		fi
 	else
-		pacman -Rdd --noconfirm nvidia-dkms-tkg nvidia-utils-tkg nvidia-egl-wayland-tkg nvidia-settings-tkg opencl-nvidia-tkg lib32-nvidia-utils-tkg lib32-opencl-nvidia-tkg libva-nvidia-driver-git
+		pacman -Rdd --noconfirm nvidia-dkms-tkg nvidia-utils-tkg nvidia-egl-wayland-tkg nvidia-settings-tkg opencl-nvidia-tkg lib32-nvidia-utils-tkg lib32-opencl-nvidia-tkg libva-nvidia-driver-git nvidia-prime
 	fi
 	arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
 	arch-chroot "${HOLO_INSTALL_DIR}" userdel -r liveuser
