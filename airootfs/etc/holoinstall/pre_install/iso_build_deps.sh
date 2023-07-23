@@ -173,6 +173,18 @@ cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/p
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/xpad-noone-dkms
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xpad-noone-dkms && makepkg -si --noconfirm"
 
+# Install xboxdrv
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/xboxdrv.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/xboxdrv.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/xboxdrv
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xboxdrv && makepkg -si --noconfirm"
+
+# Install 8bitdo-ultimate-controller-udev rules
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/8bitdo-ultimate-controller-udev.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/8bitdo-ultimate-controller-udev.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev && makepkg -si --noconfirm"
+
 # Install Nvidia driver
 cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
