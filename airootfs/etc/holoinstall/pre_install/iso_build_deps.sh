@@ -73,13 +73,13 @@ wget https://archive.archlinux.org/packages/i/intel-ucode/intel-ucode-20230613-1
 
 # Update linux-firmware
 mkdir /etc/holoinstall/post_install/pkgs/Firmware
-wget https://archive.archlinux.org/packages/l/linux-firmware/linux-firmware-20230625.ee91452d-4-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware/linux-firmware-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
 
-wget https://archive.archlinux.org/packages/l/linux-firmware-qlogic/linux-firmware-qlogic-20230625.ee91452d-4-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
-wget https://archive.archlinux.org/packages/l/linux-firmware-bnx2x/linux-firmware-bnx2x-20230625.ee91452d-4-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
-wget https://archive.archlinux.org/packages/l/linux-firmware-liquidio/linux-firmware-liquidio-20230625.ee91452d-4-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
-wget https://archive.archlinux.org/packages/l/linux-firmware-mellanox/linux-firmware-mellanox-20230625.ee91452d-4-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
-wget https://archive.archlinux.org/packages/l/linux-firmware-nfp/linux-firmware-nfp-20230625.ee91452d-4-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-qlogic/linux-firmware-qlogic-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-bnx2x/linux-firmware-bnx2x-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-liquidio/linux-firmware-liquidio-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-mellanox/linux-firmware-mellanox-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
+wget https://archive.archlinux.org/packages/l/linux-firmware-nfp/linux-firmware-nfp-20230404.2e92a49f-1-any.pkg.tar.zst -P /etc/holoinstall/post_install/pkgs/Firmware
 
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/aic94xx-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
 cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/aic94xx-firmware.tar.gz
