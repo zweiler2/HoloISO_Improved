@@ -15,9 +15,6 @@
 #
 
 pactl unload-module module-echo-cancel 2>/dev/null
-if [ ! -f "/home/${USER}/.local/share/Steam/.cef-enable-remote-debugging" ]; then
-    touch /home/"${USER}"/.local/share/Steam/.cef-enable-remote-debugging 2>/dev/null
-fi
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
