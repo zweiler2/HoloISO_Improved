@@ -188,39 +188,39 @@ partitioning() {
 			HOLOUSER=$(grep home </tmp/rootpart/etc/passwd | cut -d ':' -f 1)
 			umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
 			umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
-			else
-				zenity --progress --title="Preparing to reuse home at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" --text="Your installation will reuse following user: ${HOLOUSER} \n\nStarting to move following directories to target offload ():\
+		else
+			zenity --progress --title="Preparing to reuse home at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" --text="Your installation will reuse following user: ${HOLOUSER} \n\nStarting to move following directories to target offload ():\
 				\n\n- /opt\n- /root\n- /srv\n- /usr/lib/debug\n- /usr/local\n- /var/cache/pacman\n- /var/lib/docker\n- /var/lib/systemd/coredump\n- /var/log\n- /var/tmp\n" --width=500 --no-cancel --percentage=0 --auto-close 2>/dev/null \
-					< <(
-						echo "10"
-						sleep 1
-						HOLOUSER=$(grep home </tmp/rootpart/etc/passwd | cut -d ':' -f 1)
-						mkdir -p /tmp/home/.steamos/ /tmp/home/.steamos/offload/opt /tmp/home/.steamos/offload/root /tmp/home/.steamos/offload/srv /tmp/home/.steamos/offload/usr/lib/debug /tmp/home/.steamos/offload/usr/local /tmp/home/.steamos/offload/var/lib/flatpak /tmp/home/.steamos/offload/var/cache/pacman /tmp/home/.steamos/offload/var/lib/docker /tmp/home/.steamos/offload/var/lib/systemd/coredump /tmp/home/.steamos/offload/var/log /tmp/home/.steamos/offload/var/tmp
-						echo "15"
-						sleep 1
-						mv /tmp/rootpart/opt/* /tmp/home/.steamos/offload/opt
-						mv /tmp/rootpart/root/* /tmp/home/.steamos/offload/root
-						mv /tmp/rootpart/srv/* /tmp/home/.steamos/offload/srv
-						mv /tmp/rootpart/usr/lib/debug/* /tmp/home/.steamos/offload/usr/lib/debug
-						mv /tmp/rootpart/usr/local/* /tmp/home/.steamos/offload/usr/local
-						mv /tmp/rootpart/var/cache/pacman/* /tmp/home/.steamos/offload/var/cache/pacman
-						mv /tmp/rootpart/var/lib/docker/* /tmp/home/.steamos/offload/var/lib/docker
-						mv /tmp/rootpart/var/lib/systemd/coredump/* /tmp/home/.steamos/offload/var/lib/systemd/coredump
-						mv /tmp/rootpart/var/log/* /tmp/home/.steamos/offload/var/log
-						mv /tmp/rootpart/var/tmp/* /tmp/home/.steamos/offload/var/tmp
-						echo "System directory moving complete. Preparing to move flatpak content."
-						echo "30"
-						sleep 1
-						printf "Starting flatpak data migration.\nThis may take 2-10 minutes to complete.\n"
-						rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive /tmp/rootpart/var/lib/flatpak /tmp/home/.steamos/offload/var/lib/ | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }'
-						echo "99"
-						sleep 3
-						echo "Finished."
-					)
+				< <(
+					echo "10"
+					sleep 1
+					HOLOUSER=$(grep home </tmp/rootpart/etc/passwd | cut -d ':' -f 1)
+					mkdir -p /tmp/home/.steamos/ /tmp/home/.steamos/offload/opt /tmp/home/.steamos/offload/root /tmp/home/.steamos/offload/srv /tmp/home/.steamos/offload/usr/lib/debug /tmp/home/.steamos/offload/usr/local /tmp/home/.steamos/offload/var/lib/flatpak /tmp/home/.steamos/offload/var/cache/pacman /tmp/home/.steamos/offload/var/lib/docker /tmp/home/.steamos/offload/var/lib/systemd/coredump /tmp/home/.steamos/offload/var/log /tmp/home/.steamos/offload/var/tmp
+					echo "15"
+					sleep 1
+					mv /tmp/rootpart/opt/* /tmp/home/.steamos/offload/opt
+					mv /tmp/rootpart/root/* /tmp/home/.steamos/offload/root
+					mv /tmp/rootpart/srv/* /tmp/home/.steamos/offload/srv
+					mv /tmp/rootpart/usr/lib/debug/* /tmp/home/.steamos/offload/usr/lib/debug
+					mv /tmp/rootpart/usr/local/* /tmp/home/.steamos/offload/usr/local
+					mv /tmp/rootpart/var/cache/pacman/* /tmp/home/.steamos/offload/var/cache/pacman
+					mv /tmp/rootpart/var/lib/docker/* /tmp/home/.steamos/offload/var/lib/docker
+					mv /tmp/rootpart/var/lib/systemd/coredump/* /tmp/home/.steamos/offload/var/lib/systemd/coredump
+					mv /tmp/rootpart/var/log/* /tmp/home/.steamos/offload/var/log
+					mv /tmp/rootpart/var/tmp/* /tmp/home/.steamos/offload/var/tmp
+					echo "System directory moving complete. Preparing to move flatpak content."
+					echo "30"
+					sleep 1
+					printf "Starting flatpak data migration.\nThis may take 2-10 minutes to complete.\n"
+					rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive /tmp/rootpart/var/lib/flatpak /tmp/home/.steamos/offload/var/lib/ | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }'
+					echo "99"
+					sleep 3
+					echo "Finished."
+				)
 
-				umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
-				umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
-			fi
+			umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
+			umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
+		fi
 	fi
 
 	# Setup password for root
