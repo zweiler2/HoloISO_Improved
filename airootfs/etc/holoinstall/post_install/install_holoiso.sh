@@ -107,7 +107,7 @@ information_gathering() {
 
 	# Ask for swapfile size
 	while true; do
-		if SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB\n32GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=285 2>/dev/null); then
+		if SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=285 2>/dev/null); then
 			if [ -n "$SWAPSIZE" ]; then
 				break
 			else
@@ -123,7 +123,6 @@ information_gathering() {
 	4GB) SWAPSIZE=4096 ;;
 	8GB) SWAPSIZE=8192 ;;
 	16GB) SWAPSIZE=16384 ;;
-	32GB) SWAPSIZE=32768 ;;
 	esac
 
 	# Ask for xone-dkms-git driver
@@ -411,7 +410,7 @@ base_os_install() {
 	mv /etc/holoinstall/post_install/amd-perf-fix.service "${HOLO_INSTALL_DIR}"/etc/systemd/system/multi-user.target.wants
 	mv /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
 	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
-	
+
 	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" = "NVIDIA" ]]; then
 		echo "LIBVA_DRIVER_NAME=nvidia" >>"${HOLO_INSTALL_DIR}"/etc/environment
 		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm/' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
