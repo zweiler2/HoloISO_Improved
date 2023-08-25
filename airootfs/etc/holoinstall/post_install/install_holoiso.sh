@@ -540,10 +540,10 @@ full_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G rfkill "${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G wheel "${HOLOUSER}"
 	echo "Preparing Steam OOBE..."
-	arch-chroot "${HOLO_INSTALL_DIR}" sudo -u "$HOLOUSER" mkdir -p ~/.local/share/Steam
-	arch-chroot "${HOLO_INSTALL_DIR}" sudo -u "$HOLOUSER" tar xf /usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -C ~/.local/share/Steam
+	arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "mkdir -p ~/.local/share/Steam"
+	arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "tar xf /usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -C ~/.local/share/Steam"
 	if $INSTALL_DECKY_LOADER; then
-		arch-chroot "${HOLO_INSTALL_DIR}" sudo -u "$HOLOUSER" touch ~/.steam/steam/.cef-enable-remote-debugging
+		arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "touch ~/.local/share/Steam/.cef-enable-remote-debugging"
 	fi
 	arch-chroot "${HOLO_INSTALL_DIR}" touch /etc/holoiso-oobe
 	echo "Cleaning up..."
