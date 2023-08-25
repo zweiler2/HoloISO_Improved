@@ -71,7 +71,7 @@ Upon booting, you'll be greeted with Steam Deck's OOBE screen, from where you'll
 
 **Updating:**
 - For regular updates you would just hit the update button in gamemode or type "sudo steamos-update check && sudo steamos-update now" in the terminal
-- For ISO updates you would just download the new ISO and install to the same disk HoloISO is already on. The installer will detect an existing installation and asks you if you want to keep/reuse your home partition (This is where all your games, steam, various configs and personal files are stored). No data loss occurs then. Only the packages you installed via "pacman" from the terminal get lost (but not their configuration or user data).
+- For ISO updates you would just download the new ISO and install to the same disk HoloISO is already on. The installer will detect an existing installation and asks you if you want to keep/reuse your home partition (This is where all your games, steam, various configs and personal files are stored). No data loss occurs then. Only the packages you installed via "pacman" from the terminal or the discover store get lost (but not their configuration or user data).
 
 Notes:
 -
