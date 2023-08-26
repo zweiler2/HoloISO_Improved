@@ -181,7 +181,7 @@ su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xboxdrv && makepkg -s
 
 # Install 8bitdo-ultimate-controller-udev rules
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/8bitdo-ultimate-controller-udev.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/8bitdo-ultimate-controller-udev.tar.gz
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev.tar.gz
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev && makepkg -si --noconfirm"
 
