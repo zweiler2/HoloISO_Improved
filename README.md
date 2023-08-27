@@ -61,7 +61,7 @@ Nvidia 900 series and up
 - Disabled secure boot
 
 **Installation:**
-- Flash the ISO from [releases](https://github.com/zweiler2/HoloISO_Tweaked/releases) using [BalenaEtcher](https://etcher.balena.io), [Rufus](https://rufus.ie) with DD mode, or by typing `sudo dd if=SteamOS.iso of=/dev/sd(your flash drive) bs=4M status=progress oflag=sync`, or by simply throwing the ISO onto a [Ventoy](https://www.ventoy.net) drive
+- Flash the ISO from [releases](https://github.com/zweiler2/HoloISO_Tweaked/releases) using [BalenaEtcher](https://etcher.balena.io), [Rufus](https://rufus.ie) with DD mode, or by typing `sudo dd if=SteamOS.iso of=/dev/sd(your flash drive) bs=4M status=progress oflag=sync` in the terminal, or by simply throwing the ISO onto a [Ventoy](https://www.ventoy.net) drive
 - Boot into ISO
 - Click on "Install SteamOS on this device"
 - Follow on-screen instructions
@@ -70,7 +70,7 @@ Nvidia 900 series and up
 Upon booting, you'll be greeted with Steam Deck's OOBE screen, from where you'll connect to your network, and login to your Steam account, from there, you can exit to KDE Plasma seamlessly by choosing *Switch to desktop* in the power menu, [like so](https://www.youtube.com/watch?v=smfwna2iHho).
 
 **Updating:**
-- For regular updates you would just hit the update button in gamemode or type "sudo steamos-update check && sudo steamos-update now" in the terminal
+- For regular updates you would just hit the update button in gamemode or type `sudo steamos-update check && sudo steamos-update now` in the terminal
 - For ISO updates you would just download the new ISO and install to the same disk HoloISO is already on. The installer will detect an existing installation and asks you if you want to keep/reuse your home partition (This is where all your games, steam, various configs and personal files are stored). No data loss occurs then. Only the packages you installed via "pacman" from the terminal or the discover store get lost (but not their configuration or user data).
 
 Notes:
