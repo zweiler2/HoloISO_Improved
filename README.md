@@ -17,16 +17,31 @@ Main point of this project focuses in re-implementing proprietary (as in runs-on
 
 Click [here](https://t.me/HoloISO) to join **HoloISO** Telegram update channel;
 
-Click [here](https://steamdeck.community/forums/holoiso.29/) to visit **HoloISO** discussion on Steam Deck Community forums
-
 **Common Questions**
 
 - Is this official?
-> No, but it may as well be 99% of the way there. The code and packages, are straight from Valve, with zero possible edits, and the ISO is being built same rootfs bootstrap as all HoloISO installations run
+> No, but it may as well be 99% of the way there. Most of the code and packages, are straight from Valve, with zero possible edits, and the ISO is being built same rootfs bootstrap as all HoloISO installations run
 - I have an NVIDIA GPU
 > It may not be perfect but it works. For a better experiece go to the desktop, then to the steam settings and under interface make sure you have GPU acceleration for web views and hardware video decoding set to enabled
 
+Hardware Support:
+-
+**CPU:**
+- Mostly all CPUs work fine. But people report inoperable experience on 7xxx series. (Should be working in later builds with linux-zen package included)
 
+**WLAN/PCIe additional cards:**
+- Any pre-2021 WLAN Card works fine on Valve's 5.13 Neptune kernel, but linux-zen provides support for ALL current cards
+
+**Sound:**
+- Everything mostly works fine(tm)
+
+**GPU:**
+- AMD GPUs with RADV support (Guaranteed to work fully stable. 7xxx requires testing)
+- NVIDIA GPUs (Unfunctional, but might work. No support will be provided to you, don't ask about it)
+- Intel GPUs (Random experience)
+
+Progress:
+-
 **Working stuff:**
 - Bootup
 - SteamOS OOBE (Steam Deck UI First Boot Experience)
@@ -43,7 +58,7 @@ Click [here](https://steamdeck.community/forums/holoiso.29/) to visit **HoloISO*
 
 **Working stuff on Steam Deck compared to other distributions:**
 - Dock Firmware updater (additionally installable in desktop by running sudo pacman -S jupiter-dock-updater-bin)
-- Steam Deck BIOS, Controller firmware, OS firmware updater
+- Steam Deck BIOS, Controller firmware, OS firmware updater, support for thumbstick and haptic motor calibration, native amplifier (CS35L41) support
 - New fan curve control
 - TDP/Clock control
 

@@ -1,19 +1,25 @@
 #!/bin/bash
 # Prepares ISO for packaging
 
-# Remove useless shortcuts for now
-mkdir /etc/holoinstall/post_install_shortcuts
-mv /etc/skel/Desktop/Return.desktop /etc/holoinstall/post_install_shortcuts
-
 # Prepare thyself
 chmod +x /etc/holoinstall/post_install/install_holoiso.sh
 chmod +x /etc/holoinstall/post_install/chroot_holoiso.sh
 chmod +x /etc/skel/Desktop/install.desktop
 chmod 755 /etc/skel/Desktop/install.desktop
+# Begin coreOS bootstrapping below:
 
-# Remove steam shortcut on ISO
-rm /home/"${LIVEOSUSER}"/steam.desktop
+# Init pacman keys
+pacman-key --init
+pacman -Sy
 
+# Install desktop suite
+pacman -Rcns --noconfirm pulseaudio xfce4-pulseaudio-plugin pulseaudio-alsa
+pacman -Rdd --noconfirm sddm syslinux xorg-xwayland
+pacman --overwrite="*" --noconfirm -S holoiso-main
+
+# Remove useless shortcuts for now
+mkdir /etc/holoinstall/post_install_shortcuts
+mv /etc/skel/Desktop/Return.desktop /etc/holoinstall/post_install_shortcuts
 # Add a liveOS user
 ROOTPASS="holoiso"
 LIVEOSUSER="liveuser"
@@ -25,25 +31,18 @@ echo "${LIVEOSUSER} ALL=(root) NOPASSWD:ALL" >/etc/sudoers.d/${LIVEOSUSER}
 chmod 0440 /etc/sudoers.d/${LIVEOSUSER}
 usermod -a -G rfkill ${LIVEOSUSER}
 usermod -a -G wheel ${LIVEOSUSER}
-# Begin coreOS bootstrapping below:
-
-# Init pacman keys
-pacman-key --init
-pacman -Sy
-
-# Install desktop suite
-pacman -Rcns --noconfirm pulseaudio xfce4-pulseaudio-plugin pulseaudio-alsa
-pacman -Rdd --noconfirm sddm linux syslinux
-rm -r /usr/lib/modules/6.0.2-arch1-1
-pacman --overwrite="*" --noconfirm -S holoiso-main
-rm /etc/pacman.d/holo_mirrorlist
-cp /etc/holoinstall/post_install/holo_mirrorlist /etc/pacman.d/holo_mirrorlist
-pacman -Rdd --noconfirm rz608-fix-git
+mkdir -p /var/cache/pacman/
+mv /.steamos/offload/var/cache/pacman/pkg /var/cache/pacman/
 mv /etc/pacman.conf /etc/pacold
 cp /etc/holoinstall/post_install/pacman.conf /etc/pacman.conf
+pacman -Rdd --noconfirm sddm
 pacman --overwrite="*" --noconfirm -S holoiso-updateclient wireplumber flatpak packagekit-qt5 rsync unzip sddm-wayland dkms steam-im-modules systemd-swap ttf-twemoji-default ttf-hack ttf-dejavu pkgconf pavucontrol partitionmanager gamemode lib32-gamemode cpupower bluez-plugins bluez-utils
-mv /etc/xdg/autostart/steam.desktop /etc/xdg/autostart/desktopshortcuts.desktop /etc/skel/Desktop/steamos-gamemode.desktop /etc/holoinstall/post_install_shortcuts
+mv /etc/xdg/autostart/steam.desktop /etc/skel/Desktop/steamos-gamemode.desktop /etc/holoinstall/post_install_shortcuts
 pacman --noconfirm -S base-devel
+sed -i 's/base udev modconf/base udev plymouth modconf/g' /etc/mkinitcpio.conf
+pacman --overwrite="*" --noconfirm -S handygccs-git extra-main/mesa extra-main/vulkan-radeon extra-main/vulkan-intel multilib-main/lib32-mesa multilib-main/lib32-vulkan-radeon multilib-main/lib32-vulkan-intel
+plymouth-set-default-theme -R steamos
+mkinitcpio -P
 
 # Enable stuff
 systemctl enable sddm NetworkManager systemd-timesyncd cups bluetooth sshd
@@ -211,13 +210,14 @@ wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkg
 
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf
-mv /etc/mkinitcpio.conf.pacnew /etc/mkinitcpio.conf
-rm /etc/mkinitcpio.d/*
-cp /etc/holoinstall/post_install/mkinitcpio_presets/linux-neptune-61.preset /etc/mkinitcpio.d/
-cp /etc/holoinstall/post_install/mkinitcpio_presets/linux.preset /etc/mkinitcpio.d/
+mv /etc/holoinstall/pre_install/mkinitcpio.conf /etc/mkinitcpio.conf 
+rm /etc/mkinitcpio.d/* # This removes shitty unasked presets so that this thing can't overwrite it next time
+mkdir -p /etc/mkinitcpio.d
 
 # Remove this script from ISO
 rm /etc/pacman.conf
 mv /etc/pacold /etc/pacman.conf
-rm /home/.steamos/offload/var/cache/pacman/pkg/*
-rm -rf /etc/holoinstall/pre_install
+rm -rf /etc/xdg/powermanagementprofilesrc
+rm -rf /home/liveuser/Desktop/steamos-gamemode.desktop
+rm -rf /home/liveuser/Desktop/Return.desktop
+systemctl disable qemu-guest-agent

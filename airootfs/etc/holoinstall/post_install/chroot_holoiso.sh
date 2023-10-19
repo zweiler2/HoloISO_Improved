@@ -2,7 +2,7 @@
 # Simple chrooter for stuff
 
 # Define mountpoint
-MOUNT_DIR=/tmp/mount
+MOUNT_DIR=/tmp/mount_chroot
 
 # Detect holo partitions
 ROOTPART=$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)

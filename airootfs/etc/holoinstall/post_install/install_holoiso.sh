@@ -467,13 +467,13 @@ EOF
 	echo "Configuring first boot user accounts..."
 	rm "${HOLO_INSTALL_DIR}"/etc/skel/Desktop/*
 	arch-chroot "${HOLO_INSTALL_DIR}" rm /etc/sddm.conf.d/*
-	mv /etc/holoinstall/post_install_shortcuts/steam.desktop /etc/holoinstall/post_install_shortcuts/desktopshortcuts.desktop "${HOLO_INSTALL_DIR}"/etc/xdg/autostart
+	mv /etc/holoinstall/post_install_shortcuts/steam.desktop "${HOLO_INSTALL_DIR}"/etc/xdg/autostart
 	mv /etc/holoinstall/post_install_shortcuts/steamos-gamemode.desktop "${HOLO_INSTALL_DIR}"/etc/skel/Desktop
 	echo "Creating user ${HOLOUSER}..."
 	echo -e "${ROOTPASS}\n${ROOTPASS}" | arch-chroot "${HOLO_INSTALL_DIR}" passwd root
 	arch-chroot "${HOLO_INSTALL_DIR}" useradd --create-home "${HOLOUSER}"
 	echo -e "${HOLOPASS}\n${HOLOPASS}" | arch-chroot "${HOLO_INSTALL_DIR}" passwd "${HOLOUSER}"
-	echo "${HOLOUSER} ALL=(root) NOPASSWD:ALL" >"${HOLO_INSTALL_DIR}"/etc/sudoers.d/"${HOLOUSER}"
+	echo "${HOLOUSER} ALL=(ALL) ALL" >"${HOLO_INSTALL_DIR}"/etc/sudoers.d/"${HOLOUSER}"
 	chmod 0440 "${HOLO_INSTALL_DIR}"/etc/sudoers.d/"${HOLOUSER}"
 	sleep 1
 
@@ -549,6 +549,9 @@ full_install() {
 	echo "Cleaning up..."
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
+	arch-chroot ${HOLO_INSTALL_DIR} systemctl enable amd-perf-fix
+	sudo rm -rf ${HOLO_INSTALL_DIR}/etc/sudoers.d/g_wheel
+	sudo rm -rf ${HOLO_INSTALL_DIR}/etc/sudoers.d/liveuser
 	sleep 1
 }
 
