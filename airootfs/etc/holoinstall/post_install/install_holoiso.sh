@@ -436,10 +436,6 @@ base_os_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman-key --init
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm mkinitcpio-archiso
 
-	rm "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
-	mv /etc/holoinstall/post_install/gamescope-session "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
-	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
-
 	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" = "NVIDIA" ]]; then
 		echo "LIBVA_DRIVER_NAME=nvidia" >>"${HOLO_INSTALL_DIR}"/etc/environment
 		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm /' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
