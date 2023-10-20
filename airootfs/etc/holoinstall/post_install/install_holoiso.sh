@@ -442,10 +442,6 @@ base_os_install() {
 	mv /etc/holoinstall/post_install/gamescope-session "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
 	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
 
-	mv /etc/holoinstall/post_install/amd-perf-fix.service "${HOLO_INSTALL_DIR}"/etc/systemd/system/multi-user.target.wants
-	mv /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
-	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
-
 	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" = "NVIDIA" ]]; then
 		echo "LIBVA_DRIVER_NAME=nvidia" >>"${HOLO_INSTALL_DIR}"/etc/environment
 		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm /' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
@@ -572,6 +568,10 @@ full_install() {
 	else
 		sed -i 's!/usr/lib/hwsupport/power-button-handler.py!/usr/lib/holoiso-hwsupport/power-button-handler.py!' "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
 	fi
+
+	mv /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
+	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
+
 	echo "Configuring Steam Deck UI by default..."
 	ln -s /usr/share/applications/steam.desktop "${HOLO_INSTALL_DIR}"/etc/skel/Desktop/steam.desktop
 	echo -e "[General]\nDisplayServer=wayland\n\n[Autologin]\nUser=${HOLOUSER}\nSession=gamescope-wayland.desktop\nRelogin=true\n\n[X11]\n# Janky workaround for wayland sessions not stopping in sddm, kills\n# all active sddm-helper sessions on teardown\nDisplayStopCommand=/usr/bin/gamescope-wayland-teardown-workaround" >>"${HOLO_INSTALL_DIR}"/etc/sddm.conf.d/autologin.conf
