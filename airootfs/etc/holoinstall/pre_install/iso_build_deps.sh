@@ -74,10 +74,10 @@ chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware && makepkg -si --noconfirm"
 
 # Install xboxdrv
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/xboxdrv.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/xboxdrv.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/xboxdrv
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xboxdrv && makepkg -si --noconfirm"
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/xboxdrv-stable-git.tar.gz -P /etc/holoinstall/post_install/pkgs
+cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git.tar.gz
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git && makepkg -si --noconfirm"
 
 # Install 8bitdo-ultimate-controller-udev rules
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/8bitdo-ultimate-controller-udev.tar.gz -P /etc/holoinstall/post_install/pkgs
