@@ -395,7 +395,6 @@ base_os_install() {
 	fi
 	rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive / "${HOLO_INSTALL_DIR}" | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }' | zenity --progress --title="Installing base OS..." --text="Bootstrapping root filesystem...\nThis may take more than 10 minutes.\n" --width=500 --no-cancel --auto-close 2>/dev/null
 	while read -r input; do
-		echo "$input" | tr ' ' '\n'
 		kernel=$(echo "$input" | cut -d ' ' -f 1)
 		echo -e "PRESETS=('default' 'fallback')\n\nALL_kver='/boot/vmlinuz-${kernel}'\nALL_config='/etc/mkinitcpio.conf'\n\ndefault_image=\"/boot/initramfs-${kernel}.img\"\n\nfallback_image=\"/boot/initramfs-${kernel}-fallback.img\"\nfallback_options=\"-S autodetect\"" >"${HOLO_INSTALL_DIR}"/etc/mkinitcpio.d/"${kernel}".preset
 		case $kernel in
@@ -565,8 +564,6 @@ full_install() {
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addon | grep linux-neptune)"
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addon | grep linux-firmware-neptune)"
 		arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
-	else
-		sed -i 's!/usr/lib/hwsupport/power-button-handler.py!/usr/lib/holoiso-hwsupport/power-button-handler.py!' "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session
 	fi
 
 	mv /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
@@ -587,9 +584,9 @@ full_install() {
 	echo "Cleaning up..."
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
-	arch-chroot ${HOLO_INSTALL_DIR} systemctl enable amd-perf-fix
-	sudo rm -rf ${HOLO_INSTALL_DIR}/etc/sudoers.d/g_wheel
-	sudo rm -rf ${HOLO_INSTALL_DIR}/etc/sudoers.d/liveuser
+	arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable amd-perf-fix
+	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/g_wheel
+	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/liveuser
 	sleep 1
 }
 
