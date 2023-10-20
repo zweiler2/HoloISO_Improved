@@ -574,6 +574,7 @@ full_install() {
 	echo -e "[General]\nDisplayServer=wayland\n\n[Autologin]\nUser=${HOLOUSER}\nSession=gamescope-wayland.desktop\nRelogin=true\n\n[X11]\n# Janky workaround for wayland sessions not stopping in sddm, kills\n# all active sddm-helper sessions on teardown\nDisplayStopCommand=/usr/bin/gamescope-wayland-teardown-workaround" >>"${HOLO_INSTALL_DIR}"/etc/sddm.conf.d/autologin.conf
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G rfkill "${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G wheel "${HOLOUSER}"
+	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G realtime "${HOLOUSER}"
 	echo "Preparing Steam OOBE..."
 	arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "mkdir -p ~/.local/share/Steam"
 	arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "tar xf /usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -C ~/.local/share/Steam"
