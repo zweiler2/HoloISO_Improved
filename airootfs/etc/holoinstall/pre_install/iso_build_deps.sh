@@ -111,13 +111,14 @@ wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs_addon
 
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf
-mv /etc/holoinstall/pre_install/mkinitcpio.conf /etc/mkinitcpio.conf 
-rm /etc/mkinitcpio.d/* # This removes shitty unasked presets so that this thing can't overwrite it next time
+mv /etc/holoinstall/pre_install/mkinitcpio.conf /etc/mkinitcpio.conf
+rm /etc/mkinitcpio.d/*
 mkdir -p /etc/mkinitcpio.d
 
 # Remove this script from ISO
+rm -rf /etc/holoinstall/pre_install
 rm /etc/pacman.conf
 mv /etc/pacold /etc/pacman.conf
 rm -rf /etc/xdg/powermanagementprofilesrc
-rm -rf /home/liveuser/Desktop/steamos-gamemode.desktop
-rm -rf /home/liveuser/Desktop/Return.desktop
+rm -rf /home/"${LIVEOSUSER}"/Desktop/steamos-gamemode.desktop
+rm -rf /home/"${LIVEOSUSER}"/Desktop/Return.desktop
