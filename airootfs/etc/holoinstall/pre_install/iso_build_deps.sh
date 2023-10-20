@@ -207,6 +207,8 @@ rm -r /etc/holoinstall/post_install/pkgs
 # Download extra stuff
 wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs_addon
 wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkgs_addon
+wget "$(pacman -Sp amd-ucode)" -P /etc/holoinstall/post_install/pkgs_addon
+wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs_addon
 
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf
@@ -220,4 +222,3 @@ mv /etc/pacold /etc/pacman.conf
 rm -rf /etc/xdg/powermanagementprofilesrc
 rm -rf /home/liveuser/Desktop/steamos-gamemode.desktop
 rm -rf /home/liveuser/Desktop/Return.desktop
-systemctl disable qemu-guest-agent

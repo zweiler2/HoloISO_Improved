@@ -396,8 +396,43 @@ base_os_install() {
 		check_mount $? home
 	fi
 	rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive / "${HOLO_INSTALL_DIR}" | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }' | zenity --progress --title="Installing base OS..." --text="Bootstrapping root filesystem...\nThis may take more than 10 minutes.\n" --width=500 --no-cancel --auto-close 2>/dev/null
-	arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(find /usr/lib | grep vmlinuz | grep neptune)" "/boot/vmlinuz-$(cat /usr/lib/modules/*neptune*/pkgbase)"
-	arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(find /usr/lib | grep vmlinuz | grep arch)" "/boot/vmlinuz-$(cat /usr/lib/modules/*arch*/pkgbase)"
+	while read -r input; do
+		echo "$input" | tr ' ' '\n'
+		kernel=$(echo "$input" | cut -d ' ' -f 1)
+		echo -e "PRESETS=('default' 'fallback')\n\nALL_kver='/boot/vmlinuz-${kernel}'\nALL_config='/etc/mkinitcpio.conf'\n\ndefault_image=\"/boot/initramfs-${kernel}.img\"\n\nfallback_image=\"/boot/initramfs-${kernel}-fallback.img\"\nfallback_options=\"-S autodetect\"" >"${HOLO_INSTALL_DIR}"/etc/mkinitcpio.d/"${kernel}".preset
+		case $kernel in
+		linux)
+			arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w arch1 | grep vmlinuz)" \
+				"/boot/vmlinuz-$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w arch1 | grep pkgbase | xargs arch-chroot "${HOLO_INSTALL_DIR}" cat)"
+			;;
+		linux-lts)
+			arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w lts | grep vmlinuz)" \
+				"/boot/vmlinuz-$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w lts | grep pkgbase | xargs arch-chroot "${HOLO_INSTALL_DIR}" cat)"
+			;;
+		linux-zen)
+			arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w zen | grep vmlinuz)" \
+				"/boot/vmlinuz-$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w zen | grep pkgbase | xargs arch-chroot "${HOLO_INSTALL_DIR}" cat)"
+			;;
+		linux-hardened)
+			arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w hardened | grep vmlinuz)" \
+				"/boot/vmlinuz-$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w hardened | grep pkgbase | xargs arch-chroot "${HOLO_INSTALL_DIR}" cat)"
+			;;
+		linux-neptune)
+			arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w neptune | grep vmlinuz)" \
+				"/boot/vmlinuz-$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w neptune | grep pkgbase | xargs arch-chroot "${HOLO_INSTALL_DIR}" cat)"
+			;;
+		linux-neptune-60)
+			arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w neptune-60 | grep vmlinuz)" \
+				"/boot/vmlinuz-$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w neptune-60 | grep pkgbase | xargs arch-chroot "${HOLO_INSTALL_DIR}" cat)"
+			;;
+		linux-neptune-61)
+			arch-chroot "${HOLO_INSTALL_DIR}" install -Dm644 "$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w neptune-61 | grep vmlinuz)" \
+				"/boot/vmlinuz-$(arch-chroot "${HOLO_INSTALL_DIR}" find /usr/lib/modules | grep -w neptune-61 | grep pkgbase | xargs arch-chroot "${HOLO_INSTALL_DIR}" cat)"
+			;;
+		esac
+	done <"${HOLO_INSTALL_DIR}"/etc/holoinstall/post_install/kernel_list.bootstrap
+	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addons | grep amd-ucode)"
+	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addons | grep intel-ucode)"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm /etc/polkit-1/rules.d/99_holoiso_installuser.rules
 	cp -r /etc/holoinstall/post_install/pacman.conf "${HOLO_INSTALL_DIR}"/etc/pacman.conf
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman-key --init

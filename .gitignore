@@ -5,3 +5,4 @@ pkglist.x86_64.txt
 test2.sh
 test
 efiboot/loader/entries/*
+airootfs/etc/mkinitcpio.d/*
