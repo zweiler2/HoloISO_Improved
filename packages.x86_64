@@ -5,7 +5,7 @@ b43-fwcutter
 base
 bind-tools
 brltty
-broadcom-wl
+broadcom-wl-dkms
 btrfs-progs
 clonezilla
 cloud-init
@@ -48,6 +48,14 @@ linux-atm
 core-main/linux-firmware
 core-main/linux-firmware-marvell
 core-main/linux-firmware-whence
+core-main/linux-firmware-qlogic
+core-main/linux-firmware-bnx2x
+core-main/linux-firmware-liquidio
+core-main/linux-firmware-mellanox
+core-main/linux-firmware-nfp
+sof-firmware
+xf86-video-amdgpu
+os-prober
 livecd-sounds
 lsscsi
 lvm2
