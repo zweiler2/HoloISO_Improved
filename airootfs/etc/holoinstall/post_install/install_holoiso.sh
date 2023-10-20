@@ -178,46 +178,44 @@ partitioning() {
 	if [[ -n "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" ]]; then
 		HOME_PART_EXISTS=true
 		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1).\nPlease select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=400 --height=220 2>/dev/null)
-		HOME_REUSE=true
-		mkdir -p /tmp/home
-		mount "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" /tmp/home
-		mkdir -p /tmp/rootpart
-		mount "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)" /tmp/rootpart
-		if [[ -d "/tmp/home/.steamos" ]]; then
-			echo "Migration data found. Proceeding"
+		if [[ "${HOME_REUSE_TYPE}" == "2" ]]; then
+			HOME_REUSE=true
+			mkdir -p /tmp/home
+			mount "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" /tmp/home
+			mkdir -p /tmp/rootpart
+			mount "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)" /tmp/rootpart
 			HOLOUSER=$(grep home </tmp/rootpart/etc/passwd | cut -d ':' -f 1)
-			umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
-			umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
-		else
-			zenity --progress --title="Preparing to reuse home at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" --text="Your installation will reuse following user: ${HOLOUSER} \n\nStarting to move following directories to target offload ():\
-				\n\n- /opt\n- /root\n- /srv\n- /usr/lib/debug\n- /usr/local\n- /var/cache/pacman\n- /var/lib/docker\n- /var/lib/systemd/coredump\n- /var/log\n- /var/tmp\n" --width=500 --no-cancel --percentage=0 --auto-close 2>/dev/null \
-				< <(
-					echo "10"
-					sleep 1
-					HOLOUSER=$(grep home </tmp/rootpart/etc/passwd | cut -d ':' -f 1)
-					mkdir -p /tmp/home/.steamos/ /tmp/home/.steamos/offload/opt /tmp/home/.steamos/offload/root /tmp/home/.steamos/offload/srv /tmp/home/.steamos/offload/usr/lib/debug /tmp/home/.steamos/offload/usr/local /tmp/home/.steamos/offload/var/lib/flatpak /tmp/home/.steamos/offload/var/cache/pacman /tmp/home/.steamos/offload/var/lib/docker /tmp/home/.steamos/offload/var/lib/systemd/coredump /tmp/home/.steamos/offload/var/log /tmp/home/.steamos/offload/var/tmp
-					echo "15"
-					sleep 1
-					mv /tmp/rootpart/opt/* /tmp/home/.steamos/offload/opt
-					mv /tmp/rootpart/root/* /tmp/home/.steamos/offload/root
-					mv /tmp/rootpart/srv/* /tmp/home/.steamos/offload/srv
-					mv /tmp/rootpart/usr/lib/debug/* /tmp/home/.steamos/offload/usr/lib/debug
-					mv /tmp/rootpart/usr/local/* /tmp/home/.steamos/offload/usr/local
-					mv /tmp/rootpart/var/cache/pacman/* /tmp/home/.steamos/offload/var/cache/pacman
-					mv /tmp/rootpart/var/lib/docker/* /tmp/home/.steamos/offload/var/lib/docker
-					mv /tmp/rootpart/var/lib/systemd/coredump/* /tmp/home/.steamos/offload/var/lib/systemd/coredump
-					mv /tmp/rootpart/var/log/* /tmp/home/.steamos/offload/var/log
-					mv /tmp/rootpart/var/tmp/* /tmp/home/.steamos/offload/var/tmp
-					echo "System directory moving complete. Preparing to move flatpak content."
-					echo "30"
-					sleep 1
-					printf "Starting flatpak data migration.\nThis may take 2-10 minutes to complete.\n"
-					rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive /tmp/rootpart/var/lib/flatpak /tmp/home/.steamos/offload/var/lib/ | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }'
-					echo "99"
-					sleep 3
-					echo "Finished."
-				)
-
+			if [[ -d "/tmp/home/.steamos" ]]; then
+				echo "Migration data found. Proceeding"
+			else
+				zenity --progress --title="Preparing to reuse home at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" --text="Your installation will reuse following user: ${HOLOUSER} \n\nStarting to move following directories to target offload ():\
+					\n\n- /opt\n- /root\n- /srv\n- /usr/lib/debug\n- /usr/local\n- /var/cache/pacman\n- /var/lib/docker\n- /var/lib/systemd/coredump\n- /var/log\n- /var/tmp\n" --width=500 --no-cancel --percentage=0 --auto-close 2>/dev/null \
+					< <(
+						echo "10"
+						sleep 1
+						mkdir -p /tmp/home/.steamos/ /tmp/home/.steamos/offload/opt /tmp/home/.steamos/offload/root /tmp/home/.steamos/offload/srv /tmp/home/.steamos/offload/usr/lib/debug /tmp/home/.steamos/offload/usr/local /tmp/home/.steamos/offload/var/lib/flatpak /tmp/home/.steamos/offload/var/cache/pacman /tmp/home/.steamos/offload/var/lib/docker /tmp/home/.steamos/offload/var/lib/systemd/coredump /tmp/home/.steamos/offload/var/log /tmp/home/.steamos/offload/var/tmp
+						echo "15"
+						sleep 1
+						mv /tmp/rootpart/opt/* /tmp/home/.steamos/offload/opt
+						mv /tmp/rootpart/root/* /tmp/home/.steamos/offload/root
+						mv /tmp/rootpart/srv/* /tmp/home/.steamos/offload/srv
+						mv /tmp/rootpart/usr/lib/debug/* /tmp/home/.steamos/offload/usr/lib/debug
+						mv /tmp/rootpart/usr/local/* /tmp/home/.steamos/offload/usr/local
+						mv /tmp/rootpart/var/cache/pacman/* /tmp/home/.steamos/offload/var/cache/pacman
+						mv /tmp/rootpart/var/lib/docker/* /tmp/home/.steamos/offload/var/lib/docker
+						mv /tmp/rootpart/var/lib/systemd/coredump/* /tmp/home/.steamos/offload/var/lib/systemd/coredump
+						mv /tmp/rootpart/var/log/* /tmp/home/.steamos/offload/var/log
+						mv /tmp/rootpart/var/tmp/* /tmp/home/.steamos/offload/var/tmp
+						echo "System directory moving complete. Preparing to move flatpak content."
+						echo "30"
+						sleep 1
+						printf "Starting flatpak data migration.\nThis may take 2-10 minutes to complete.\n"
+						rsync -axHAWXS --numeric-ids --info=progress2 --no-inc-recursive /tmp/rootpart/var/lib/flatpak /tmp/home/.steamos/offload/var/lib/ | tr '\r' '\n' | awk '/^ / { print int(+$2) ; next } $0 { print "# " $0 }'
+						echo "99"
+						sleep 3
+						echo "Finished."
+					)
+			fi
 			umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
 			umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
 		fi
@@ -371,7 +369,7 @@ partitioning() {
 	echo "Root partition formatted"
 	btrfs filesystem label "${root_partition}" holo-root
 	if $home; then
-		if $HOME_PART_EXISTS && [[ "${HOME_REUSE_TYPE}" == "2" ]]; then
+		if $HOME_PART_EXISTS && $HOME_REUSE; then
 			echo "Home partition will be reused at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
 			home_partition="$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
 			echo "Home partition reused"
