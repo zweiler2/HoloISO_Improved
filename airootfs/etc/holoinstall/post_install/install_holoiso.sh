@@ -504,6 +504,7 @@ EOF
 	sleep 1
 
 	if $INSTALL_XONE_DRIVER; then
+		pacman -Syu --noconfirm
 		# Install xone-dongle-firmware
 		echo The firmware for the wireless dongle is subject to Microsofts Terms of Use:
 		echo https://www.microsoft.com/en-us/legal/terms-of-use
@@ -511,13 +512,19 @@ EOF
 		wget https://aur.archlinux.org/cgit/aur.git/snapshot/xone-dongle-firmware.tar.gz -P "${HOLO_INSTALL_DIR}"/etc/xone
 		cd "${HOLO_INSTALL_DIR}"/etc/xone && tar -xf "${HOLO_INSTALL_DIR}"/etc/xone/xone-dongle-firmware.tar.gz
 		arch-chroot "${HOLO_INSTALL_DIR}" chown -hR "${HOLOUSER}" /etc/xone/xone-dongle-firmware
-		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "cd /etc/xone/xone-dongle-firmware && makepkg -si --noconfirm"
+		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "cd /etc/xone/xone-dongle-firmware && makepkg"
+		XONE_DONGLE_FW=$(find "${HOLO_INSTALL_DIR}"/etc/xone/xone-dongle-firmware -name 'xone-dongle-firmware*.pkg.tar.zst')
+		XONE_DONGLE_FW=${XONE_DONGLE_FW//$HOLO_INSTALL_DIR/}
+		echo "$XONE_DONGLE_FW" | xargs arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm
 
 		# Install xone-dkms-git driver
 		wget https://aur.archlinux.org/cgit/aur.git/snapshot/xone-dkms-git.tar.gz -P "${HOLO_INSTALL_DIR}"/etc/xone
 		cd "${HOLO_INSTALL_DIR}"/etc/xone && tar -xf "${HOLO_INSTALL_DIR}"/etc/xone/xone-dkms-git.tar.gz
 		arch-chroot "${HOLO_INSTALL_DIR}" chown -hR "${HOLOUSER}" /etc/xone/xone-dkms-git
-		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "cd /etc/xone/xone-dkms-git && makepkg -si --noconfirm"
+		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "cd /etc/xone/xone-dkms-git && makepkg"
+		XONE_DKMS=$(find "${HOLO_INSTALL_DIR}"/etc/xone/xone-dkms-git -name 'xone-dkms-git*.pkg.tar.zst')
+		XONE_DKMS=${XONE_DKMS//$HOLO_INSTALL_DIR/}
+		echo "$XONE_DKMS" | xargs arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm
 		rm -r "${HOLO_INSTALL_DIR}"/etc/xone
 	fi
 
