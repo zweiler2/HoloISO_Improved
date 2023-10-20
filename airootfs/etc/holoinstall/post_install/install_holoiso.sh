@@ -448,7 +448,8 @@ base_os_install() {
 
 	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" = "NVIDIA" ]]; then
 		echo "LIBVA_DRIVER_NAME=nvidia" >>"${HOLO_INSTALL_DIR}"/etc/environment
-		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm/' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
+		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm /' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
+		sed -i 's/plymouth.nolog/plymouth.nolog nvidia-drm.modeset=1/g' "${HOLO_INSTALL_DIR}"/etc/default/grub
 		if $IS_LAPTOP; then
 			echo 'GAMEMODERUNEXEC="env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only"' >>"${HOLO_INSTALL_DIR}"/etc/environment
 		else
