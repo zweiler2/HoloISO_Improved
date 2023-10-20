@@ -560,12 +560,14 @@ EOF
 full_install() {
 	if $GAMEPAD_DRV; then
 		echo "You're running this on Anbernic Win600. A suitable gamepad driver will be installed."
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm /etc/holoinstall/post_install/pkgs_addon/win600-xpad-dkms*.pkg.tar.zst
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addon | grep win600-xpad-dkms)"
 	fi
 	if $FIRMWARE_INSTALL; then
 		echo "You're running this on a Steam Deck. linux-firmware-neptune will be installed to ensure maximum kernel-side compatibility."
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm linux-firmware
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm /etc/holoinstall/post_install/pkgs_addon/linux-firmware-neptune*.pkg.tar.zst
+		cut -d ' ' -f 1 "${HOLO_INSTALL_DIR}"/etc/holoinstall/post_install/kernel_list.bootstrap | xargs arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addon | grep linux-neptune)"
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addon | grep linux-firmware-neptune)"
 		arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
 	else
 		sed -i 's!/usr/lib/hwsupport/power-button-handler.py!/usr/lib/holoiso-hwsupport/power-button-handler.py!' "${HOLO_INSTALL_DIR}"/usr/bin/gamescope-session

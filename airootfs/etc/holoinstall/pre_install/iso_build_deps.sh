@@ -105,6 +105,7 @@ rm -r /etc/holoinstall/post_install/pkgs
 # Download extra stuff
 wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs_addon
 wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkgs_addon
+wget "$(pacman -Sp linux-neptune)" -P /etc/holoinstall/post_install/pkgs_addon
 wget "$(pacman -Sp amd-ucode)" -P /etc/holoinstall/post_install/pkgs_addon
 wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs_addon
 
