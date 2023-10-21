@@ -115,6 +115,8 @@ mv /etc/holoinstall/pre_install/mkinitcpio.conf /etc/mkinitcpio.conf
 rm /etc/mkinitcpio.d/*
 mkdir -p /etc/mkinitcpio.d
 
+pacman -Syu --noconfirm grub
+
 # Remove this script from ISO
 rm -rf /etc/holoinstall/pre_install
 rm /etc/pacman.conf
