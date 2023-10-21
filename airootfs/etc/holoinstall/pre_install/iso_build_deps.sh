@@ -119,6 +119,7 @@ pacman -Syu --noconfirm grub
 
 # Remove this script from ISO
 rm -rf /etc/holoinstall/pre_install
+rm -rf /home/.steamos/offload/var/cache/pacman/pkg/*
 rm /etc/pacman.conf
 mv /etc/pacold /etc/pacman.conf
 rm -rf /etc/xdg/powermanagementprofilesrc
