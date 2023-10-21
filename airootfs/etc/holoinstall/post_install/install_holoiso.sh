@@ -528,7 +528,9 @@ EOF
 	fi
 
 	if $INSTALL_DECKY_LOADER; then
-		arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_release.sh | sh"
+		pacman -Syu --noconfirm
+		# shellcheck disable=SC2034
+		SUDO_USER=$HOLOUSER; curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_release.sh | arch-chroot "${HOLO_INSTALL_DIR}" bash
 	fi
 
 	if $INSTALL_EMUDECK; then
@@ -576,10 +578,10 @@ full_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G wheel "${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G realtime "${HOLOUSER}"
 	echo "Preparing Steam OOBE..."
-	arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "mkdir -p ~/.local/share/Steam"
-	arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "tar xf /usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -C ~/.local/share/Steam"
+	arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "mkdir -p ~/.local/share/Steam"
+	arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "tar xf /usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -C ~/.local/share/Steam"
 	if $INSTALL_DECKY_LOADER; then
-		arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "touch ~/.local/share/Steam/.cef-enable-remote-debugging"
+		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "touch ~/.local/share/Steam/.cef-enable-remote-debugging"
 	fi
 	arch-chroot "${HOLO_INSTALL_DIR}" touch /etc/holoiso-oobe
 	echo "Cleaning up..."
