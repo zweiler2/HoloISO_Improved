@@ -273,8 +273,9 @@ partitioning() {
 	1)
 		destructive=true
 		# Umount twice to fully umount the broken install of steam os 3 before installing.
-		umount "$INSTALLDEVICE"* >/dev/null 2>&1
-		umount "$INSTALLDEVICE"* >/dev/null 2>&1
+		swapoff "${HOLO_INSTALL_DIR}"/home/swapfile 2>/dev/null
+		umount -R "${HOLO_INSTALL_DIR}" 2>/dev/null
+		umount -R /tmp/mount_chroot 2>/dev/null
 		if zenity --question --text "WARNING: The following drive is going to be fully erased. ALL DATA ON DRIVE ${DEVICE} WILL BE LOST! \n\n$(lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT "${DEVICE}" | sed "1d")\n\nErase ${DEVICE} and begin installation?" --width=700 2>/dev/null; then
 			echo "Wiping partitions..."
 			sfdisk --delete "${DEVICE}"
