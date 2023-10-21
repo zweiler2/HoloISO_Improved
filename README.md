@@ -101,9 +101,8 @@ Trigger the build by executing:
 ```
 sudo pacman -S archiso
 git clone https://github.com/zweiler2/HoloISO_Tweaked.git
-sudo mv ./HoloISO_Tweaked/mkarchiso-holoiso /usr/bin
-sudo chmod +x /usr/bin/mkarchiso-holoiso
-sudo mkarchiso-holoiso -v ./HoloISO_Tweaked
+sudo chmod +x ./HoloISO_Tweaked/mkarchiso-holoiso
+sudo ./HoloISO_Tweaked/mkarchiso-holoiso -rv ./HoloISO_Tweaked
 sudo chown -hR $USER:$USER ./out 
 ```
 Once it finishes, your ISO will be available in the `out` folder.
