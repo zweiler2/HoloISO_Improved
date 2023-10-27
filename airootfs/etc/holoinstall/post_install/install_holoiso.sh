@@ -535,9 +535,13 @@ EOF
 	fi
 
 	if $INSTALL_EMUDECK; then
-		arch-chroot "${HOLO_INSTALL_DIR}" su "$HOLOUSER" -c "curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | sh"
+		pacman -Syu --noconfirm
+		mkdir -p "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications
+		curl -L "$(curl -s https://api.github.com/repos/EmuDeck/emudeck-electron/releases/latest | grep -E 'browser_download_url.*AppImage' | cut -d '"' -f 4)" -o "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
+		chown -hR liveuser:liveuser "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
 		chmod +x "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
-		HOME=${HOLO_INSTALL_DIR}/home/${HOLOUSER} "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
+		HOME=${HOLO_INSTALL_DIR}/home/${HOLOUSER}; su -p liveuser -c "${HOLO_INSTALL_DIR}/home/${HOLOUSER}/Applications/EmuDeck.AppImage"
+		wait
 	fi
 
 	echo "Installing bootloader..."
