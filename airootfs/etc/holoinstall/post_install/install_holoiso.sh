@@ -593,6 +593,7 @@ full_install() {
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
 	arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable amd-perf-fix
+	arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable xboxdrv
 	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/g_wheel
 	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/liveuser
 	sleep 1
