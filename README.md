@@ -116,9 +116,9 @@ Credits:
 [wynn1212](https://github.com/wynn1212)  
 [TwinniDev](https://github.com/TwinniDev)  
 [Pato05](https://github.com/Pato05)  
-[maade69](https://github.com/maade69)  
+[maade93791](https://github.com/maade93791)  
 [huangsijun17](https://github.com/huangsijun17)  
-[wordlesswind](https://github.com/wordlesswind)  
+[cherinyy](https://github.com/cherinyy)  
 [NightHammer1000](https://github.com/NightHammer1000)  
 [kubo6472](https://github.com/kubo6472)  
 [ItsVixano](https://github.com/ItsVixano)  
@@ -128,6 +128,8 @@ Credits:
 [Etienne Juvigny](https://github.com/Tk-Glitch) and all contributors who made the [Nvidia driver AIO Installer](https://github.com/Frogging-Family/nvidia-all)  
 [Stephen](https://github.com/elFarto) and all contributors who made the [Nvidia vaapi driver](https://github.com/elFarto/nvidia-vaapi-driver)  
 [Severin](https://github.com/medusalix) and all contributors who made the [Xbox One and Xbox Series X|S accessories linux kernel driver](https://github.com/medusalix/xone)
+[Ingo Ruhnke](https://github.com/Grumbel) and all contributors who made the [Xbox/Xbox360 Gamepad Driver](https://github.com/xboxdrv/xboxdrv)
+[Joaquín Ignacio Aramendía](https://github.com/Samsagax), [Alesh Slovak](https://github.com/alkazar) and all contributors who made the [ChimeraOS gamescope-session](https://github.com/ChimeraOS/gamescope-session)
 
 Screenshots:
 -
