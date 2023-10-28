@@ -37,7 +37,7 @@ Hardware Support:
 
 **GPU:**
 - AMD GPUs with RADV support (Guaranteed to work fully stable. 7xxx requires testing)
-- NVIDIA GPUs (Unfunctional, but might work. No support will be provided to you, don't ask about it)
+- NVIDIA GPUs (900 series and above work. SteamUI lags, but games are fine)
 - Intel GPUs (Random experience)
 
 Progress:
@@ -69,9 +69,7 @@ Installation process:
 **Prerequistes:**
 - 4GB flash drive
 - More than 8 GB RAM if you plan to use "Copy-To-RAM" option to install
-- AMD GPU that supports RADV Drivers instead of Radeon (Southern Islands and Sea Islands require additional kernel cmdline property) or  
-Intel GPUs should work, but this needs testing or  
-Nvidia 900 series and up
+- A Vulkan capable GPU
 - UEFI-enabled device
 - Disabled secure boot
 
