@@ -594,6 +594,7 @@ full_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
 	arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable amd-perf-fix
 	arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable xboxdrv
+	[ "$(grep 'vendor' /proc/cpuinfo | uniq | awk '{print$3}')" = "GenuineIntel" ] && arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable intel-power-readout-fix
 	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/g_wheel
 	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/liveuser
 	sleep 1

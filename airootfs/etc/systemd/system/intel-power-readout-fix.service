@@ -1,0 +1,8 @@
+[Unit]
+Description=Fix power usage readout in MangoHud on Intel CPUs
+
+[Service]
+ExecStart=chmod o+r /sys/class/powercap/intel-rapl:0/energy_uj
+
+[Install]
+WantedBy=multi-user.target
