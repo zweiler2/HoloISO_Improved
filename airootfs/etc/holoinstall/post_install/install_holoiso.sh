@@ -499,8 +499,10 @@ EOF
 	echo "Configuring first boot user accounts..."
 	rm "${HOLO_INSTALL_DIR}"/etc/skel/Desktop/*
 	arch-chroot "${HOLO_INSTALL_DIR}" rm /etc/sddm.conf.d/*
-	mv /etc/holoinstall/post_install_shortcuts/steam.desktop "${HOLO_INSTALL_DIR}"/etc/xdg/autostart
-	mv /etc/holoinstall/post_install_shortcuts/steamos-gamemode.desktop "${HOLO_INSTALL_DIR}"/etc/skel/Desktop
+	cp /etc/holoinstall/post_install_shortcuts/steam.desktop "${HOLO_INSTALL_DIR}"/etc/xdg/autostart
+	echo -e "[Desktop Entry]\nName=Steam\nExec=steam steam://open/games\nIcon=steam\nType=Application" >"${HOLO_INSTALL_DIR}"/etc/skel/Desktop/steam.desktop
+	chmod +x "${HOLO_INSTALL_DIR}"/etc/skel/Desktop/steam.desktop
+	cp /etc/holoinstall/post_install_shortcuts/steamos-gamemode.desktop "${HOLO_INSTALL_DIR}"/etc/skel/Desktop
 	echo "Creating user ${HOLOUSER}..."
 	echo -e "${ROOTPASS}\n${ROOTPASS}" | arch-chroot "${HOLO_INSTALL_DIR}" passwd root
 	arch-chroot "${HOLO_INSTALL_DIR}" useradd --create-home "${HOLOUSER}"
@@ -585,7 +587,6 @@ full_install() {
 	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
 
 	echo "Configuring Steam Deck UI by default..."
-	ln -s /usr/share/applications/steam.desktop "${HOLO_INSTALL_DIR}"/etc/skel/Desktop/steam.desktop
 	echo -e "[General]\nDisplayServer=wayland\n\n[Autologin]\nUser=${HOLOUSER}\nSession=gamescope-wayland.desktop\nRelogin=true\n\n[X11]\n# Janky workaround for wayland sessions not stopping in sddm, kills\n# all active sddm-helper sessions on teardown\nDisplayStopCommand=/usr/bin/gamescope-wayland-teardown-workaround" >>"${HOLO_INSTALL_DIR}"/etc/sddm.conf.d/autologin.conf
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G rfkill "${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G wheel "${HOLOUSER}"
