@@ -473,6 +473,7 @@ base_os_install() {
 
 	# Set locales
 	echo "$LANGUAGES_ALL" | tr "|" "\n" >>"${HOLO_INSTALL_DIR}"/etc/locale.gen
+	sleep 3 && grep -x "en_US.UTF-8 UTF-8" "${HOLO_INSTALL_DIR}"/etc/locale.gen 1>/dev/null || echo "en_US.UTF-8 UTF-8" >>"${HOLO_INSTALL_DIR}"/etc/locale.gen
 	arch-chroot "${HOLO_INSTALL_DIR}" locale-gen
 	MAIN_LANGUAGE="$(echo "$MAIN_LANGUAGE" | cut -d' ' -f1)"
 	echo "LANG=$MAIN_LANGUAGE" >"${HOLO_INSTALL_DIR}"/etc/locale.conf
