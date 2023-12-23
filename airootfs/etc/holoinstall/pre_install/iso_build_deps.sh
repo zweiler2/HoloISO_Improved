@@ -41,6 +41,9 @@ mv /etc/xdg/autostart/steam.desktop /etc/skel/Desktop/steamos-gamemode.desktop /
 pacman --noconfirm -S base-devel
 sed -i 's/base udev modconf/base udev plymouth modconf/g' /etc/mkinitcpio.conf
 pacman --overwrite="*" --noconfirm -S handygccs-git extra-main/mesa extra-main/vulkan-radeon extra-main/vulkan-intel multilib-main/lib32-mesa multilib-main/lib32-vulkan-radeon multilib-main/lib32-vulkan-intel
+rm /usr/share/steamos/steamos.png
+ln -s ../plymouth/themes/steamos/steamos-jupiter.png /usr/share/steamos/steamos.png
+sed -i 's/steamos.png/steamos-jupiter.png/' /usr/share/plymouth/themes/steamos/steamos.script
 plymouth-set-default-theme -R steamos
 mkinitcpio -P
 
