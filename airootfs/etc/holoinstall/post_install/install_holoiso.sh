@@ -447,10 +447,10 @@ base_os_install() {
 		if $IS_LAPTOP; then
 			echo 'GAMEMODERUNEXEC="env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only"' >>"${HOLO_INSTALL_DIR}"/etc/environment
 		else
-			pacman -Rdd --noconfirm nvidia-prime
+			arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm nvidia-prime
 		fi
 	else
-		pacman -Rdd --noconfirm nvidia-dkms-tkg nvidia-utils-tkg nvidia-egl-wayland-tkg nvidia-settings-tkg opencl-nvidia-tkg lib32-nvidia-utils-tkg lib32-opencl-nvidia-tkg libva-nvidia-driver-git nvidia-prime
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm nvidia-dkms-tkg nvidia-utils-tkg nvidia-egl-wayland-tkg nvidia-settings-tkg opencl-nvidia-tkg lib32-nvidia-utils-tkg lib32-opencl-nvidia-tkg libva-nvidia-driver-git nvidia-prime
 	fi
 	arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
 	arch-chroot "${HOLO_INSTALL_DIR}" userdel -r liveuser
@@ -476,7 +476,7 @@ base_os_install() {
 	echo "LANG=$MAIN_LANGUAGE" >"${HOLO_INSTALL_DIR}"/etc/locale.conf
 
 	# Set keyboard layout
-	echo "KEYMAP=$KEYBOARD_LAYOUT" >"${HOLO_INSTALL_DIR}"/etc/vconsole.conf
+	echo "KEYMAP=$KEYBOARD_LAYOUT" >>"${HOLO_INSTALL_DIR}"/etc/vconsole.conf
 	echo "XKBLAYOUT=$KEYBOARD_LAYOUT_X11" >>"${HOLO_INSTALL_DIR}"/etc/vconsole.conf
 	cat <<EOF >"${HOLO_INSTALL_DIR}"/etc/X11/xorg.conf.d/00-keyboard.conf
 Section "InputClass"
@@ -508,7 +508,8 @@ EOF
 	sleep 1
 
 	if $INSTALL_XONE_DRIVER; then
-		pacman -Syu --noconfirm
+		echo "Installing XBox One Controller driver..."
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Syu --noconfirm
 		# Install xone-dongle-firmware
 		echo The firmware for the wireless dongle is subject to Microsofts Terms of Use:
 		echo https://www.microsoft.com/en-us/legal/terms-of-use
@@ -533,13 +534,15 @@ EOF
 	fi
 
 	if $INSTALL_DECKY_LOADER; then
-		pacman -Syu --noconfirm
+		echo "Installing DeckyLoader..."
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Syu --noconfirm
 		# shellcheck disable=SC2034
 		SUDO_USER=$HOLOUSER; curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_release.sh | arch-chroot "${HOLO_INSTALL_DIR}" bash
 	fi
 
 	if $INSTALL_EMUDECK; then
-		pacman -Syu --noconfirm
+		echo "Installing EmuDeck..."
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Syu --noconfirm
 		mkdir -p "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications
 		curl -L "$(curl -s https://api.github.com/repos/EmuDeck/emudeck-electron/releases/latest | grep -E 'browser_download_url.*AppImage' | cut -d '"' -f 4)" -o "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
 		chown -hR liveuser:liveuser "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
@@ -577,7 +580,7 @@ full_install() {
 		arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
 	fi
 
-	mv /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
+	cp /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
 	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
 
 	echo "Configuring Steam Deck UI by default..."
