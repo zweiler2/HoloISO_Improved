@@ -148,6 +148,7 @@ dos2unix
 gptfdisk
 iotop
 lib32-mesa-vdpau
+lib32-vulkan-mesa-layers
 libva-mesa-driver
 mesa-vdpau
 okular
@@ -162,5 +163,10 @@ xorg-xhost
 zip
 
 realtime-privileges
+kate
+acpid
+galileo-mura
+xf86-video-intel
+intel-media-driver
 
 # Kernels
