@@ -441,6 +441,7 @@ base_os_install() {
 
 	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" = "NVIDIA" ]]; then
 		echo "LIBVA_DRIVER_NAME=nvidia" >>"${HOLO_INSTALL_DIR}"/etc/environment
+		echo "NVD_BACKEND=direct" >>"${HOLO_INSTALL_DIR}"/etc/environment
 		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm /' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
 		sed -i 's/plymouth.nolog/plymouth.nolog nvidia-drm.modeset=1/g' "${HOLO_INSTALL_DIR}"/etc/default/grub
 		if $IS_LAPTOP; then
