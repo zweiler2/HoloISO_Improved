@@ -588,6 +588,10 @@ full_install() {
 	if $INSTALL_DECKY_LOADER; then
 		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "touch ~/.local/share/Steam/.cef-enable-remote-debugging"
 	fi
+	cp /etc/holoinstall/post_install/99-steamos-automount.rules "${HOLO_INSTALL_DIR}"/usr/lib/udev/rules.d/99-steamos-automount.rules
+	rm "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
+	cp /etc/holoinstall/post_install/steamos-automount.sh "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
+	chmod +x "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
 	arch-chroot "${HOLO_INSTALL_DIR}" touch /etc/holoiso-oobe
 	echo "Cleaning up..."
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
