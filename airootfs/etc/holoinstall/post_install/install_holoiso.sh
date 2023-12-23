@@ -27,7 +27,9 @@ check_mount() {
 }
 
 information_gathering() {
-	sudo sed -i 's/en_US.UTF-8 UTF-8/#en_US.UTF-8 UTF-8/' /etc/locale.gen
+	if grep -x "en_US.UTF-8 UTF-8  " /etc/locale.gen >/dev/null; then
+		sudo sed -i 's/en_US.UTF-8 UTF-8/#en_US.UTF-8 UTF-8/' /etc/locale.gen
+	fi
 	# Ask for temp keyboard layout
 	while true; do
 		if TEMP_LANG=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select a keyboard layout to use while using the installer" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null); then
