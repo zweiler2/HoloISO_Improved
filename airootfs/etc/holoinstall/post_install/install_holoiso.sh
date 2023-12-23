@@ -555,6 +555,7 @@ EOF
 
 	echo "Installing bootloader..."
 	echo "GRUB_DISABLE_OS_PROBER=false" >>"${HOLO_INSTALL_DIR}"/etc/default/grub
+	sed -i 's/plymouth.nolog/plymouth.nolog usbcore.autosuspend=-1/g' "${HOLO_INSTALL_DIR}"/etc/default/grub
 	arch-chroot "${HOLO_INSTALL_DIR}" holoiso-grub-update
 	mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
 	HOLOISO_EFI_ENTRY=$(efibootmgr | grep HoloISO | head -c8 | tail -c4)
