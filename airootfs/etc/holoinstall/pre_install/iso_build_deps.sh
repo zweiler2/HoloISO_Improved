@@ -103,7 +103,7 @@ su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/libva-nvidia-driver &
 pacman -Syyu --noconfirm nvidia-prime
 
 # Remove packages from ISO
-rm -r /etc/holoinstall/post_install/pkgs
+rm -r /etc/holoinstall/post_install/pkgs/*
 
 # Download extra stuff
 wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs_addon
