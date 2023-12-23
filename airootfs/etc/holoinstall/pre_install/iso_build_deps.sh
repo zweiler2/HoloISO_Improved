@@ -95,10 +95,9 @@ chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/nvidia-all && echo -e '3\n1\nN\n' | makepkg -si --noconfirm"
 
 # Install Nvidia vaapi driver
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/libva-nvidia-driver-git.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/libva-nvidia-driver-git.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/libva-nvidia-driver-git
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/libva-nvidia-driver-git && makepkg -si --noconfirm"
+cd /etc/holoinstall/post_install/pkgs && git clone https://gitlab.archlinux.org/archlinux/packaging/packages/libva-nvidia-driver.git
+chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/libva-nvidia-driver
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/libva-nvidia-driver && makepkg -si --noconfirm"
 
 # Install Nvidia prime
 pacman -Syyu --noconfirm nvidia-prime
