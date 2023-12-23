@@ -177,7 +177,8 @@ partitioning() {
 	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space from the end)" --width=820 --height=220 2>/dev/null)
 	HOME_REUSE=false
 	HOME_PART_EXISTS=false
-	if [[ -n "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)" ]]; then
+	tmp_home_part=$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)
+	if [[ -n "$tmp_home_part" && $tmp_home_part =~ $INSTALLDEVICE ]]; then
 		HOME_PART_EXISTS=true
 		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1).\nPlease select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=400 --height=220 2>/dev/null)
 		if [[ "${HOME_REUSE_TYPE}" == "2" ]]; then
