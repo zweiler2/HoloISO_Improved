@@ -44,6 +44,7 @@ pacman --overwrite="*" --noconfirm -S handygccs-git extra-main/mesa extra-main/v
 rm /usr/share/steamos/steamos.png
 ln -s ../plymouth/themes/steamos/steamos-jupiter.png /usr/share/steamos/steamos.png
 sed -i 's/steamos.png/steamos-jupiter.png/' /usr/share/plymouth/themes/steamos/steamos.script
+echo "FONT=ter-132b" >>/etc/vconsole.conf
 plymouth-set-default-theme -R steamos
 mkinitcpio -P
 
