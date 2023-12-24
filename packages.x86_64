@@ -168,5 +168,6 @@ acpid
 galileo-mura
 xf86-video-intel
 intel-media-driver
+gamescope-holoiso
 
 # Kernels

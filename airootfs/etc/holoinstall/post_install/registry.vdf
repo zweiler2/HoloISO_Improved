@@ -1,0 +1,39 @@
+"Registry"
+{
+	"HKLM"
+	{
+		"Software"
+		{
+			"Valve"
+			{
+				"Steam"
+				{
+					"SteamPID"		"8692"
+					"TempAppCmdLine"		""
+					"ReLaunchCmdLine"		""
+					"ClientLauncherType"		"0"
+				}
+			}
+		}
+	}
+	"HKCU"
+	{
+		"Software"
+		{
+			"Valve"
+			{
+				"Steam"
+				{
+					"StartupModeTmpIsValid"		"0"
+					"steamglobal"
+					{
+						"language"		"english"
+					}
+					"language"		"english"
+					"GPUAccelWebViewsV3"		"1"
+					"GamescopeEnableAppTargetRefreshRate2"		"0"
+				}
+			}
+		}
+	}
+}
