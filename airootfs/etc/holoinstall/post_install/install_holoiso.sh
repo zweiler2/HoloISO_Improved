@@ -480,6 +480,7 @@ base_os_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm mkinitcpio-archiso
 
 	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" = "NVIDIA" ]]; then
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep nvidia-dkms)"
 		echo "LIBVA_DRIVER_NAME=nvidia" >>"${HOLO_INSTALL_DIR}"/etc/environment
 		echo "NVD_BACKEND=direct" >>"${HOLO_INSTALL_DIR}"/etc/environment
 		sed -i 's/MODULES=(/&nvidia nvidia_modeset nvidia_uvm nvidia_drm /' "${HOLO_INSTALL_DIR}"/etc/mkinitcpio.conf
@@ -492,6 +493,7 @@ base_os_install() {
 	else
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm nvidia-dkms-tkg nvidia-utils-tkg nvidia-egl-wayland-tkg nvidia-settings-tkg opencl-nvidia-tkg lib32-nvidia-utils-tkg lib32-opencl-nvidia-tkg libva-nvidia-driver-git nvidia-prime
 	fi
+	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep broadcom-wl-dkms)"
 	arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
 	arch-chroot "${HOLO_INSTALL_DIR}" userdel -r liveuser
 	sleep 2

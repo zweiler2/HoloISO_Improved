@@ -93,6 +93,7 @@ su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-contr
 cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/nvidia-all && echo -e '3\n1\nN\n' | makepkg -si --noconfirm"
+cp /etc/holoinstall/post_install/pkgs/nvidia-all/nvidia-dkms*.pkg.tar.zst /etc/holoinstall/post_install/
 
 # Install Nvidia vaapi driver
 cd /etc/holoinstall/post_install/pkgs && git clone https://gitlab.archlinux.org/archlinux/packaging/packages/libva-nvidia-driver.git
@@ -112,6 +113,8 @@ wget "$(pacman -Sp linux-neptune-61)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp amd-ucode)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp xorg-xwayland-jupiter)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Sp broadcom-wl-dkms)" -P /etc/holoinstall/post_install/pkgs
+mv /etc/holoinstall/post_install/nvidia-dkms*.pkg.tar.zst /etc/holoinstall/post_install/pkgs
 
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf
