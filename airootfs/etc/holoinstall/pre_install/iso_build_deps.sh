@@ -14,7 +14,7 @@ pacman -Sy
 
 # Install desktop suite
 pacman -Rcns --noconfirm pulseaudio xfce4-pulseaudio-plugin pulseaudio-alsa
-pacman -Rdd --noconfirm sddm syslinux xorg-xwayland
+pacman -Rdd --noconfirm sddm syslinux
 pacman --overwrite="*" --noconfirm -S holoiso-main
 
 # Remove useless shortcuts for now
@@ -106,11 +106,12 @@ pacman -Syyu --noconfirm nvidia-prime
 rm -r /etc/holoinstall/post_install/pkgs/*
 
 # Download extra stuff
-wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs_addon
-wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkgs_addon
-wget "$(pacman -Sp linux-neptune)" -P /etc/holoinstall/post_install/pkgs_addon
-wget "$(pacman -Sp amd-ucode)" -P /etc/holoinstall/post_install/pkgs_addon
-wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs_addon
+wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Sp linux-neptune-61)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Sp amd-ucode)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Sp xorg-xwayland-jupiter)" -P /etc/holoinstall/post_install/pkgs
 
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf

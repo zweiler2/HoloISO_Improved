@@ -4,17 +4,24 @@
 HOLO_INSTALL_DIR="${HOLO_INSTALL_DIR:-/mnt}"
 IS_WIN600=$(grep </sys/devices/virtual/dmi/id/product_name Win600)
 IS_STEAMDECK=$(grep </sys/devices/virtual/dmi/id/product_name Jupiter)
+IS_OXP2=$(grep </sys/devices/virtual/dmi/id/product_name "OneXPlayer 2")
 
 if [ -n "${IS_WIN600}" ]; then
-	GAMEPAD_DRV=true
+	IS_WIN600=true
 else
-	GAMEPAD_DRV=false
+	IS_WIN600=false
 fi
 
 if [ -n "${IS_STEAMDECK}" ]; then
-	FIRMWARE_INSTALL=true
+	IS_STEAMDECK=true
 else
-	FIRMWARE_INSTALL=false
+	IS_STEAMDECK=false
+fi
+
+if [ -n "${IS_OXP2}" ]; then
+	IS_OXP2=true
+else
+	IS_OXP2=false
 fi
 
 check_mount() {
@@ -436,6 +443,39 @@ base_os_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addons | grep intel-ucode)"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm /etc/polkit-1/rules.d/99_holoiso_installuser.rules
 	cp -r /etc/holoinstall/post_install/pacman.conf "${HOLO_INSTALL_DIR}"/etc/pacman.conf
+	if $IS_STEAMDECK; then
+		echo "You're running this on a Steam Deck. linux-neptune-61 will be installed to ensure maximum kernel-side compatibility."
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm linux-firmware
+		cat </etc/holoinstall/post_install/kernel_list.bootstrap | xargs arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm
+		echo -e "PRESETS=('default' 'fallback')\n\nALL_kver='/boot/vmlinuz-linux-neptune-61'\nALL_config='/etc/mkinitcpio.conf'\n\ndefault_image=\"/boot/initramfs-linux-neptune-61.img\"\n\nfallback_image=\"/boot/initramfs-linux-neptune-61-fallback.img\"\nfallback_options=\"-S autodetect\"" >"${HOLO_INSTALL_DIR}"/etc/mkinitcpio.d/linux-neptune-61.preset
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-neptune-61-6)"
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-neptune-61-headers)"
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-firmware-neptune)"
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm xorg-xwayland
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep xorg-xwayland-jupiter)"
+	elif $IS_OXP2; then
+		echo "You're running this on a OneXPlayer 2. linux-neptune-61 will be installed."
+		cat </etc/holoinstall/post_install/kernel_list.bootstrap | xargs arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm
+		echo -e "PRESETS=('default' 'fallback')\n\nALL_kver='/boot/vmlinuz-linux-neptune-61'\nALL_config='/etc/mkinitcpio.conf'\n\ndefault_image=\"/boot/initramfs-linux-neptune-61.img\"\n\nfallback_image=\"/boot/initramfs-linux-neptune-61-fallback.img\"\nfallback_options=\"-S autodetect\"" >"${HOLO_INSTALL_DIR}"/etc/mkinitcpio.d/linux-neptune-61.preset
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-neptune-61-6)"
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-neptune-61-headers)"
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm xorg-xwayland
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep xorg-xwayland-jupiter)"
+		arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable upower
+		echo "blacklist sp5100_tco" >"${HOLO_INSTALL_DIR}"/etc/modprobe.d/disable-5100.conf
+		{
+			echo "export LIBVA_DRIVER_NAME=radeonsi"
+			echo "export DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1=1"
+			echo "export STEAM_FORCE_DESKTOPUI_SCALING=2.0"
+		} >>"${HOLO_INSTALL_DIR}"/etc/environment
+		sed -i 's/plymouth.nolog/plymouth.nolog fbcon=rotate:3 acpi.ec_no_wakeup=1 usbcore.autosuspend=-1 nowatchdog clearcpuid=514 /g' "${HOLO_INSTALL_DIR}"/etc/default/grub
+	elif $IS_WIN600; then
+		echo "You're running this on Anbernic Win600. A suitable gamepad driver will be installed."
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep win600-xpad-dkms)"
+	else
+		arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable acpid.service
+		sed -i "s/logger 'PowerButton pressed'/systemctl suspend/" "${HOLO_INSTALL_DIR}"/etc/acpi/handler.sh
+	fi
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman-key --init
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm mkinitcpio-archiso
 
@@ -571,19 +611,6 @@ EOF
 }
 
 full_install() {
-	if $GAMEPAD_DRV; then
-		echo "You're running this on Anbernic Win600. A suitable gamepad driver will be installed."
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addon | grep win600-xpad-dkms)"
-	fi
-	if $FIRMWARE_INSTALL; then
-		echo "You're running this on a Steam Deck. linux-firmware-neptune will be installed to ensure maximum kernel-side compatibility."
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm linux-firmware
-		cut -d ' ' -f 1 "${HOLO_INSTALL_DIR}"/etc/holoinstall/post_install/kernel_list.bootstrap | xargs arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addon | grep linux-neptune)"
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addon | grep linux-firmware-neptune)"
-		arch-chroot "${HOLO_INSTALL_DIR}" mkinitcpio -P
-	fi
-
 	cp /etc/holoinstall/post_install/amd-perf-fix "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
 	chmod +x "${HOLO_INSTALL_DIR}"/usr/bin/amd-perf-fix
 
