@@ -162,6 +162,13 @@ information_gathering() {
 		INSTALL_EMUDECK=false
 	fi
 
+	# Ask for Steam Patch
+	if zenity --question --title="Steam Patch" --text='Do you want to install <a href="https://github.com/corando98/steam-patch">steam-patch</a> by corando98?\nThis integrates some fixes for the ASUS ROG Ally, OneXPlayer 2 and Legion Go.\n(This requires an internet connection)' 2>/dev/null; then
+		INSTALL_STEAM_PATCH=true
+	else
+		INSTALL_STEAM_PATCH=false
+	fi
+
 	# Ask for laptop
 	if zenity --question --title="Laptop" --text='Is this system a laptop?' 2>/dev/null; then
 		IS_LAPTOP=true
@@ -605,6 +612,30 @@ EOF
 		wait
 	fi
 
+	if $INSTALL_STEAM_PATCH; then
+		echo "Installing steam-patch..."
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Syu --noconfirm
+		steam_patch_path="${HOLO_INSTALL_DIR}/home/${HOLOUSER}/steam-patch"
+		pacman -Syu --noconfirm --needed cargo gcc
+		rm -rf "$steam_patch_path"
+		cd "${HOLO_INSTALL_DIR}/home/${HOLOUSER}" && su liveuser -c "git clone https://github.com/corando98/steam-patch $steam_patch_path"
+		cd "$steam_patch_path" && su liveuser -c "cargo build -r"
+		sed -i 's/mapper = true/mapper = false/' ./config.toml
+		chmod +x "$steam_patch_path/target/release/steam-patch"
+		cp "$steam_patch_path/target/release/steam-patch" "${HOLO_INSTALL_DIR}/usr/bin/steam-patch"
+		sed -i "s@\$USER@$HOLOUSER@g" "$steam_patch_path/steam-patch.service"
+		# Move services in place
+		cp "$steam_patch_path/steam-patch.service" "${HOLO_INSTALL_DIR}/etc/systemd/system/"
+		cp "$steam_patch_path/restart-steam-patch-on-boot.service" "${HOLO_INSTALL_DIR}/etc/systemd/system/"
+		cp "${HOLO_INSTALL_DIR}/usr/bin/steamos-polkit-helpers/steamos-priv-write" "${HOLO_INSTALL_DIR}/usr/bin/steamos-polkit-helpers/steamos-priv-write-bkp"
+		cp "$steam_patch_path/steamos-priv-write-updated" "${HOLO_INSTALL_DIR}/usr/bin/steamos-polkit-helpers/steamos-priv-write"
+
+		# Enable services
+		arch-chroot "${HOLO_INSTALL_DIR}" systemctl disable handycon
+		arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable steam-patch.service
+		arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable restart-steam-patch-on-boot.service
+	fi
+
 	if $INSTALL_8BITDO_UDEV_RULES; then
 		# Install xboxdrv-stable-git
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs/ | grep "xboxdrv")"
@@ -639,7 +670,7 @@ full_install() {
 	echo "Preparing Steam OOBE..."
 	arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "mkdir -p ~/.local/share/Steam"
 	arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "tar xf /usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -C ~/.local/share/Steam"
-	if $INSTALL_DECKY_LOADER; then
+	if $INSTALL_DECKY_LOADER || $INSTALL_STEAM_PATCH; then
 		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "touch ~/.local/share/Steam/.cef-enable-remote-debugging"
 	fi
 	cp /etc/holoinstall/post_install/99-steamos-automount.rules "${HOLO_INSTALL_DIR}"/usr/lib/udev/rules.d/99-steamos-automount.rules
