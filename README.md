@@ -22,7 +22,13 @@ Click [here](https://t.me/HoloISO) to join **HoloISO** Telegram update channel;
 - Is this official?
 > No, but it may as well be 99% of the way there. Most of the code and packages, are straight from Valve, with zero possible edits, and the ISO is being built same rootfs bootstrap as all HoloISO installations run
 - I have an NVIDIA GPU
-> It may not be perfect but it works. For a better experiece go to the desktop, then to the steam settings and under interface make sure you have GPU acceleration for web views and hardware video decoding set to enabled
+> It may not be perfect but it works.
+- I have a laptop
+> WIP. Unless you have an all AMD one, you will most likely run into issues.
+- Steam says i have to format my Hard Drive to use it for games, but there are already games on it.
+> Just add the drive to steam via the desktop mode. This is a side effect of steam not knowing the device yet. See below.
+- How do i add my Hard Drive with all my games to Steam?
+> Go to the desktop mode and in the Steam settings under storage you can add it there. Once thats done, it will also show up in gamemode. You only need to do this once.
 
 Hardware Support:
 -
@@ -37,7 +43,7 @@ Hardware Support:
 
 **GPU:**
 - AMD GPUs with RADV support (Guaranteed to work fully stable. 7xxx requires testing)
-- NVIDIA GPUs (900 series and above work. SteamUI lags, but games are fine)
+- NVIDIA GPUs (900 series and above work.)
 - Intel GPUs (Random experience)
 
 Progress:
@@ -130,6 +136,7 @@ Credits:
 [Severin](https://github.com/medusalix) and all contributors who made the [Xbox One and Xbox Series X|S accessories linux kernel driver](https://github.com/medusalix/xone)
 [Ingo Ruhnke](https://github.com/Grumbel) and all contributors who made the [Xbox/Xbox360 Gamepad Driver](https://github.com/xboxdrv/xboxdrv)
 [Joaquín Ignacio Aramendía](https://github.com/Samsagax), [Alesh Slovak](https://github.com/alkazar) and all contributors who made the [ChimeraOS gamescope-session](https://github.com/ChimeraOS/gamescope-session)
+[Diego Garcia](https://github.com/corando98) and all contributors who made the [Steam Patch Project](https://github.com/corando98/steam-patch)
 
 Screenshots:
 -
