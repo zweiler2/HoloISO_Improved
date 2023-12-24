@@ -141,6 +141,13 @@ information_gathering() {
 		INSTALL_XONE_DRIVER=false
 	fi
 
+	# Ask for 8bitdo-ultimate-controller-udev rules
+	if zenity --question --title="8bitdo ultimate controller" --text='Do you want to install the udev rules for the 8bitdo ultimate controller?' 2>/dev/null; then
+		INSTALL_8BITDO_UDEV_RULES=true
+	else
+		INSTALL_8BITDO_UDEV_RULES=false
+	fi
+
 	# Ask for decky loader
 	if zenity --question --title="Decky loader" --text='Do you want to install decky loader?\n(This requires an internet connection)' 2>/dev/null; then
 		INSTALL_DECKY_LOADER=true
@@ -598,6 +605,14 @@ EOF
 		wait
 	fi
 
+	if $INSTALL_8BITDO_UDEV_RULES; then
+		# Install xboxdrv-stable-git
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs/ | grep "xboxdrv")"
+		arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable xboxdrv
+		# Install 8bitdo-ultimate-controller-udev rules
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs/ | grep "8bitdo-ultimate-controller-udev")"
+	fi
+
 	echo "Installing bootloader..."
 	echo "GRUB_DISABLE_OS_PROBER=false" >>"${HOLO_INSTALL_DIR}"/etc/default/grub
 	sed -i 's/plymouth.nolog/plymouth.nolog usbcore.autosuspend=-1/g' "${HOLO_INSTALL_DIR}"/etc/default/grub
@@ -636,7 +651,6 @@ full_install() {
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
 	[[ $(lspci -vnn | grep VGA | grep -o "\[[0-9a-f]\{4\}:[0-9a-f]\{4\}\]" | tr -d '[]') =~ 1002:* ]] && arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable amd-perf-fix
-	arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable xboxdrv
 	[ "$(grep 'vendor' /proc/cpuinfo | uniq | awk '{print$3}')" = "GenuineIntel" ] && arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable intel-power-readout-fix
 	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/g_wheel
 	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/liveuser

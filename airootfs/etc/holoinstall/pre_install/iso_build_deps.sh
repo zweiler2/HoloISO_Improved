@@ -77,17 +77,20 @@ cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/p
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware && makepkg -si --noconfirm"
 
-# Install xboxdrv
+# Build xboxdrv package
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/xboxdrv-stable-git.tar.gz -P /etc/holoinstall/post_install/pkgs
 cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git.tar.gz
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git
 su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git && makepkg -si --noconfirm"
+cp /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git/xboxdrv-stable-git*.pkg.tar.zst /etc/holoinstall/post_install/
 
-# Install 8bitdo-ultimate-controller-udev rules
+# Build 8bitdo-ultimate-controller-udev rules package
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/8bitdo-ultimate-controller-udev.tar.gz -P /etc/holoinstall/post_install/pkgs
 cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev.tar.gz
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev && makepkg -si --noconfirm"
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev && makepkg -s --noconfirm"
+cp /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev/8bitdo-ultimate-controller-udev*.pkg.tar.zst /etc/holoinstall/post_install/
+pacman -Rdd --noconfirm xboxdrv-stable-git
 
 # Install Nvidia driver
 cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
@@ -115,6 +118,8 @@ wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp xorg-xwayland-jupiter)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp broadcom-wl-dkms)" -P /etc/holoinstall/post_install/pkgs
 mv /etc/holoinstall/post_install/nvidia-dkms*.pkg.tar.zst /etc/holoinstall/post_install/pkgs
+mv /etc/holoinstall/post_install/xboxdrv-stable-git*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/
+mv /etc/holoinstall/post_install/8bitdo-ultimate-controller-udev*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/
 
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf
