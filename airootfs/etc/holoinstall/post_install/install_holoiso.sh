@@ -453,8 +453,8 @@ base_os_install() {
 			;;
 		esac
 	done <"${HOLO_INSTALL_DIR}"/etc/holoinstall/post_install/kernel_list.bootstrap
-	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addons | grep amd-ucode)"
-	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs_addons | grep intel-ucode)"
+	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep amd-ucode)"
+	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep intel-ucode)"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm /etc/polkit-1/rules.d/99_holoiso_installuser.rules
 	cp -r /etc/holoinstall/post_install/pacman.conf "${HOLO_INSTALL_DIR}"/etc/pacman.conf
 	if $IS_STEAMDECK; then
