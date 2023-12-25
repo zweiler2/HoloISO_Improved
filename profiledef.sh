@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="HoloISO_5.0.2.1_Tweaked"
+iso_name="HoloISO_5.0.2.2_Tweaked"
 iso_label="HOLO_$(date +%Y%m)"
 iso_publisher="zweiler2 <https://github.com/zweiler2>"
 iso_application="HoloISO Installer Image Tweaked"
