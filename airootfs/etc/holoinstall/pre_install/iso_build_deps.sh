@@ -35,7 +35,6 @@ mkdir -p /var/cache/pacman/
 mv /.steamos/offload/var/cache/pacman/pkg /var/cache/pacman/
 mv /etc/pacman.conf /etc/pacold
 cp /etc/holoinstall/post_install/pacman.conf /etc/pacman.conf
-pacman -Rdd --noconfirm sddm
 pacman --overwrite="*" --noconfirm -S holoiso-updateclient wireplumber flatpak packagekit-qt5 rsync unzip sddm-wayland dkms steam-im-modules systemd-swap ttf-twemoji-default ttf-hack ttf-dejavu pkgconf pavucontrol partitionmanager gamemode lib32-gamemode cpupower bluez-plugins bluez-utils
 mv /etc/xdg/autostart/steam.desktop /etc/skel/Desktop/steamos-gamemode.desktop /etc/holoinstall/post_install_shortcuts
 pacman --noconfirm -S base-devel
@@ -126,8 +125,6 @@ rm /etc/mkinitcpio.conf
 mv /etc/holoinstall/pre_install/mkinitcpio.conf /etc/mkinitcpio.conf
 rm /etc/mkinitcpio.d/*
 mkdir -p /etc/mkinitcpio.d
-
-pacman -Syu --noconfirm grub
 
 # Remove this script from ISO
 rm -rf /etc/holoinstall/pre_install

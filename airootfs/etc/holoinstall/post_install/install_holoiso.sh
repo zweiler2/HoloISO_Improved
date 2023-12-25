@@ -598,7 +598,8 @@ EOF
 		echo "Installing DeckyLoader..."
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Syu --noconfirm
 		# shellcheck disable=SC2034
-		SUDO_USER=$HOLOUSER; curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_release.sh | arch-chroot "${HOLO_INSTALL_DIR}" bash
+		SUDO_USER=$HOLOUSER
+		curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_release.sh | arch-chroot "${HOLO_INSTALL_DIR}" bash
 	fi
 
 	if $INSTALL_EMUDECK; then
@@ -608,7 +609,8 @@ EOF
 		curl -L "$(curl -s https://api.github.com/repos/EmuDeck/emudeck-electron/releases/latest | grep -E 'browser_download_url.*AppImage' | cut -d '"' -f 4)" -o "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
 		chown -hR liveuser:liveuser "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
 		chmod +x "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"/Applications/EmuDeck.AppImage
-		HOME=${HOLO_INSTALL_DIR}/home/${HOLOUSER}; su -p liveuser -c "${HOLO_INSTALL_DIR}/home/${HOLOUSER}/Applications/EmuDeck.AppImage"
+		HOME=${HOLO_INSTALL_DIR}/home/${HOLOUSER}
+		su -p liveuser -c "${HOLO_INSTALL_DIR}/home/${HOLOUSER}/Applications/EmuDeck.AppImage"
 		wait
 	fi
 
