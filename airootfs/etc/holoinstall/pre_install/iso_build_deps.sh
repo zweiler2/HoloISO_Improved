@@ -126,6 +126,10 @@ mv /etc/holoinstall/pre_install/mkinitcpio.conf /etc/mkinitcpio.conf
 rm /etc/mkinitcpio.d/*
 mkdir -p /etc/mkinitcpio.d
 
+# Fix pacman mirrorlist
+# shellcheck disable=SC2016
+echo 'Server = https://cd2.holoiso.ru.eu.org/pkg/$repo/os/$arch' >/etc/pacman.d/holo_mirrorlist
+
 # Remove this script from ISO
 rm -rf /etc/holoinstall/pre_install
 rm -rf /home/.steamos/offload/var/cache/pacman/pkg/*
