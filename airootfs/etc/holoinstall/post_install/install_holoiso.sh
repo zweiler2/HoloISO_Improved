@@ -685,7 +685,7 @@ full_install() {
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
 	[[ $(lspci -vnn | grep VGA | grep -o "\[[0-9a-f]\{4\}:[0-9a-f]\{4\}\]" | tr -d '[]') =~ 1002:* ]] && arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable amd-perf-fix
-	[ "$(grep 'vendor' /proc/cpuinfo | uniq | awk '{print$3}')" = "GenuineIntel" ] && arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable intel-power-readout-fix
+	arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable power-readout-fix
 	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/g_wheel
 	sudo rm -rf "${HOLO_INSTALL_DIR}"/etc/sudoers.d/liveuser
 	sleep 1
