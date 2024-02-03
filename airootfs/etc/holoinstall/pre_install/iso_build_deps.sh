@@ -94,7 +94,7 @@ pacman -Rdd --noconfirm xboxdrv-stable-git
 # Install Nvidia driver
 cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
 chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/nvidia-all && echo -e '3\n1\nN\n' | makepkg -si --noconfirm"
+su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/nvidia-all && echo -e '4\n1\nN\n' | makepkg -si --noconfirm"
 cp /etc/holoinstall/post_install/pkgs/nvidia-all/nvidia-dkms*.pkg.tar.zst /etc/holoinstall/post_install/
 
 # Install Nvidia vaapi driver
