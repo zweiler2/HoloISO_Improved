@@ -21,12 +21,15 @@ EFIPART=$(sudo blkid | grep HOLOEFI | cut -d ':' -f 1 | head -n 1)
 # Re-mount stuff before proceeding
 CHK_MNT=$(lsblk | grep -e ${MOUNT_DIR} -e /mnt)
 if [ -n "${CHK_MNT}" ]; then
-	sudo umount -l "$ROOTPART" 2>&1
+    sudo swapoff /mnt/home/swapfile 2>/dev/null
+    sudo umount -R /mnt
+    sudo umount -R $MOUNT_DIR
 fi
 
 # Create an mountpoint
-sudo rm -rf ${MOUNT_DIR}
-sudo mkdir -p ${MOUNT_DIR}
+if [ ! -d $MOUNT_DIR ]; then
+    sudo mkdir -p $MOUNT_DIR
+fi
 
 # Inform user about partition location
 echo "Your HoloISO EFI Partition is located in ${EFIPART} partition."
