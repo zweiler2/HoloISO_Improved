@@ -194,8 +194,8 @@ partitioning() {
 		fi
 	done
 
-	echo "Choose your partitioning type:"
-	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space from the end)" --width=820 --height=220 2>/dev/null)
+	echo "Choose your installation type:"
+	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive/option to reuse home partition if found" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space at the end of the drive)" --width=820 --height=220 2>/dev/null)
 	HOME_REUSE=false
 	HOME_PART_EXISTS=false
 	tmp_home_part=$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)
@@ -240,8 +240,8 @@ partitioning() {
 						echo "Finished."
 					)
 			fi
-			umount -l "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
-			umount -l "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
+			umount "$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)"
+			umount "$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)"
 		fi
 	fi
 
@@ -295,22 +295,23 @@ partitioning() {
 	done
 	case $install in
 	1)
-		destructive=true
 		# Umount twice to fully umount the broken install of steam os 3 before installing.
 		swapoff "${HOLO_INSTALL_DIR}"/home/swapfile 2>/dev/null
 		umount -R "${HOLO_INSTALL_DIR}" 2>/dev/null
 		umount -R /tmp/mount_chroot 2>/dev/null
-		if zenity --question --text "WARNING: The following drive is going to be fully erased. ALL DATA ON DRIVE ${DEVICE} WILL BE LOST! \n\n$(lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT "${DEVICE}" | sed "1d")\n\nErase ${DEVICE} and begin installation?" --width=700 2>/dev/null; then
-			echo "Wiping partitions..."
-			sfdisk --delete "${DEVICE}"
-			wipefs -a "${DEVICE}"
-			echo "Creating new gpt partitions..."
-			parted "${DEVICE}" mklabel gpt
-		else
-			printf "\nNothing has been written.\nYou canceled the destructive install, please try again.\n"
-			echo "Press any key to exit..."
-			read -n 1 -s -r
-			exit 1
+		if ! $HOME_REUSE; then
+			if zenity --question --text "WARNING: The following drive is going to be fully erased. ALL DATA ON DRIVE ${DEVICE} WILL BE LOST! \n\n$(lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT "${DEVICE}" | sed "1d")\n\nErase ${DEVICE} and begin installation?" --width=700 2>/dev/null; then
+				echo "Wiping partitions..."
+				sfdisk --delete "${DEVICE}"
+				wipefs -a "${DEVICE}"
+				echo "Creating new gpt partitions..."
+				parted "${DEVICE}" mklabel gpt
+			else
+				printf "\nNothing has been written.\nYou canceled the destructive install, please try again.\n"
+				echo "Press any key to exit..."
+				read -n 1 -s -r
+				exit 1
+			fi
 		fi
 		;;
 	2)
@@ -341,55 +342,66 @@ partitioning() {
 		numPartitions=$(grep -c "${DRIVEDEVICE}"p /proc/partitions)
 	fi
 
-	efiPartNum=$((numPartitions + 1))
-	rootPartNum=$((numPartitions + 2))
-	homePartNum=$((numPartitions + 3))
-
 	echo "Calculating start and end of free space..."
 	diskSpace=$(awk '/'"${DRIVEDEVICE}"'/ {print $3; exit}' /proc/partitions)
 	realDiskSpace=$(parted "${DEVICE}" unit MB print free | head -n2 | tail -n1 | grep -oh "\w*MB" | sed s/MB//)
 
-	if [ "$destructive" ]; then
-		efiStart=2
+	if $HOME_REUSE; then
+		efi_partition=$(sudo blkid | grep HOLOEFI | cut -d ':' -f 1 | head -n 1)
+		root_partition=$(sudo blkid | grep holo-root | cut -d ':' -f 1 | head -n 1)
+		home_partition=$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)
+		efiPartNum=$(echo "$efi_partition" | tail -c2)
+		rootPartNum=$(echo "$root_partition" | tail -c2)
+		homePartNum=$(echo "$home_partition" | tail -c2)
 	else
-		efiStart=$(parted "${DEVICE}" unit MB print free | tail -n2 | awk '{$1=$1};1' | head -n1 | sed 's/\s.*$//' | sed s/MB//)
-	fi
-	efiEnd=$((efiStart + 256))
-	rootStart=$efiEnd
-	rootEnd=$((rootStart + 24000))
+		efiPartNum=$((numPartitions + 1))
+		rootPartNum=$((numPartitions + 2))
+		homePartNum=$((numPartitions + 3))
+		efi_partition=${INSTALLDEVICE}${efiPartNum}
+		root_partition=${INSTALLDEVICE}${rootPartNum}
+		home_partition=${INSTALLDEVICE}${homePartNum}
+		case $install in
+		1)
+			efiStart=2
+			;;
+		2)
+			efiStart=$(parted "${DEVICE}" unit MB print free | tail -n2 | awk '{$1=$1};1' | head -n1 | sed 's/\s.*$//' | sed s/MB//)
+			;;
+		esac
+		efiEnd=$((efiStart + 256))
+		rootStart=$efiEnd
+		rootEnd=$((rootStart + 24000))
 
-	if [ $efiEnd -gt "$realDiskSpace" ]; then
-		echo "Not enough space available, please choose another disk and try again."
-		echo "Press any key to exit..."
-		read -n 1 -s -r
-		exit 1
-	fi
+		if [ "$efiEnd" -gt "$realDiskSpace" ]; then
+			echo "Not enough space available, please choose another disk and try again."
+			echo "Press any key to exit..."
+			read -n 1 -s -r
+			exit 1
+		fi
 
-	echo "Creating partitions..."
-	parted "${DEVICE}" mkpart primary fat32 "${efiStart}"M ${efiEnd}M
-	parted "${DEVICE}" set ${efiPartNum} boot on
-	parted "${DEVICE}" set ${efiPartNum} esp on
-	echo "EFI partition created"
-	# If the available storage is less than 64GB, don't create /home.
-	# If the boot device is mmcblk0, don't create an ext4 partition or it will break steamOS versions
-	# released after May 20.
-	if [ "$diskSpace" -lt 64000000 ] || [[ "${DEVICE}" =~ mmcblk0 ]]; then
-		home=false
-		parted "${DEVICE}" mkpart primary btrfs ${rootStart}M 100%
-		echo "Root partition created"
-	else
-		home=true
-		parted "${DEVICE}" mkpart primary btrfs ${rootStart}M ${rootEnd}M
-		echo "Root partition created"
-		parted "${DEVICE}" mkpart primary ext4 ${rootEnd}M 100%
-		echo "Home partition created"
+		echo "Creating partitions..."
+		parted "${DEVICE}" mkpart primary fat32 "${efiStart}"M ${efiEnd}M
+		parted "${DEVICE}" set ${efiPartNum} boot on
+		parted "${DEVICE}" set ${efiPartNum} esp on
+		echo "EFI partition created"
+		# If the available storage is less than 64GB, don't create /home.
+		# If the boot device is mmcblk0, don't create an ext4 partition or it will break steamOS versions
+		# released after May 20.
+		if [ "$diskSpace" -lt 64000000 ] || [[ "${DEVICE}" =~ mmcblk0 ]]; then
+			home=false
+			parted "${DEVICE}" mkpart primary btrfs ${rootStart}M 100%
+			echo "Root partition created"
+		else
+			home=true
+			parted "${DEVICE}" mkpart primary btrfs ${rootStart}M ${rootEnd}M
+			echo "Root partition created"
+			parted "${DEVICE}" mkpart primary ext4 ${rootEnd}M 100%
+			echo "Home partition created"
+		fi
 	fi
-	efi_partition=${INSTALLDEVICE}${efiPartNum}
-	root_partition=${INSTALLDEVICE}${rootPartNum}
-	home_partition=${INSTALLDEVICE}${homePartNum}
 	mkfs -t vfat "${efi_partition}"
 	echo "EFI partition formatted"
-	fatlabel "${INSTALLDEVICE}"${efiPartNum} HOLOEFI
+	fatlabel "${INSTALLDEVICE}""${efiPartNum}" HOLOEFI
 	mkfs -t btrfs -f "${root_partition}"
 	echo "Root partition formatted"
 	btrfs filesystem label "${root_partition}" holo-root
@@ -656,7 +668,7 @@ EOF
 		echo "Old HoloISO EFI entry found. Deleting now..."
 		arch-chroot "${HOLO_INSTALL_DIR}" efibootmgr -b "$HOLOISO_EFI_ENTRY" -B
 	fi
-	arch-chroot "${HOLO_INSTALL_DIR}" efibootmgr -c -d "${DEVICE}" -p ${efiPartNum} -L "HoloISO" -l '\EFI\BOOT\BOOTX64.EFI'
+	arch-chroot "${HOLO_INSTALL_DIR}" efibootmgr -c -d "${DEVICE}" -p "${efiPartNum}" -L "HoloISO" -l '\EFI\BOOT\BOOTX64.EFI'
 	sleep 1
 }
 
