@@ -31,6 +31,7 @@ echo "${LIVEOSUSER} ALL=(root) NOPASSWD:ALL" >/etc/sudoers.d/${LIVEOSUSER}
 chmod 0440 /etc/sudoers.d/${LIVEOSUSER}
 usermod -a -G rfkill ${LIVEOSUSER}
 usermod -a -G wheel ${LIVEOSUSER}
+echo "/usr/bin/bash" >>/etc/shells
 mkdir -p /var/cache/pacman/
 mv /.steamos/offload/var/cache/pacman/pkg /var/cache/pacman/
 mv /etc/pacman.conf /etc/pacold
