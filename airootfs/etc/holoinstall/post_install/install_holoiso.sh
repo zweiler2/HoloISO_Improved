@@ -314,7 +314,7 @@ partitioning() {
 			read -n 1 -s -r
 			exit 1
 		fi
-		if zenity --question --text "HoloISO will be installed on the following free (unallocated) space.\nDoes this look reasonable?\n$(sudo parted "${DEVICE}" print free | tail -n2 | grep "Free Space")" --width=500 2>/dev/null; then
+		if zenity --question --text "HoloISO will be installed on the following free (unallocated) space.\nDoes this look reasonable?\nStart\tEnd\t\tSize\n$(sudo parted "${DEVICE}" print free | tail -n2 | grep "Free Space" | xargs | sed 's/ Free Space//' | tr ' ' '\t')" --width=500 2>/dev/null; then
 			echo "Beginning installation..."
 		else
 			printf "\nNothing has been written.\nYou canceled the non-destructive install, please try again.\n"
