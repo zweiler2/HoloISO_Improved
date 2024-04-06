@@ -39,7 +39,7 @@ information_gathering() {
 	fi
 	# Ask for temp keyboard layout
 	while true; do
-		if TEMP_LANG=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select a keyboard layout to use while using the installer" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null); then
+		if TEMP_LANG=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=450 --height=700 --title="Keyboard layout" --text="Select a keyboard layout to use while using the installer" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null); then
 			if [ -n "$TEMP_LANG" ]; then
 				break
 			else
@@ -53,7 +53,7 @@ information_gathering() {
 
 	# Ask for the timezone
 	while true; do
-		if TIMEZONE=$(timedatectl list-timezones --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Timezone" --text="Select your timezone below:\n " --multiple --column '' --column 'Timezones' 2>/dev/null); then
+		if TIMEZONE=$(timedatectl list-timezones --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=450 --height=700 --title="Timezone" --text="Select your timezone below:\n " --multiple --column '' --column 'Timezones' 2>/dev/null); then
 			if [ -n "$TIMEZONE" ]; then
 				break
 			else
@@ -66,7 +66,7 @@ information_gathering() {
 
 	# Ask for languages
 	while true; do
-		if LANGUAGES_ALL=$(cut </etc/locale.gen -c2- | tail -n +18 | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --width=600 --height=512 --title="Select Languages" --text="Select your desired languages below:\n(UTF-8 is preferred)" --checklist --multiple --column '' --column 'Languages' 2>/dev/null); then
+		if LANGUAGES_ALL=$(cut </etc/locale.gen -c2- | tail -n +18 | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --width=450 --height=700 --title="Select Languages" --text="Select your desired languages below:\n(UTF-8 is preferred)" --checklist --multiple --column '' --column 'Languages' 2>/dev/null); then
 			if [ -n "$LANGUAGES_ALL" ]; then
 				break
 			else
@@ -79,7 +79,7 @@ information_gathering() {
 
 	# Ask for main language
 	while true; do
-		if MAIN_LANGUAGE=$(echo "$LANGUAGES_ALL" | tr "|" "\n" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Select Language" --text="Select your desired main language below:" --multiple --column '' --column 'Language' 2>/dev/null); then
+		if MAIN_LANGUAGE=$(echo "$LANGUAGES_ALL" | tr "|" "\n" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=450 --height=700 --title="Select Language" --text="Select your desired main language below:" --multiple --column '' --column 'Language' 2>/dev/null); then
 			if [ -n "$MAIN_LANGUAGE" ]; then
 				break
 			else
@@ -92,7 +92,7 @@ information_gathering() {
 
 	# Ask for keyboard layouts
 	while true; do
-		if KEYBOARD_LAYOUT=$(localectl list-keymaps --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="Keyboard layout" --text="Select your desired keyboard layout below:" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null); then
+		if KEYBOARD_LAYOUT=$(localectl list-keymaps --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=450 --height=700 --title="Keyboard layout" --text="Select your desired keyboard layout below:" --multiple --column '' --column 'Keyboard layouts' 2>/dev/null); then
 			if [ -n "$KEYBOARD_LAYOUT" ]; then
 				break
 			else
@@ -103,7 +103,7 @@ information_gathering() {
 		fi
 	done
 	while true; do
-		if KEYBOARD_LAYOUT_X11=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=600 --height=512 --title="X11 Keyboard layout" --text="Select your desired X11 keyboard layout below:" --multiple --column '' --column 'X11 Keyboard layouts' 2>/dev/null); then
+		if KEYBOARD_LAYOUT_X11=$(localectl list-x11-keymap-layouts --no-pager | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --width=450 --height=700 --title="X11 Keyboard layout" --text="Select your desired X11 keyboard layout below:" --multiple --column '' --column 'X11 Keyboard layouts' 2>/dev/null); then
 			if [ -n "$KEYBOARD_LAYOUT_X11" ]; then
 				break
 			else
@@ -116,7 +116,7 @@ information_gathering() {
 
 	# Ask for swapfile size
 	while true; do
-		if SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=285 2>/dev/null); then
+		if SWAPSIZE=$(printf "1GB\n2GB\n4GB\n8GB\n16GB" | awk '{ printf "FALSE""\0"$0"\0" }' | zenity --list --radiolist --title="SWAP" --text="How big do you want your swapfile?\n(8GB is recommended)" --multiple --column '' --column '' --width=275 --height=438 2>/dev/null); then
 			if [ -n "$SWAPSIZE" ]; then
 				break
 			else
@@ -135,35 +135,35 @@ information_gathering() {
 	esac
 
 	# Ask for xone-dkms-git driver
-	if zenity --question --title="Xbox One gamepad driver" --text='Do you want to install the Xbox One gamepad driver?\n\nThe firmware for the wireless dongle is subject to Microsofts Terms of Use:\n<a href="https://www.microsoft.com/en-us/legal/terms-of-use">Microsofts Terms of Use</a>\n\nDo you agree to Microsofts Terms of Use and want to install the driver?\n\nNote: This requires an internet connection.' --width=500 2>/dev/null; then
+	if zenity --question --title="Xbox One gamepad driver" --text='Do you want to install the Xbox One gamepad driver?\n\nThe firmware for the wireless dongle is subject to Microsofts Terms of Use:\n<a href="https://www.microsoft.com/en-us/legal/terms-of-use">Microsofts Terms of Use</a>\n\nDo you agree to Microsofts Terms of Use and want to install the driver?\n\nNote: This requires an internet connection.' --width=514 2>/dev/null; then
 		INSTALL_XONE_DRIVER=true
 	else
 		INSTALL_XONE_DRIVER=false
 	fi
 
 	# Ask for 8bitdo-ultimate-controller-udev rules
-	if zenity --question --title="8bitdo ultimate controller" --text='Do you want to install the udev rules for the 8bitdo ultimate controller?' 2>/dev/null; then
+	if zenity --question --title="8bitdo ultimate controller" --text='Do you want to install the udev rules for the 8bitdo ultimate controller?' --width=487 2>/dev/null; then
 		INSTALL_8BITDO_UDEV_RULES=true
 	else
 		INSTALL_8BITDO_UDEV_RULES=false
 	fi
 
 	# Ask for decky loader
-	if zenity --question --title="Decky loader" --text='Do you want to install decky loader?\n(This requires an internet connection)' 2>/dev/null; then
+	if zenity --question --title="Decky loader" --text='Do you want to install decky loader?\n(This requires an internet connection)' --width=256 2>/dev/null; then
 		INSTALL_DECKY_LOADER=true
 	else
 		INSTALL_DECKY_LOADER=false
 	fi
 
 	# Ask for emudeck
-	if zenity --question --title="EmuDeck" --text='Do you want to install EmuDeck?\n(This requires an internet connection)' 2>/dev/null; then
+	if zenity --question --title="EmuDeck" --text='Do you want to install EmuDeck?\n(This requires an internet connection)' --width=256 2>/dev/null; then
 		INSTALL_EMUDECK=true
 	else
 		INSTALL_EMUDECK=false
 	fi
 
 	# Ask for Steam Patch
-	if zenity --question --title="Steam Patch" --text='Do you want to install <a href="https://github.com/corando98/steam-patch">steam-patch</a> by corando98?\nThis integrates some fixes for the ASUS ROG Ally, OneXPlayer 2 and Legion Go.\n(This requires an internet connection)' 2>/dev/null; then
+	if zenity --question --title="Steam Patch" --text='Do you want to install <a href="https://github.com/corando98/steam-patch">steam-patch</a> by corando98?\nThis integrates some fixes for the ASUS ROG Ally, OneXPlayer 2 and Legion Go.\n(This requires an internet connection)' --width=342 2>/dev/null; then
 		INSTALL_STEAM_PATCH=true
 	else
 		INSTALL_STEAM_PATCH=false
@@ -181,7 +181,7 @@ partitioning() {
 	echo "Select your drive in popup:"
 	while true; do
 		DRIVEDEVICE=$(lsblk -d -o NAME | sed "1d" | sed '/sr/d' | sed '/loop/d' | awk '{ printf "FALSE""\0"$0"\0" }' |
-			xargs -0 zenity --list --width=600 --height=512 --title="Select disk" --text="Select your disk to install HoloISO in below:\n\n $(lsblk -d -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT | sed '/sr/d' | sed '/loop/d')" --radiolist --multiple --column ' ' --column 'Disks' 2>/dev/null)
+			xargs -0 zenity --list --width=600 --height=512 --title="Select disk" --text="Select your disk to install HoloISO in below:\n\n $(lsblk -d -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,VENDOR,MODEL,SERIAL,MOUNTPOINT | sed '/sr/d' | sed '/loop/d')" --radiolist --multiple --column ' ' --column 'Disks' --height=700 2>/dev/null)
 		DEVICE="/dev/${DRIVEDEVICE}"
 		INSTALLDEVICE="${DEVICE}"
 		if [ -b "$DEVICE" ] && lsblk "$DEVICE" | head -n2 | tail -n1 | grep disk >/dev/null 2>&1; then
@@ -195,13 +195,13 @@ partitioning() {
 	done
 
 	echo "Choose your installation type:"
-	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive/option to reuse home partition if found" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space at the end of the drive)" --width=820 --height=220 2>/dev/null)
+	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive/option to reuse home partition if found" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space at the end of the drive)" --width=880 --height=281 2>/dev/null)
 	HOME_REUSE=false
 	HOME_PART_EXISTS=false
 	tmp_home_part=$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)
 	if [[ -n "$tmp_home_part" && $tmp_home_part =~ $INSTALLDEVICE ]]; then
 		HOME_PART_EXISTS=true
-		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1).\nPlease select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=400 --height=220 2>/dev/null)
+		HOME_REUSE_TYPE=$(zenity --list --title="Warning" --text="A HoloISO home partition was detected at $(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1).\nPlease select an appropriate action below:" --column="Type" --column="Name" 1 "Format it and start over" 2 "Reuse partition" --width=450 --height=302 2>/dev/null)
 		if [[ "${HOME_REUSE_TYPE}" == "2" ]]; then
 			HOME_REUSE=true
 			mkdir -p /tmp/home
@@ -697,13 +697,13 @@ full_install() {
 echo "SteamOS 3 Installer"
 echo "Start time: $(date)"
 echo "Please choose installation type:"
-HOLO_INSTALL_TYPE=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Install HoloISO, version $(grep </etc/os-release VARIANT_ID | cut -d "=" -f 2 | sed 's/"//g') " 2 "Exit installer" --width=700 --height=220 2>/dev/null)
+HOLO_INSTALL_TYPE=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Install HoloISO, version $(grep </etc/os-release VARIANT_ID | cut -d "=" -f 2 | sed 's/"//g') " 2 "Exit installer" --width=450 --height=281 2>/dev/null)
 if [[ "${HOLO_INSTALL_TYPE}" == "1" ]] || [[ "${HOLO_INSTALL_TYPE}" == "barebones" ]]; then
 	echo "Installing SteamOS, barebones configuration..."
 	information_gathering
 	base_os_install
 	full_install
-	zenity --info --text="Installation finished! \nYou may reboot now, or type \"sudo arch-chroot /mnt\"\nto make further changes." 2>/dev/null
+	zenity --info --text="Installation finished! \nYou may reboot now, or type \"sudo arch-chroot /mnt\"\nto make further changes." --width=400 2>/dev/null
 else
 	zenity --info --text="Exiting installer..." --width=120 --height=50 2>/dev/null
 fi
