@@ -247,18 +247,14 @@ partitioning() {
 
 	# Setup password for root
 	while true; do
-		ROOTPASS=$(zenity --forms --title="Account configuration" --text="Set root/system administrator password" --add-password="Password for user root" 2>/dev/null)
+		ROOTPASS=$(kdialog --newpassword "Set root/system administrator password")
 		if [ -z "$ROOTPASS" ]; then
-			zenity --warning --text "No password was set for user \"root\"!" --width=300 2>/dev/null
+			if zenity --question --text "No password was set for user \"root\"! \n(This is not recommended) \nAre you sure about that?" --width=258 2>/dev/null; then
+				break
+			fi
+		else
 			break
 		fi
-		echo
-		ROOTPASS_CONF=$(zenity --forms --title="Account configuration" --text="Confirm your root password" --add-password="Password for user root" 2>/dev/null)
-		echo
-		if [ "$ROOTPASS" = "$ROOTPASS_CONF" ]; then
-			break
-		fi
-		zenity --warning --text "Passwords do not match." --width=300 2>/dev/null
 	done
 	# Create user
 	NAME_REGEX="^[a-z][-a-z0-9_]*\$"
@@ -280,18 +276,12 @@ partitioning() {
 	fi
 	# Setup password for user
 	while true; do
-		HOLOPASS=$(zenity --forms --title="Account configuration" --text="Set password for $HOLOUSER" --add-password="Password for user $HOLOUSER" 2>/dev/null)
-		echo
-		HOLOPASS_CONF=$(zenity --forms --title="Account configuration" --text="Confirm password for $HOLOUSER" --add-password="Password for user $HOLOUSER" 2>/dev/null)
-		echo
+		HOLOPASS=$(kdialog --newpassword "Set password for user $HOLOUSER")
 		if [ -z "$HOLOPASS" ]; then
 			zenity --warning --text "Please type password for user \"$HOLOUSER\"!" --width=300 2>/dev/null
-			HOLOPASS_CONF=unmatched
-		fi
-		if [ "$HOLOPASS" = "$HOLOPASS_CONF" ]; then
+		else
 			break
 		fi
-		zenity --warning --text "Passwords do not match." --width=300 2>/dev/null
 	done
 	case $install in
 	1)
