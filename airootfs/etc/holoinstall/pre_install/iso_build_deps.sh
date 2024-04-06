@@ -4,6 +4,9 @@
 # Prepare thyself
 chmod +x /etc/holoinstall/post_install/install_holoiso.sh
 chmod +x /etc/holoinstall/post_install/chroot_holoiso.sh
+chmod +x /etc/holoinstall/post_install/gamescope_downgrader.sh
+chmod +x /etc/skel/Desktop/gamescope_downgrader.desktop
+chmod 755 /etc/skel/Desktop/gamescope_downgrader.desktop
 chmod +x /etc/skel/Desktop/install.desktop
 chmod 755 /etc/skel/Desktop/install.desktop
 # Begin coreOS bootstrapping below:
@@ -120,6 +123,7 @@ wget "$(pacman -Sp broadcom-wl-dkms)" -P /etc/holoinstall/post_install/pkgs
 mv /etc/holoinstall/post_install/nvidia-dkms*.pkg.tar.zst /etc/holoinstall/post_install/pkgs
 mv /etc/holoinstall/post_install/xboxdrv-stable-git*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/
 mv /etc/holoinstall/post_install/8bitdo-ultimate-controller-udev*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/
+mv /etc/holoinstall/post_install/gamescope-holoiso-tweaked-3.11.48-4-x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/
 
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
 rm /etc/mkinitcpio.conf
