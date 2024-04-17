@@ -671,6 +671,7 @@ full_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G rfkill "${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G wheel "${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G realtime "${HOLOUSER}"
+	arch-chroot "${HOLO_INSTALL_DIR}" usermod -a -G gamemode "${HOLOUSER}"
 	echo "Preparing Steam OOBE..."
 	arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "mkdir -p ~/.local/share/Steam"
 	arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "tar xf /usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -C ~/.local/share/Steam"
