@@ -16,9 +16,8 @@ pacman-key --init
 pacman -Sy
 
 # Install desktop suite
-pacman -Rcns --noconfirm pulseaudio xfce4-pulseaudio-plugin pulseaudio-alsa
-pacman -Rdd --noconfirm sddm syslinux
-pacman --overwrite="*" --noconfirm -S holoiso-main
+pacman -Rdd --noconfirm syslinux
+pacman --overwrite="*" --noconfirm -S holoiso-main holoiso-updateclient
 
 # Remove useless shortcuts for now
 mkdir /etc/holoinstall/post_install_shortcuts
@@ -39,17 +38,13 @@ mkdir -p /var/cache/pacman/
 mv /home/.steamos/offload/var/cache/pacman/pkg /var/cache/pacman/
 mv /etc/pacman.conf /etc/pacold
 cp /etc/holoinstall/post_install/pacman.conf /etc/pacman.conf
-pacman --overwrite="*" --noconfirm -S holoiso-updateclient wireplumber flatpak packagekit-qt5 rsync unzip sddm-wayland dkms steam-im-modules ibus ttf-twemoji-default ttf-hack ttf-dejavu pkgconf pavucontrol partitionmanager gamemode lib32-gamemode cpupower bluez-plugins bluez-utils
 mv /etc/xdg/autostart/steam.desktop /etc/skel/Desktop/steamos-gamemode.desktop /etc/holoinstall/post_install_shortcuts
-pacman --noconfirm -S base-devel
 sed -i 's/base udev modconf/base udev plymouth modconf/g' /etc/mkinitcpio.conf
-pacman --overwrite="*" --noconfirm -S handygccs-git
 rm /usr/share/steamos/steamos.png
 ln -s ../plymouth/themes/steamos/steamos-jupiter.png /usr/share/steamos/steamos.png
 sed -i 's/steamos.png/steamos-jupiter.png/' /usr/share/plymouth/themes/steamos/steamos.script
 echo "FONT=ter-132b" >>/etc/vconsole.conf
 plymouth-set-default-theme -R steamos
-mkinitcpio -P
 
 # Enable stuff
 systemctl enable sddm NetworkManager systemd-timesyncd cups bluetooth sshd
