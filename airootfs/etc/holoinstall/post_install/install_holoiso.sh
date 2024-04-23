@@ -260,7 +260,7 @@ partitioning() {
 	NAME_REGEX="^[a-z][-a-z0-9_]*\$"
 	if ! $HOME_REUSE; then
 		while true; do
-			HOLOUSER=$(zenity --entry --title="Account creation" --text "Enter username for this installation:\n(Tip: Use \"deck\" to increase decky loader plugin compatibility.)" 2>/dev/null)
+			HOLOUSER=$(kdialog --title "Account creation" --inputbox "Enter username for this installation:\n(Tip: Use \"deck\" to increase decky loader plugin compatibility." "deck")
 			if [ "$HOLOUSER" = "root" ]; then
 				zenity --warning --text "User root already exists." --width=300 2>/dev/null
 			elif [ -z "$HOLOUSER" ]; then
