@@ -13,6 +13,7 @@ chmod 755 /etc/skel/Desktop/install.desktop
 
 # Init pacman keys
 pacman-key --init
+pacman-key --populate
 pacman -Sy
 
 # Install desktop suite
@@ -36,8 +37,6 @@ usermod -a -G wheel ${LIVEOSUSER}
 echo "/usr/bin/bash" >>/etc/shells
 mkdir -p /var/cache/pacman/
 mv /home/.steamos/offload/var/cache/pacman/pkg /var/cache/pacman/
-mv /etc/pacman.conf /etc/pacold
-cp /etc/holoinstall/post_install/pacman.conf /etc/pacman.conf
 mv /etc/xdg/autostart/steam.desktop /etc/skel/Desktop/steamos-gamemode.desktop /etc/holoinstall/post_install_shortcuts
 sed -i 's/base udev modconf/base udev plymouth modconf/g' /etc/mkinitcpio.conf
 rm /usr/share/steamos/steamos.png
@@ -49,75 +48,18 @@ plymouth-set-default-theme -R steamos
 # Enable stuff
 systemctl enable sddm NetworkManager systemd-timesyncd cups bluetooth sshd
 
-# Install Firmwares
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/aic94xx-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/aic94xx-firmware.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/aic94xx-firmware
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/aic94xx-firmware && makepkg -si --noconfirm"
-
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/ast-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/ast-firmware.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/ast-firmware
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/ast-firmware && makepkg -si --noconfirm"
-
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/wd719x-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/wd719x-firmware.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/wd719x-firmware
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/wd719x-firmware && makepkg -si --noconfirm"
-
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/upd72020x-fw.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/upd72020x-fw.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/upd72020x-fw
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/upd72020x-fw && makepkg -si --noconfirm"
-
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/mkinitcpio-firmware.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/mkinitcpio-firmware && makepkg -si --noconfirm"
-
-# Build xboxdrv package
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/xboxdrv-stable-git.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git && makepkg -si --noconfirm"
-cp /etc/holoinstall/post_install/pkgs/xboxdrv-stable-git/xboxdrv-stable-git*.pkg.tar.zst /etc/holoinstall/post_install/
-
-# Build 8bitdo-ultimate-controller-udev rules package
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/8bitdo-ultimate-controller-udev.tar.gz -P /etc/holoinstall/post_install/pkgs
-cd /etc/holoinstall/post_install/pkgs && tar -xf /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev.tar.gz
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev && makepkg -s --noconfirm"
-cp /etc/holoinstall/post_install/pkgs/8bitdo-ultimate-controller-udev/8bitdo-ultimate-controller-udev*.pkg.tar.zst /etc/holoinstall/post_install/
-pacman -Rdd --noconfirm xboxdrv-stable-git
-
-# Install Nvidia driver
-cd /etc/holoinstall/post_install/pkgs && git clone https://github.com/Frogging-Family/nvidia-all.git
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/nvidia-all
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/nvidia-all && echo -e '4\n1\nN\n' | makepkg -si --noconfirm"
-cp /etc/holoinstall/post_install/pkgs/nvidia-all/nvidia-dkms*.pkg.tar.zst /etc/holoinstall/post_install/
-
-# Install Nvidia vaapi driver
-cd /etc/holoinstall/post_install/pkgs && git clone https://gitlab.archlinux.org/archlinux/packaging/packages/libva-nvidia-driver.git
-chown -hR ${LIVEOSUSER} /etc/holoinstall/post_install/pkgs/libva-nvidia-driver
-su ${LIVEOSUSER} -c "cd /etc/holoinstall/post_install/pkgs/libva-nvidia-driver && makepkg -si --noconfirm"
-
-# Install Nvidia prime
-pacman -Syyu --noconfirm nvidia-prime
-
-# Remove packages from ISO
-rm -r /etc/holoinstall/post_install/pkgs/*
-
 # Download extra stuff
-wget "$(pacman -Sp win600-xpad-dkms)" -P /etc/holoinstall/post_install/pkgs
+mkdir /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp linux-neptune-61)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp amd-ucode)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp xorg-xwayland-jupiter)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp broadcom-wl-dkms)" -P /etc/holoinstall/post_install/pkgs
-mv /etc/holoinstall/post_install/nvidia-dkms*.pkg.tar.zst /etc/holoinstall/post_install/pkgs
-mv /etc/holoinstall/post_install/xboxdrv-stable-git*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/
-mv /etc/holoinstall/post_install/8bitdo-ultimate-controller-udev*.pkg.tar.zst /etc/holoinstall/post_install/pkgs/
+wget "$(pacman -Sp dbus-glib)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Spdd xboxdrv-stable-git)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Spdd 8bitdo-ultimate-controller-udev)" -P /etc/holoinstall/post_install/pkgs
+wget "$(pacman -Sp nvidia-dkms-tkg)" -P /etc/holoinstall/post_install/pkgs
 mv /etc/holoinstall/post_install/gamescope-holoiso-tweaked-3.11.48-4-x86_64.pkg.tar.zst /etc/holoinstall/post_install/pkgs/
 
 # Workaround mkinitcpio stuff so that i don't KMS after rebuilding ISO each time and having users reinstalling their OS everytime.
@@ -126,15 +68,9 @@ mv /etc/holoinstall/pre_install/mkinitcpio.conf /etc/mkinitcpio.conf
 rm /etc/mkinitcpio.d/*
 mkdir -p /etc/mkinitcpio.d
 
-# Fix pacman mirrorlist
-# shellcheck disable=SC2016
-echo 'Server = https://cd2.holoiso.ru.eu.org/pkg/$repo/os/$arch' >/etc/pacman.d/holo_mirrorlist
-
 # Remove this script from ISO
 rm -rf /etc/holoinstall/pre_install
 rm -rf /home/.steamos/offload/var/cache/pacman/pkg/*
-rm /etc/pacman.conf
-mv /etc/pacold /etc/pacman.conf
 rm -rf /etc/xdg/powermanagementprofilesrc
 rm -rf /home/"${LIVEOSUSER}"/Desktop/steamos-gamemode.desktop
 rm -rf /home/"${LIVEOSUSER}"/Desktop/Return.desktop

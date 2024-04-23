@@ -458,7 +458,6 @@ base_os_install() {
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep amd-ucode)"
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep intel-ucode)"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm /etc/polkit-1/rules.d/99_holoiso_installuser.rules
-	cp -r /etc/holoinstall/post_install/pacman.conf "${HOLO_INSTALL_DIR}"/etc/pacman.conf
 	if $IS_STEAMDECK; then
 		echo "You're running this on a Steam Deck. linux-neptune-61 will be installed to ensure maximum kernel-side compatibility."
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm linux-firmware
@@ -642,6 +641,7 @@ EOF
 
 	if $INSTALL_8BITDO_UDEV_RULES; then
 		# Install xboxdrv-stable-git
+		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs/ | grep "dbus-glib")"
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs/ | grep "xboxdrv")"
 		arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable xboxdrv
 		# Install 8bitdo-ultimate-controller-udev rules
