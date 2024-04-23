@@ -683,7 +683,8 @@ full_install() {
 	rm "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
 	cp /etc/holoinstall/post_install/steamos-automount.sh "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
 	chmod +x "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
-	arch-chroot "${HOLO_INSTALL_DIR}" touch /etc/holoiso-oobe
+	$HOME_REUSE || touch "${HOLO_INSTALL_DIR}"/etc/holoiso-oobe
+	$HOME_REUSE && grep -q '"CompletedOOBE"		"1"' "${HOLO_INSTALL_DIR}/home/${HOLOUSER}/.steam/registry.vdf" && rm "${HOLO_INSTALL_DIR}"/etc/holoiso-oobe
 	echo "Cleaning up..."
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
