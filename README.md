@@ -2,7 +2,7 @@
 # HoloISO_Tweaked
 First of all i want to credit [Adam Jafarov](https://github.com/theVakhovskeIsTaken) for creating the HoloISO project! So please go check him out.
 
-This project is mutable and has support for Nvidia cards.
+This project is mutable and has support for Nvidia cards.  
 If you want immutability then check [this](https://github.com/HoloISO/releases) out.
 
 SteamOS 3 (Holo) archiso configuration.
