@@ -2,11 +2,8 @@
 # HoloISO_Tweaked
 First of all i want to credit [Adam Jafarov](https://github.com/theVakhovskeIsTaken) for creating the HoloISO project! So please go check him out.
 
-Note: I am not in any way affiliated with [Adam Jafarov](https://github.com/theVakhovskeIsTaken).  
-This is not a competition of "Who makes the better HoloISO?" or something like that.  
-I just like the project he made and saw some things that didn't work for me or i'd like to see changed.  
-So i changed some things and made them public, because it might help someone.  
-There is no bad blood between us.
+This project is mutable and has support for Nvidia cards.
+If you want immutability then check [this](https://github.com/HoloISO/releases) out.
 
 SteamOS 3 (Holo) archiso configuration.
 
