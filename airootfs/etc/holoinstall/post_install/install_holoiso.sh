@@ -195,7 +195,14 @@ partitioning() {
 	done
 
 	echo "Choose your installation type:"
-	install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive/option to reuse home partition if found" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space at the end of the drive)" --width=880 --height=281 2>/dev/null)
+	while true; do
+		install=$(zenity --list --title="Choose your installation type:" --column="Type" --column="Name" 1 "Use entire drive/option to reuse home partition if found" 2 "Install alongside existing OS/Partition (Requires at least 50 GB of free unformatted space at the end of the drive)" --width=880 --height=281 2>/dev/null)
+		if [ -z "$install" ]; then
+			exit 0
+		else
+			break
+		fi
+	done
 	HOME_REUSE=false
 	HOME_PART_EXISTS=false
 	tmp_home_part=$(sudo blkid | grep holo-home | cut -d ':' -f 1 | head -n 1)
