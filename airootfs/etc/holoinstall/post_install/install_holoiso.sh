@@ -689,6 +689,9 @@ full_install() {
 	$HOME_REUSE || touch "${HOLO_INSTALL_DIR}"/etc/holoiso-oobe
 	$HOME_REUSE && grep -q '"CompletedOOBE"		"1"' "${HOLO_INSTALL_DIR}/home/${HOLOUSER}/.steam/registry.vdf" && rm "${HOLO_INSTALL_DIR}"/etc/holoiso-oobe
 	$HOME_REUSE || arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "mkdir ~/.steam && cp /etc/holoinstall/post_install/registry.vdf ~/.steam/registry.vdf"
+	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" == "NVIDIA" ]]; then
+		sed -i 's/"GPUAccelWebViewsV3"		"1"/"GPUAccelWebViewsV3"		"0"/' "${HOLO_INSTALL_DIR}/home/${HOLOUSER}/.steam/registry.vdf"
+	fi
 	echo "Cleaning up..."
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
