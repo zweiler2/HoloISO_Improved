@@ -190,7 +190,6 @@ partitionmanager
 gamemode
 lib32-gamemode
 cpupower
-bluez-plugins
 bluez-utils
 cups
 
