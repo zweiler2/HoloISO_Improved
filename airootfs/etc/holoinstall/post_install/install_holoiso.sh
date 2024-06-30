@@ -682,13 +682,13 @@ full_install() {
 	if $INSTALL_DECKY_LOADER || $INSTALL_STEAM_PATCH; then
 		arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "touch ~/.local/share/Steam/.cef-enable-remote-debugging"
 	fi
-	arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "mkdir ~/.steam && cp /etc/holoinstall/post_install/registry.vdf ~/.steam/registry.vdf"
 	cp /etc/holoinstall/post_install/99-steamos-automount.rules "${HOLO_INSTALL_DIR}"/usr/lib/udev/rules.d/99-steamos-automount.rules
 	rm "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
 	cp /etc/holoinstall/post_install/steamos-automount.sh "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
 	chmod +x "${HOLO_INSTALL_DIR}"/usr/lib/hwsupport/steamos-automount.sh
 	$HOME_REUSE || touch "${HOLO_INSTALL_DIR}"/etc/holoiso-oobe
 	$HOME_REUSE && grep -q '"CompletedOOBE"		"1"' "${HOLO_INSTALL_DIR}/home/${HOLOUSER}/.steam/registry.vdf" && rm "${HOLO_INSTALL_DIR}"/etc/holoiso-oobe
+	$HOME_REUSE || arch-chroot "${HOLO_INSTALL_DIR}" su "${HOLOUSER}" -c "mkdir ~/.steam && cp /etc/holoinstall/post_install/registry.vdf ~/.steam/registry.vdf"
 	echo "Cleaning up..."
 	cp /etc/skel/.bashrc "${HOLO_INSTALL_DIR}"/home/"${HOLOUSER}"
 	arch-chroot "${HOLO_INSTALL_DIR}" rm -rf /etc/holoinstall
