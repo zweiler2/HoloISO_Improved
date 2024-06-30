@@ -495,6 +495,7 @@ base_os_install() {
 		sed -i "s/logger 'PowerButton pressed'/systemctl suspend/" "${HOLO_INSTALL_DIR}"/etc/acpi/handler.sh
 	fi
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman-key --init
+	arch-chroot "${HOLO_INSTALL_DIR}" pacman-key --populate
 	arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm mkinitcpio-archiso
 
 	if [[ "$(lspci -v | grep VGA | sed -nE "s/.*(NVIDIA) .*/\1/p")" = "NVIDIA" ]]; then
