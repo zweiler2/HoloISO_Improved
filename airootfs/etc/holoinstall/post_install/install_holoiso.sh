@@ -473,16 +473,12 @@ base_os_install() {
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-neptune-61-6)"
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-neptune-61-headers)"
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-firmware-neptune)"
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm xorg-xwayland
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep xorg-xwayland-jupiter)"
 	elif $IS_OXP2; then
 		echo "You're running this on a OneXPlayer 2. linux-neptune-61 will be installed."
 		cat </etc/holoinstall/post_install/kernel_list.bootstrap | xargs arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm
 		echo -e "PRESETS=('default' 'fallback')\n\nALL_kver='/boot/vmlinuz-linux-neptune-61'\nALL_config='/etc/mkinitcpio.conf'\n\ndefault_image=\"/boot/initramfs-linux-neptune-61.img\"\n\nfallback_image=\"/boot/initramfs-linux-neptune-61-fallback.img\"\nfallback_options=\"-S autodetect\"" >"${HOLO_INSTALL_DIR}"/etc/mkinitcpio.d/linux-neptune-61.preset
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-neptune-61-6)"
 		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep linux-neptune-61-headers)"
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -Rdd --noconfirm xorg-xwayland
-		arch-chroot "${HOLO_INSTALL_DIR}" pacman -U --noconfirm "$(arch-chroot "${HOLO_INSTALL_DIR}" find /etc/holoinstall/post_install/pkgs | grep xorg-xwayland-jupiter)"
 		arch-chroot "${HOLO_INSTALL_DIR}" systemctl enable upower
 		echo "blacklist sp5100_tco" >"${HOLO_INSTALL_DIR}"/etc/modprobe.d/disable-5100.conf
 		{

@@ -54,7 +54,6 @@ wget "$(pacman -Sp linux-firmware-neptune)" -P /etc/holoinstall/post_install/pkg
 wget "$(pacman -Sp linux-neptune-61)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp amd-ucode)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp intel-ucode)" -P /etc/holoinstall/post_install/pkgs
-wget "$(pacman -Sp xorg-xwayland-jupiter)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp broadcom-wl-dkms)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Sp dbus-glib)" -P /etc/holoinstall/post_install/pkgs
 wget "$(pacman -Spdd xboxdrv-stable-git)" -P /etc/holoinstall/post_install/pkgs
